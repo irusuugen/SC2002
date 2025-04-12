@@ -29,4 +29,12 @@ public abstract class User {
     public String getName() {
         return this.name;
     }
+
+    public boolean isMarried() {
+        return this.isMarried;
+    }
+
+    public int getAge() {
+        return this.age;
+    }
 }

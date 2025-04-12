@@ -4,7 +4,7 @@ import java.util.*;
 public class UserLoader {
 
     /* Function to parse through the file and return a list of Users */
-    public static ArrayList<User> readUsers(String filename) {
+    public ArrayList<User> readUsers(String filename) {
         ArrayList<User> users = new ArrayList<>();
         try {
             BufferedReader br = new BufferedReader(new FileReader(filename));
