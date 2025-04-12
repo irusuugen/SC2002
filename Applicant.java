@@ -1,5 +1,5 @@
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Applicant extends User {
     private Application application;
@@ -11,38 +11,38 @@ public class Applicant extends User {
         this.application = null;
     }
 
-    public void viewOpenProjects(List<Project> projectList) {
-        if (isMarried() && getAge() >= 21) {
-            for (Project project : projectList) {
-                if (project.getVisibility()) {
-                    project.printProjectDetails();
-                }
-            }
-        } else if (!isMarried() && getAge() >= 35) {
-            for (Project project : projectList) {
-                if (project.getNumFlat() == 2 && project.getVisibility()) {
-                    project.printProjectDetails();
-                }
-            }
-        }
-    }
+    // public void viewOpenProjects(List<Project> projectList) {
+    //     if (isMarried() && getAge() >= 21) {
+    //         for (Project project : projectList) {
+    //             if (project.getVisibility()) {
+    //                 project.printProjectDetails();
+    //             }
+    //         }
+    //     } else if (!isMarried() && getAge() >= 35) {
+    //         for (Project project : projectList) {
+    //             if (project.getNumFlat() == 2 && project.getVisibility()) {
+    //                 project.printProjectDetails();
+    //             }
+    //         }
+    //     }
+    // }
 
-    public boolean applyForProject(Project project, String flatType) {
-        if (this.application != null) {
-            return false; // Prevent applicants from applying for more than one project
-        }
-        this.application = new Application(project, flatType, this);
-        return true;
-    }
+    // public boolean applyForProject(Project project, String flatType) {
+    //     if (this.application != null) {
+    //         return false; // Prevent applicants from applying for more than one project
+    //     }
+    //     this.application = new Application(project, flatType, this);
+    //     return true;
+    // }
 
-    public void viewApplication() {
-        if (application != null) {
-            application.getProject().printProjectDetails();
-            System.out.println(application); // Show application info using toString()
-        } else {
-            System.out.println("No application submitted.");
-        }
-    }
+    // public void viewApplication() {
+    //     if (application != null) {
+    //         application.getProject().printProjectDetails();
+    //         System.out.println(application); // Show application info using toString()
+    //     } else {
+    //         System.out.println("No application submitted.");
+    //     }
+    // }
 
     public boolean withdrawApplication() {
         if (this.application == null) return false; // Checks for existing application

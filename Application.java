@@ -46,7 +46,7 @@ public class Application {
         return status;
     }
 
-    //convert the status enum to a string with " "
+    //converts the status enum to a string with " "
     public String getStatusString() 
     {
         return status.toString();
@@ -90,22 +90,22 @@ public class Application {
         }
     }
 
-    //check is application is still ongoing
+    //check if application is still ongoing
     public boolean isActive() 
     {
         return status == Status.PENDING || status == Status.SUCCESSFUL;
     }
 
     // i used NRIC instead of name --> cuz unique
-    @Override
-    public String toString() 
-    {
-        String nric = applicant.getNric();
-        String maskedNric = "****" + nric.substring(nric.length() - 4);
-        return "Applicant: " + maskedNric +
-               ", Project: " + project.getProjectName() +
-               ", Flat Type: " + flatType +
-               ", Date: " + date +
-               ", Status: " + status;
-    }
+    // @Override
+    // public String toString() 
+    // {
+    //     String nric = applicant.getNric();
+    //     String maskedNric = "****" + nric.substring(nric.length() - 4);
+    //     return "Applicant: " + maskedNric +
+    //            ", Project: " + project.getProjectName() +
+    //            ", Flat Type: " + flatType +
+    //            ", Date: " + date +
+    //            ", Status: " + status;
+    // }
 }

@@ -1,7 +1,7 @@
 public class Enquiry {
     private String message;  //enquiry message from the applicant
     private Project project; //project the enquiry is related to
-    private String answer;   //reply to the enquiry(can be null if no reply yet)
+    private String answer;   //reply to the enquiry (can be null if no reply yet)
 
     public Enquiry(String message, Project project) 
     {
