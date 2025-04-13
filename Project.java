@@ -23,6 +23,7 @@ public class Project {
     private ArrayList<HDBOfficer> officerList;
     private ArrayList<HDBOfficer> registrationList;
     private ArrayList<Application> applicationList;
+    private ArrayList<Enquiry> enquiryList;
     DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM);
     
     public Project(String projectName, String neighborhood, int num2Room, int num3Room, int sellingPrice2Room, int sellingPrice3Room, Date applicationOpenDate, Date applicationCloseDate, HDBManager projectManager, int officerSlot) {
@@ -39,6 +40,7 @@ public class Project {
     	this.officerList = new ArrayList<>();
         this.applicationList = new ArrayList<>();
         this.registrationList = new ArrayList<>();
+        this.enquiryList = new ArrayList<>();
     }
     
     public String getProjectName() {
@@ -69,6 +71,10 @@ public class Project {
 
     public void removeApplication(Application application) {
         applicationList.remove(application);
+    }
+    
+    public ArrayList<Enquiry> getEnquiries(){
+    	return this.enquiryList;
     }
     
     public void updateOfficerSlot(int newSlots) {
@@ -102,7 +108,7 @@ public class Project {
     }
 
     public boolean checkOpeningPeriod() {
-        return false;
+        return true;
     }
 
     public int getNumFlatAvailable(flatType type) {
