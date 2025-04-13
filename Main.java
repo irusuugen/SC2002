@@ -1,9 +1,13 @@
+import boundary.*;
+import control.*;
+
 public class Main {
     public static void main(String[] args) {
-        // Initialize the Welcome class
-        Welcome welcome = new Welcome();
+        // System setup
+        BTOCoordinator bto = new BTOCoordinator();
 
-        // Call the welcome method to start the UI
+        // Start the welcome screen
+        Welcome welcome = new Welcome(bto);
         welcome.welcome();
     }
 }
