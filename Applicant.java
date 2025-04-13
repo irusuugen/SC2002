@@ -20,7 +20,7 @@ public class Applicant extends User {
             }
         } else if (!isMarried() && getAge() >= 35) {
             for (Project project : projectList) {
-                if (project.getNumFlat() == 2 && project.getVisibility()) {
+                if (project.getNumFlatAvailable(flatType.TWOROOMS) > 0 && project.getVisibility()) {
                     project.printProjectDetails();
                 }
             }
