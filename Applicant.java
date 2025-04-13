@@ -11,21 +11,21 @@ public class Applicant extends User {
         this.application = null;
     }
 
-    // public void viewOpenProjects(List<Project> projectList) {
-    //     if (isMarried() && getAge() >= 21) {
-    //         for (Project project : projectList) {
-    //             if (project.getVisibility()) {
-    //                 project.printProjectDetails();
-    //             }
-    //         }
-    //     } else if (!isMarried() && getAge() >= 35) {
-    //         for (Project project : projectList) {
-    //             if (project.getNumFlat() == 2 && project.getVisibility()) {
-    //                 project.printProjectDetails();
-    //             }
-    //         }
-    //     }
-    // }
+    public void viewOpenProjects(List<Project> projectList) {
+        if (isMarried() && getAge() >= 21) {
+            for (Project project : projectList) {
+                if (project.getVisibility()) {
+                    project.printProjectDetails();
+                }
+            }
+        } else if (!isMarried() && getAge() >= 35) {
+            for (Project project : projectList) {
+                if (project.getNumFlatAvailable(flatType.TWOROOMS) > 0 && project.getVisibility()) {
+                    project.printProjectDetails();
+                }
+            }
+        }
+    }
 
     // public boolean applyForProject(Project project, String flatType) {
     //     if (this.application != null) {
