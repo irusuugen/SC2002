@@ -7,50 +7,48 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserService {
-    private UserRepository userRepository;
-    private List<Applicant> applicantList;
-    private List<HDBManager> managerList;
-    private List<HDBOfficer> officerList;
-    private List<User> userList;
+    private static UserRepository userRepository;
+    private static List<Applicant> applicantList = new ArrayList<>();
+    private static List<HDBManager> managerList = new ArrayList<>();
+    private static List<HDBOfficer> officerList = new ArrayList<>();
+    private static List<User> userList = new ArrayList<>();
 
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public static boolean startUserStorage(UserRepository repo) {
+        userRepository = repo;
 
-        // Initialize the lists
-        this.applicantList = new ArrayList<>();
-        this.managerList = new ArrayList<>();
-        this.officerList = new ArrayList<>();
-        this.userList = new ArrayList<>();
+        applicantList.clear();
+        managerList.clear();
+        officerList.clear();
+        userList.clear();
 
-        // Load users from UserRepository
         userList = userRepository.loadAllUsers();
 
-        // Distribute users by their actual subclass
         for (User user : userList) {
-            if (user instanceof Applicant) {
-                applicantList.add((Applicant) user);
-            } else if (user instanceof HDBManager) {
-                managerList.add((HDBManager) user);
-            } else if (user instanceof HDBOfficer) {
-                officerList.add((HDBOfficer) user);
+            if (user instanceof Applicant a) {
+                applicantList.add(a);
+            } else if (user instanceof HDBManager m) {
+                managerList.add(m);
+            } else if (user instanceof HDBOfficer o) {
+                officerList.add(o);
             }
         }
+
+        return true;
     }
 
-    // Getters for the user lists
-    public List<Applicant> getApplicants() {
+    public static List<Applicant> getApplicants() {
         return applicantList;
     }
 
-    public List<HDBManager> getManagers() {
+    public static List<HDBManager> getManagers() {
         return managerList;
     }
 
-    public List<HDBOfficer> getOfficers() {
+    public static List<HDBOfficer> getOfficers() {
         return officerList;
     }
 
-    public List<User> getAllUsers() {
+    public static List<User> getAllUsers() {
         return userList;
     }
 }

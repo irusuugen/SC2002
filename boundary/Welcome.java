@@ -1,17 +1,12 @@
 /* This class provides the UI for the Welcome Page */
 package boundary;
 
-import control.BTOCoordinator;
 import java.util.Scanner;
+import utils.ClearPage;
 
 public class Welcome {
-    private final BTOCoordinator bto;
-
-    public Welcome(BTOCoordinator bto) {
-        this.bto = bto;
-    }
-
     public void welcome() {
+        ClearPage.clearPage();
         Scanner sc = new Scanner(System.in);
         System.out.println("""
             ______ _____ _____  ___  ___                                                  _     _____           _                
@@ -34,11 +29,11 @@ public class Welcome {
             """);
         int choice;
         while (true) {
-        System.out.println("➤ Enter your choice (1 or 2): ");
+            System.out.println("➤ Enter your choice (1 or 2): ");
             choice = sc.nextInt();
             switch (choice) {
                 case 1: 
-                    Login login = new Login(bto); // Pass users from the system
+                    Login login = new Login(); // Pass users from the system
                     login.login(); // Call login method
                     return;
                 case 2: 

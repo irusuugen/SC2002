@@ -1,6 +1,6 @@
 package entity;
 
-import java.text.DateFormat;
+import java.time.LocalDate;
 import java.util.*;
 
 enum flatType{
@@ -17,18 +17,17 @@ public class Project {
     private int numAvailable3Room;
     private int sellingPrice2Room;
     private int sellingPrice3Room;
-    private Date applicationOpenDate;
-    private Date applicationCloseDate;
+    private LocalDate applicationOpenDate;
+    private LocalDate applicationCloseDate;
     private boolean visibility;
     private HDBManager projectManager;
     private int officerSlot;
-    private ArrayList<HDBOfficer> officerList;
+    private List<HDBOfficer> officerSlotList;
     private ArrayList<HDBOfficer> registrationList;
     private ArrayList<Application> applicationList;
     private ArrayList<Enquiry> enquiryList;
-    DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM);
     
-    public Project(String projectName, String neighborhood, int num2Room, int num3Room, int sellingPrice2Room, int sellingPrice3Room, Date applicationOpenDate, Date applicationCloseDate, HDBManager projectManager, int officerSlot) {
+    public Project(String projectName, String neighborhood, int num2Room, int sellingPrice2Room, int num3Room, int sellingPrice3Room, LocalDate applicationOpenDate, LocalDate applicationCloseDate, HDBManager projectManager, int officerSlot, List<HDBOfficer> officerSlotList) {
     	this.projectName = projectName;
     	this.neighborhood = neighborhood;
     	this.num2Room = num2Room;
@@ -39,7 +38,7 @@ public class Project {
     	this.officerSlot = officerSlot;
     	this.numAvailable2Room = 0;
     	this.numAvailable3Room = 0;
-    	this.officerList = new ArrayList<>();
+    	this.officerSlotList = officerSlotList;
         this.applicationList = new ArrayList<>();
         this.registrationList = new ArrayList<>();
         this.enquiryList = new ArrayList<>();
@@ -84,15 +83,15 @@ public class Project {
     }
     
     public boolean checkOfficerSlot() {
-    	return officerList.size() < officerSlot;
+    	return officerSlotList.size() < officerSlot;
     }
 
     public void addOfficer(HDBOfficer officer) {
-    	officerList.add(officer);
+    	officerSlotList.add(officer);
     }
 
     public void removeOfficer(HDBOfficer officer) {
-    	officerList.remove(officer);
+    	officerSlotList.remove(officer);
     }
     
     public void registerOfficer(HDBOfficer officer) {

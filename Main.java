@@ -1,13 +1,15 @@
 import boundary.*;
-import control.*;
+import repository.UserRepository;
+import repository.UserService;
 
 public class Main {
     public static void main(String[] args) {
-        // System setup
-        BTOCoordinator bto = new BTOCoordinator();
+        UserService.startUserStorage(new UserRepository());
 
-        // Start the welcome screen
-        Welcome welcome = new Welcome(bto);
-        welcome.welcome();
+        Welcome welcome = new Welcome();
+        while (true) {
+            welcome.welcome();
+        }
+        
     }
 }

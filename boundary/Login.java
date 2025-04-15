@@ -1,16 +1,14 @@
 package boundary;
 
-import control.BTOCoordinator;
 import entity.*;
 import java.util.Scanner;
 import utils.*;
+import repository.*;
 
 public class Login {
-    private final BTOCoordinator bto;
     private final Scanner sc;
 
-    public Login(BTOCoordinator bto) {
-        this.bto = bto;
+    public Login() {
         this.sc = new Scanner(System.in); // Use one scanner for the entire class
     }
 
@@ -27,7 +25,7 @@ public class Login {
         """);
 
         User user = null;
-        while (true) {
+        while (user == null) {
             System.out.print("Enter NRIC: ");
             String nric = sc.nextLine();
             if (nric.trim().isEmpty()) {
@@ -63,13 +61,13 @@ public class Login {
         switch (userRole) {
             case APPLICANT:
                 ApplicantMenu.applicantMenu((Applicant) user);
-                break;
+                return;
             case HDB_OFFICER:
                 HDBOfficerMenu.hdbOfficerMenu((HDBOfficer) user);
-                break;
+                return;
             case HDB_MANAGER:
                 HDBManagerMenu.hdbManagerMenu((HDBManager) user);
-                break;
+                return;
         }
     }
 
@@ -108,7 +106,7 @@ public class Login {
         }
 
         // Check for NRIC in database
-        User user = bto.getAllUsers().stream()
+        User user = UserService.getAllUsers().stream()
             .filter(u -> u.getNric().equals(nric))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException("User not found."));
