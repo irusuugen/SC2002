@@ -5,7 +5,7 @@ import java.util.*;
 import entity.Enquiry;
 import entity.HDBOfficer;
 
-public class HDBOfficerEnquiryController{
+public class HDBOfficerEnquiryHandler{
 	
 	public ArrayList<Enquiry> viewEnquiries(HDBOfficer officer)
 	{
