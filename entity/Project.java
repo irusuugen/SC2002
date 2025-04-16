@@ -146,12 +146,4 @@ public class Project {
     public LocalDate getCloseDate() {
         return this.applicationCloseDate;
     }
-
-    public LocalDate getOpenDate() {
-        return this.applicationOpenDate;
-    }
-
-    public LocalDate getCloseDate() {
-        return this.applicationCloseDate;
-    }
 }
