@@ -15,7 +15,7 @@ public class ApplicationViewer {
         BoxPrinter.printRow("Flat Type Applied For", application.getFlatType().toString());
         BoxPrinter.printRow("Application Status", application.getStatus().toString());
         BoxPrinter.printDivider();
-        ProjectViewer.filterProjectDetailsforApplicants(application.getProject(), application.getApplicant());
+        ProjectViewer.filterProjectDetailsForApplicants(application.getProject(), application.getApplicant());
         BoxPrinter.printBottomBorder();
     
     }

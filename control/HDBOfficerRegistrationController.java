@@ -30,7 +30,7 @@ public class HDBOfficerRegistrationController{
 	public static void viewRegistrableProjects(HDBOfficer officer)
 	{
 		List<Project> registrableProjects = getRegistrableProjects(officer);
-    		ProjectViewer.printProjects(registrableProjects);
+    		ProjectViewer.printProjects(registrableProjects, officer);
 	}
 	public static void registerForProject(HDBOfficer officer)
 	{
