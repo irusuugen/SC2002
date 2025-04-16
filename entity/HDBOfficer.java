@@ -22,8 +22,5 @@ public class HDBOfficer extends User{
 	{
 		return this.registrationList;
 	}
-	public void setRegistrationList(List<Registration> list){
-		this.registrationList = list;
-	}
 	
 }
