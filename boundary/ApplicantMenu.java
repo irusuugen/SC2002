@@ -7,10 +7,9 @@ import utils.*;
 
 public class ApplicantMenu {
     public static void applicantMenu(Applicant applicant) {
-        System.out.println("DEBUG: REACHED APPLICANT MENU");
         Scanner sc = new Scanner(System.in);
         
-        while (true) {  // Main menu loop
+        while (true) {  // Applicant menu loops until logging out
             ClearPage.clearPage();
             System.out.println("""
             ╔════════════════════════════════════════════╗
@@ -29,67 +28,55 @@ public class ApplicantMenu {
             ║  11. Logout                                ║
             ╚════════════════════════════════════════════╝
             """);
-            
-            System.out.print("Enter your choice: ");
-            
-            int choice = sc.nextInt();
-            sc.nextLine();
+
+            // Obtaining user's choice
+            int choice;
+            while (true) {
+                choice = IntGetter.readInt("➤ Enter your choice: ");
+                if (choice >= 1 && choice <= 11) break;
+                System.out.println("Please enter a number between 1 and 11.");
+            }
+            ClearPage.clearPage(); // Clears terminal for the page for the corresponding options
                 
             switch (choice) {
                 case 1:
-                    // Change password functionality (not implemented yet)
+                    // Change password (to be implemented)
                     break;
                 case 2:
-                    // View projects functionality
-                    ClearPage.clearPage();
+                    // View projects
                     ApplicantController.viewOpenProjects(applicant);
-                    System.out.println("Press Enter to go back");
-                    sc.nextLine(); 
                     break;
                 case 3:
                     // Apply for project
-                    ClearPage.clearPage();
                     ApplicantController.applyForProject(applicant);
-                    System.out.println("Press Enter to go back");
-                    sc.nextLine(); 
                     break;
                 case 4:
                     // View application
-                    ClearPage.clearPage();
                     ApplicantController.viewApplication(applicant);
-                    System.out.println("Press Enter to go back");
-                    sc.nextLine(); 
                     break;
                 case 5:
                     // Book with officer
+                    ApplicantController.requestBooking(applicant);
                     break;
                 case 6:
                     // Request withdrawal
-
+                    ApplicantController.requestWithdrawal(applicant);
                     break;
                 case 7:
                     // Submit enquiry
                     ApplicantController.submitEnquiry(applicant);
-                    System.out.println("Press Enter to go back");
-                    sc.nextLine(); 
                     break;
                 case 8:
                     // View enquiry
                     ApplicantController.viewEnquiries(applicant);
-                    System.out.println("Press Enter to go back");
-                    sc.nextLine(); 
                     break;
                 case 9:
                     // Edit enquiry
-                    ApplicantController.viewEnquiries(applicant);
-                    System.out.println("Press Enter to go back");
-                    sc.nextLine(); 
+                    ApplicantController.editEnquiry(applicant);
                     break;
                 case 10:
                     // Delete enquiry
                     ApplicantController.deleteEnquiry(applicant);
-                    System.out.println("Press Enter to go back");
-                    sc.nextLine(); 
                     break;
                 case 11:
                     // Log out
@@ -100,9 +87,9 @@ public class ApplicantMenu {
                         e.printStackTrace();
                     }
                     return;
-                default:
-                    System.out.println("Invalid choice. Please enter a number from 1-11.");
             }
+            System.out.println("➤ Press Enter to go back.");
+            sc.nextLine(); 
         }
     }
 }

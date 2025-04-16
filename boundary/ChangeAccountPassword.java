@@ -27,7 +27,7 @@ public class ChangeAccountPassword {
                 System.out.println("Please log in again with your new password.");
                 System.out.println("Returning to home screen...");
                 try {
-                    Thread.sleep(1000); // Optional: just to give user a moment before redirection
+                    Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

@@ -17,10 +17,4 @@ public class HDBManagerApplicationController {
     public void rejectApplication(Application application) {
         application.markUnsuccessful();
     }
-
-    public void approveWithdrawal(Application application) {
-        application.withdraw();
-        FlatType type = application.getFlatType();
-        application.getProject().removeOccupiedFlat(type);
-    }
 }

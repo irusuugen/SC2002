@@ -9,7 +9,7 @@ public class Enquiry {
     {
         this.message = message;
         this.project = project;
-        this.answer = null; 
+        this.answer = "(No reply yet)"; 
     }
 
     public String getMessage() 
@@ -27,19 +27,19 @@ public class Enquiry {
         return answer;
     }
 
-    //view the details of the enquiry, including the message and any reply
-    public void view() 
-    {
-        System.out.println("Enquiry about Project: " + project.getProjectName());
-        System.out.println("Message: " + message);
-        if (answer!=null) 
-        {
-            System.out.println("Reply: " + answer);
-        } else 
-        {
-            System.out.println("Reply: (No reply yet)");
-        }
-    }
+    // //view the details of the enquiry, including the message and any reply
+    // public void view() 
+    // {
+    //     System.out.println("Enquiry about Project: " + project.getProjectName());
+    //     System.out.println("Message: " + message);
+    //     if (answer!=null) 
+    //     {
+    //         System.out.println("Reply: " + answer);
+    //     } else 
+    //     {
+    //         System.out.println("Reply: (No reply yet)");
+    //     }
+    // }
 
     public void edit(String newMessage) 
     {
@@ -51,12 +51,12 @@ public class Enquiry {
         this.answer = answer;
     }
    
-    @Override
-    public String toString() {
-        return "Project: " + project.getProjectName() +
-               "\nMessage: " + message +
-               "\nAnswer: " + (answer != null ? answer : "(No reply yet)");
-    }
+    // @Override
+    // public String toString() {
+    //     return "Project: " + project.getProjectName() +
+    //            "\nMessage: " + message +
+    //            "\nAnswer: " + (answer != null ? answer : "(No reply yet)");
+    // }
 }
 
 /*

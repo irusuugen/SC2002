@@ -4,63 +4,44 @@ package boundary;
 
 import entity.*;
 import java.util.List;
+import utils.*;
 
 public class ProjectViewer {
-    private static final int BOX_WIDTH = 74;
-
-    public static void printOneProject(Project project) {
+    public static void printOneProject(Project project, Applicant applicant) {
         System.out.println("Here is the project information:");
-        printTopBorder();
-        printRow("Project Name", project.getProjectName());
-        printRow("Neighborhood", project.getNeighborhood());
-        printRow("Units for 2-Room Flats", String.valueOf(project.getNumFlatAvailable(FlatType.TWOROOMS)));
-        printRow("Price for 2-Room Flats", String.format("$%.2f", project.getSellingPrice(FlatType.TWOROOMS)));
-        printRow("Units for 3-Room Flats", String.valueOf(project.getNumFlatAvailable(FlatType.THREEROOMS)));
-        printRow("Price for 3-Room Flats", String.format("$%.2f", project.getSellingPrice(FlatType.THREEROOMS)));
-        printRow("Application Period", project.getOpenDate() + " to " + project.getCloseDate());
-        printBottomBorder();
+        BoxPrinter.printTopBorder();
+        filterProjectDetailsforApplicants(project, applicant);
+        BoxPrinter.printBottomBorder();
     }
 
 
-    public static void printProjects(List<Project> projects) {
+    public static void printProjects(List<Project> projects, Applicant applicant) {
         if (projects.isEmpty()) {
-            System.out.println("No projects to display.");
+            System.out.println("No projects available to display.");
             return;
         }
         System.out.println("Here is the list of available projects:");
-        printTopBorder();
+        BoxPrinter.printTopBorder();
         for (int i = 0; i < projects.size(); i++) {
             Project project = projects.get(i);
-
-            printRow("Project Name", project.getProjectName());
-            printRow("Neighborhood", project.getNeighborhood());
-            printRow("Units for 2-Room Flats", String.valueOf(project.getNumFlatAvailable(FlatType.TWOROOMS)));
-            printRow("Price for 2-Room Flats", String.format("$%.2f", project.getSellingPrice(FlatType.TWOROOMS)));
-            printRow("Units for 3-Room Flats", String.valueOf(project.getNumFlatAvailable(FlatType.THREEROOMS)));
-            printRow("Price for 3-Room Flats", String.format("$%.2f", project.getSellingPrice(FlatType.THREEROOMS)));
-            printRow("Application Period", project.getOpenDate() + " to " + project.getCloseDate());
-            
+            filterProjectDetailsforApplicants(project, applicant);
             if (i < projects.size() - 1) {
-                printDivider(); // Inner separator
+                BoxPrinter.printDivider(); // Inner separator
             } else {
-                printBottomBorder(); // End of final project
+                BoxPrinter.printBottomBorder(); // End of final project
             }
         }
     }
 
-    private static void printTopBorder() {
-        System.out.println("╔" + "═".repeat(BOX_WIDTH - 2) + "╗");
-    }
-
-    private static void printBottomBorder() {
-        System.out.println("╚" + "═".repeat(BOX_WIDTH - 2) + "╝");
-    }
-
-    private static void printDivider() {
-        System.out.println("╠" + "═".repeat(BOX_WIDTH - 2) + "╣");
-    }
-
-    private static void printRow(String label, String value) {
-        System.out.printf("║ %-25s | %-42s ║\n", label, value);
+    public static void filterProjectDetailsforApplicants(Project project, Applicant applicant) {
+        BoxPrinter.printRow("Project Name", project.getProjectName());
+        BoxPrinter.printRow("Neighborhood", project.getNeighborhood());
+        BoxPrinter.printRow("Units for 2-Room Flats", String.valueOf(project.getNumFlatAvailable(FlatType.TWOROOMS)));
+        BoxPrinter.printRow("Price for 2-Room Flats", String.format("$%.2f", project.getSellingPrice(FlatType.TWOROOMS)));
+        if (applicant.getUserGroup() == UserGroup.MARRIED) {
+            BoxPrinter.printRow("Units for 3-Room Flats", String.valueOf(project.getNumFlatAvailable(FlatType.THREEROOMS)));
+            BoxPrinter.printRow("Price for 3-Room Flats", String.format("$%.2f", project.getSellingPrice(FlatType.THREEROOMS)));
+        }
+        BoxPrinter.printRow("Application Period", project.getOpenDate() + " to " + project.getCloseDate());
     }
 }

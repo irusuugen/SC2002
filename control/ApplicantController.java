@@ -1,5 +1,7 @@
 package control;
 
+import boundary.ApplicationViewer;
+import boundary.EnquiriesViewer;
 import boundary.ProjectViewer;
 import entity.*;
 import java.util.ArrayList;
@@ -11,15 +13,16 @@ import utils.*;
 public class ApplicantController {
     private static Scanner sc = new Scanner(System.in);
 
+    // Return a list of projects based on applicant's user group, flat availability, project visibility
     public static List<Project> getOpenProjects(Applicant applicant) {
         List<Project> openProjects = new ArrayList<>();
-        if (applicant.isMarried() && applicant.getAge() >= 21) {
+        if (applicant.getUserGroup() == UserGroup.MARRIED) {
             for (Project project : ProjectService.getAllProjects()) {
-                if (project.getVisibility()) {
+                if (project.getVisibility() && (project.getNumFlatAvailable(FlatType.TWOROOMS) > 0 || project.getNumFlatAvailable(FlatType.THREEROOMS) > 0)) {
                     openProjects.add(project);
                 }
             }
-        } else if (!applicant.isMarried() && applicant.getAge() >= 35) {
+        } else if (applicant.getUserGroup() == UserGroup.SINGLE) {
             for (Project project : ProjectService.getAllProjects()) {
                 if (project.getNumFlatAvailable(FlatType.TWOROOMS) > 0 && project.getVisibility()) {
                     openProjects.add(project);
@@ -29,36 +32,63 @@ public class ApplicantController {
         return openProjects;
     }
 
+    // Prints all projects available to the user for application
     public static void viewOpenProjects(Applicant applicant) {
         List<Project> openProjects = getOpenProjects(applicant);
-        ProjectViewer.printProjects(openProjects);
+        ProjectViewer.printProjects(openProjects, applicant);
     }
 
+    // Creates an application
     public static boolean applyForProject(Applicant applicant) {
+        // Check for existing application and if existing applcation was unsuccessful
         if (applicant.getApplication() != null) {
             System.out.println("You have already registered for a project.");
             return false;
         }
+
+        // List available projects for application
         viewOpenProjects(applicant);
-        System.out.println("Please enter the name of the project you'd like to apply for: ");
+        
+        // Checks for the project that user wants to apply for
+        Project project;
+        while (true) {
+        System.out.println("Please enter the name of the project you'd like to apply for (case-sensitive!): ");
         String inputTitle = sc.nextLine();
-        Project project = getOpenProjects(applicant).stream()
-            .filter(p -> inputTitle.equals(p.getProjectName()))
-            .findFirst()
-            .orElse(null);
-        System.out.println("Enter the flat type you'd like (2 or 3): ");
-        int flatType = sc.nextInt();
-        sc.nextLine();
+            project = getOpenProjects(applicant).stream()
+                        .filter(p -> inputTitle.equals(p.getProjectName()))
+                        .findFirst()
+                        .orElse(null);
+            if (project == null) {
+                System.out.print("Project was not found. Retry? (Y/N): ");
+                String retry = sc.nextLine();
+                if (retry.equalsIgnoreCase("Y"));
+                else return false;
+            } else {
+                break;
+            }
+        }
+        
+        // Confirmation of application
         ClearPage.clearPage();
-        ProjectViewer.printOneProject(project);
+        ProjectViewer.printOneProject(project, applicant);
+        int flatChoice;
+        FlatType flatType = FlatType.TWOROOMS; // Set as default, for single applicants
+        if (applicant.getUserGroup() == UserGroup.MARRIED) {
+            while (true) {
+                flatChoice = IntGetter.readInt("Enter the flat type you'd like (2 for 2-Room, 3 for 3-Room): ");
+                if (flatChoice == 2 || flatChoice == 3) break;
+                System.out.println("Please enter a number between 1 and 11.");
+            }
+            if (flatChoice==2) {
+                flatType = FlatType.TWOROOMS;
+            } else if (flatChoice == 3) {
+                flatType = FlatType.THREEROOMS;
+            } 
+        }
         System.out.print("Are you sure you want to apply for this project? (Y/N): ");
         String choice = sc.nextLine();
         if (choice.equalsIgnoreCase("Y")) {
-            if (flatType==2) {
-            applicant.setApplication(new Application(project, FlatType.TWOROOMS, applicant));
-            } else if (flatType == 3) {
-                applicant.setApplication(new Application(project, FlatType.TWOROOMS, applicant));
-            } 
+            applicant.setApplication(new Application(project, flatType, applicant));
         }
         else {
             System.out.println("Request cancelled.");
@@ -70,18 +100,46 @@ public class ApplicantController {
     public static void viewApplication(Applicant applicant) {
         Application application = applicant.getApplication();
         if (application != null) {
-                ProjectViewer.printOneProject(application.getProject());
+                ApplicationViewer.printApplication(application);;
         } else {
             System.out.println("No application submitted.");
         }
     }
 
-    // public boolean withdrawApplication() {
-    //     if (this.application == null) return false; // Checks for existing application
-    //     application.withdraw();
-    //     this.application = null;
-    //     return true;
-    // }
+    public static void requestBooking(Applicant applicant) {
+        Application application = applicant.getApplication();
+        if (application == null) {
+            System.out.println("No existing application.");
+            return;
+        }
+        ApplicationViewer.printApplication(application);
+        System.out.print("Are you sure you want to book a flat for this project? (Y/N): ");
+        String choice = sc.nextLine();
+        if (choice.equalsIgnoreCase("Y")) {
+            BookingService.createBooking(application);
+        }
+        else {
+            System.out.println("Request cancelled.");
+        }
+    }
+
+    public static void requestWithdrawal(Applicant applicant) {
+        Application application = applicant.getApplication();
+        if (application == null) {
+            System.out.println("No existing application.");
+            return;
+        }
+        ApplicationViewer.printApplication(application);
+        System.out.print("Are you sure you want to withdraw your application? (Y/N): ");
+        String choice = sc.nextLine();
+        if (choice.equalsIgnoreCase("Y")) {
+            WithdrawalService.requestWithdrawal(application);
+        }
+        else {
+            System.out.println("Request cancelled.");
+        }
+
+    }
 
     public static void submitEnquiry(Applicant applicant) {
         viewOpenProjects(applicant);
@@ -92,7 +150,7 @@ public class ApplicantController {
             .findFirst()
             .orElse(null);
         ClearPage.clearPage();
-        ProjectViewer.printOneProject(project);
+        ProjectViewer.printOneProject(project, applicant);
         System.out.println("Enter your enquiry:");
         String message = sc.nextLine();
         System.out.println("Your enquiry is: " + message);
@@ -112,10 +170,10 @@ public class ApplicantController {
             return;
         } 
         viewEnquiries(applicant);
-        System.out.println("Select enquiry via index: ");
-        int index = sc.nextInt();
+        System.out.println("Select enquiry number: ");
+        int number = sc.nextInt();
         sc.nextLine();
-        Enquiry enquiry = applicant.getEnquiries().get(index);
+        Enquiry enquiry = applicant.getEnquiries().get(number-1);
         System.out.println("Enter your new enquiry:");
         String message = sc.nextLine();
         System.out.print("Confirm edit (Y/N): ");
@@ -135,10 +193,10 @@ public class ApplicantController {
             return;
         } 
         viewEnquiries(applicant);
-        System.out.println("Select enquiry via index: ");
-        int index = sc.nextInt();
+        System.out.println("Select enquiry number: ");
+        int number = sc.nextInt();
         sc.nextLine();
-        Enquiry enquiry = enquiryList.get(index);
+        Enquiry enquiry = enquiryList.get(number-1);
         System.out.print("Confirm removal (Y/N): ");
         String choice = sc.nextLine();
         if (choice.equalsIgnoreCase("Y")) {
@@ -150,10 +208,11 @@ public class ApplicantController {
     }
 
     public static void viewEnquiries(Applicant applicant) {
-        int index = 0;
-        for (Enquiry enquiry : applicant.getEnquiries()) {
-            System.out.println("Enquiry Index: " + index);
-            System.out.println(enquiry);
+        List<Enquiry> enquiries = applicant.getEnquiries();
+        if (enquiries.isEmpty()) {
+            System.out.println("No enquiries submitted.");
+        } else {
+            EnquiriesViewer.printEnquiries(enquiries);
         }
     }
 

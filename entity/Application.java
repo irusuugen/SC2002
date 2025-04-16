@@ -9,6 +9,8 @@ public class Application {
     private Applicant applicant;
     private LocalDate date;
     private Status status;
+    private boolean bookingRequested = false;
+    private boolean withdrawalRequested = false;
 
     public Application(Project project, FlatType flatType, Applicant applicant) 
     {
@@ -54,7 +56,7 @@ public class Application {
     public void withdraw() 
     {
         if (status == Status.PENDING || status == Status.SUCCESSFUL) {
-            status = Status.WITHDRAWN;
+            status = Status.UNSUCCESSFUL;
         }
     }
 
@@ -94,16 +96,20 @@ public class Application {
         return status == Status.PENDING || status == Status.SUCCESSFUL;
     }
 
-    // i used NRIC instead of name --> cuz unique
-    // @Override
-    // public String toString() 
-    // {
-    //     String nric = applicant.getNric();
-    //     String maskedNric = "****" + nric.substring(nric.length() - 4);
-    //     return "Applicant: " + maskedNric +
-    //            ", Project: " + project.getProjectName() +
-    //            ", Flat Type: " + flatType +
-    //            ", Date: " + date +
-    //            ", Status: " + status;
-    // }
+    public boolean isBookingRequested() {
+        return bookingRequested;
+    }
+
+    public void setBookingRequested(boolean bookingRequested) {
+        this.bookingRequested = bookingRequested;
+    }
+
+    public boolean isWithdrawalRequested() {
+        return withdrawalRequested;
+    }
+
+    public void setWithdrawalRequested(boolean withdrawalRequested) {
+        this.withdrawalRequested = withdrawalRequested;
+    }
+
 }
