@@ -41,7 +41,6 @@ public class HDBOfficerMenu {
 	            
 	            int choice = sc.nextInt();
 	            sc.nextLine();  // Consume the newline character
-	            List<Enquiry> listEnquiry;
 	            switch (choice) {
 	                case 1:
 	                    // Change password functionality
@@ -78,43 +77,77 @@ public class HDBOfficerMenu {
 	                    // Delete enquiry
 	                    break;
 	                case 11:
-	                	// print all projects that able to register
-	                	System.out.println("Please enter the number of the project that you want to register for:");
-	                    int project_choice = sc.nextInt();
-	                    sc.nextLine();
-	                    
-	                    user.registerForProject(project);
-	                    System.out.println("Registered");
+			    if(user.getAssignedProject()!=null)
+			    {
+				System.out.println("You are a HDB Officer for another project.");
+				break;
+			    }
+			    List<Project> registrableProjects = new ArrayList<>();
+			    for (Project project : ProjectService.getAllProjects())
+			    {
+				if (project.getVisibility() && project!=user.getAssignedProject() && project!=user.getApplication().getProject())
+				{
+					registrableProjects.add(project);
+				}
+	                    }
+	                    System.out.print("Please enter the project name that you want to register for:");
+	                    String projectName = sc.nextLine();
+	                    for (Project project : registrableProjects)
+	                    {
+	                        if(project.getProjectName()==projectName)
+	                        {
+	                            HDBOfficerRegistrationController.registerForProject(user,project);
+	    	                    System.out.println("Registered");
+	    	                    break;
+	                        }
+	                    }
 	                    break;
 	                case 12:
-	                	List<Registration> registrationList = user.getRegistrationList();
-	                	// print registrationList
+	                    List<Registration> registrationList = user.getRegistrationList();
+	                    // print registrationList
 	                    break;
 	                case 13:
-	                	Project project=user.getAssignedProject();
-	                	// print project
+	                    user.getAssignedProject().printProjectDetails();
 	                    break;
 	                case 14:
-	                	listEnquiry = user.getAssignedProject().getEnquiries();
-	                	// print listEnquiry
+	                    List<Enquiry> listEnquiries = user.getAssignedProject().getEnquiries();
+	                    for (Enquiry enquiry : user.getAssignedProject().getEnquiries())
+	                    {
+	                	System.out.printf("Message: %s ,Reply: ",enquiry.getMessage());
+	                	if (enquiry.getAnswer()!=null) 
+	                	{
+				    System.out.println(enquiry.getAnswer());
+	                        }
+				else 
+	                        {
+	                            System.out.println("(No reply yet)");
+	                        }
+	                    }
 	                    break;
 	                case 15:
-	                	listEnquiry = user.getAssignedProject().getEnquiries();
-	                	// print listEnquiry
-	                	System.out.println("Please enter the number of the enquiry that you want to reply: ");
+			    List<Enquiry> listNoReplyEnquiries = new ArrayList<>();
+	                    for (Enquiry enquiry : user.getAssignedProject().getEnquiries())
+	                    {
+	                	if (enquiry.getAnswer()==null) listNoReplyEnquiries.add(enquiry);
+	                    }
+	                    for (int i=0;i<listNoReplyEnquiries.size();i++)
+	                    {
+	                	System.out.printf("%d. Message: %s\n",i+1,listNoReplyEnquiries[i].getMessage());
+	                    }
+	                    System.out.print("Please enter the number of the enquiry that you want to reply: ");
 	                    int enquiry_choice = sc.nextInt();
 	                    sc.nextLine();
-	                    System.out.println("Enter your response: ");
+	                    System.out.print("Enter your response: ");
 	                    String response = sc.nextLine();
-	                    listEnquiry[enquiry_choice].reply(response);
+	                    listNoReplyEnquiries[enquiry_choice-1].reply(response);
 	                    System.out.println("replied");
 	                    break;
 	                case 16:
-	                	System.out.println("Please enter applicant’s NRIC: ");
+	                    System.out.print("Please enter applicant’s NRIC: ");
 	                    String nric = sc.nextLine();
 	                    // search for application by nric
 	                    HDBOfficerApplicationController.updateApplication(application);
-	                	// generate receipt
+	                    // generate receipt
 	                    break;
 	                case 17:
 	                    System.out.println("Logging out...");
