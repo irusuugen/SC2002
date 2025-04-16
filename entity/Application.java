@@ -9,12 +9,12 @@ public class Application {
     }
 
     private Project project;
-    private String flatType;
+    private flatType flatType;
     private Applicant applicant;
     private LocalDate date;
     private Status status;
 
-    public Application(Project project, String flatType, Applicant applicant) 
+    public Application(Project project, flatType flatType, Applicant applicant) 
     {
         this.project = project;
         this.flatType = flatType;
@@ -28,7 +28,7 @@ public class Application {
         return project;
     }
 
-    public String getFlatType() 
+    public flatType getFlatType() 
     {
         return flatType;
     }
