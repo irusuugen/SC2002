@@ -3,18 +3,14 @@ package entity;
 import java.time.LocalDate;
 
 public class Application {
-    public enum Status 
-    {
-        PENDING, WITHDRAWN, UNSUCCESSFUL, SUCCESSFUL, BOOKED
-    }
 
     private Project project;
-    private flatType flatType;
+    private FlatType flatType;
     private Applicant applicant;
     private LocalDate date;
     private Status status;
 
-    public Application(Project project, flatType flatType, Applicant applicant) 
+    public Application(Project project, FlatType flatType, Applicant applicant) 
     {
         this.project = project;
         this.flatType = flatType;
@@ -28,7 +24,7 @@ public class Application {
         return project;
     }
 
-    public flatType getFlatType() 
+    public FlatType getFlatType() 
     {
         return flatType;
     }
