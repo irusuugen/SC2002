@@ -14,7 +14,6 @@ public class HDBOfficerRegistrationController{
 		project.registerOfficer(registration);
 		List<Registration> registrationList = officer.getRegistrationList();
 		registrationList.add(registration);
-		officer.setRegistrationList(registrationList);
 	}
 	public Status checkRegistrationStatus(HDBOfficer officer, Project project)
 	{

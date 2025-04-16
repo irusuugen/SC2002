@@ -22,4 +22,7 @@ public class Registration {
 	{
 		return this.registeredProject;
 	}
+	public HDBOfficer getRegisteredOfficer(){
+		return this.registeredOfficer;
+	}
 }
