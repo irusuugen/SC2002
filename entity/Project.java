@@ -126,7 +126,7 @@ public class Project {
     	return 0;//handle error
     }
 
-    public void addOccupiedFlat(flatType type, int num) {
+    public void addOccupiedFlat(flatType type) {
     	if(type == flatType.TWOROOMS) {
     		numAvailable2Room -= 1;
     	}
@@ -135,7 +135,7 @@ public class Project {
     	}
     }
     
-    public void removeOccupiedFlat(flatType type, int num) {
+    public void removeOccupiedFlat(flatType type) {
     	if(type == flatType.TWOROOMS) {
     		numAvailable2Room += 1;
     	}
