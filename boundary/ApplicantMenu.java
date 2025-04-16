@@ -1,11 +1,12 @@
 package boundary;
 
+import control.*;
 import entity.*;
-import utils.*;
 import java.util.Scanner;
+import utils.*;
 
 public class ApplicantMenu {
-    public static void applicantMenu(User user) {
+    public static void applicantMenu(Applicant applicant) {
         Scanner sc = new Scanner(System.in);
         
         while (true) {  // Main menu loop
@@ -31,19 +32,43 @@ public class ApplicantMenu {
             System.out.print("Enter your choice: ");
             
             int choice = sc.nextInt();
-            sc.nextLine();  // Consume the newline character
                 
             switch (choice) {
                 case 1:
-                    // Change password functionality
-                    System.out.println("Change password selected");
+                    // Change password functionality (not implemented yet)
                     break;
                 case 2:
                     // View projects functionality
-                    System.out.println("View projects selected");
+                    ApplicantController.viewOpenProjects(applicant);
+                    System.out.println("Press enter to go back");
+                    sc.nextLine();
                     break;
-                // Add cases 3-10 similarly
+                case 3:
+                    // Apply for project
+                    break;
+                case 4:
+                    // View application
+                    break;
+                case 5:
+                    // Book with officer
+                    break;
+                case 6:
+                    // Request withdrawal
+                    break;
+                case 7:
+                    // Submit enquiry
+                    break;
+                case 8:
+                    // View enquiry
+                    break;
+                case 9:
+                    // Edit enquiry
+                    break;
+                case 10:
+                    // Delete enquiry
+                    break;
                 case 11:
+                    // Log out
                     System.out.println("Logging out...");
                     return;
                 default:

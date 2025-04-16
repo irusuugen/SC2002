@@ -20,7 +20,7 @@ public class HDBManager extends User {
 
     public void toggleVisibility(Project project) {
         if (createdProjects.contains(project)) {
-            project.setVisibility(!project.getVisibility());
+            //project.setVisibility(!project.getVisibility());
         }
     }
 
@@ -39,7 +39,7 @@ public class HDBManager extends User {
 
     public void approveApplication(Application application) {
         Project project = application.getProject();
-        flatType type = flatType.valueOf(application.getFlatType());
+        FlatType type = FlatType.valueOf(application.getFlatType());
         if (project.getNumFlatAvailable(type) > 0) {
             application.markSuccessful();
             project.addOccupiedFlat(type, 1);
@@ -54,7 +54,7 @@ public class HDBManager extends User {
 
     public void approveWithdrawal(Application application) {
         application.withdraw();
-        flatType type = flatType.valueOf(application.getFlatType());
+        FlatType type = FlatType.valueOf(application.getFlatType());
         application.getProject().removeOccupiedFlat(type, 1);
     }
 

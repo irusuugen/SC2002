@@ -3,11 +3,6 @@ package entity;
 import java.time.LocalDate;
 import java.util.*;
 
-enum flatType{
-	TWOROOMS,
-	THREEROOMS
-}
-
 public class Project {
 	private String projectName;
 	private String neighborhood;
@@ -15,11 +10,11 @@ public class Project {
     private int num3Room;
     private int numAvailable2Room;
     private int numAvailable3Room;
-    private int sellingPrice2Room;
-    private int sellingPrice3Room;
+    private float sellingPrice2Room;
+    private float sellingPrice3Room;
     private LocalDate applicationOpenDate;
     private LocalDate applicationCloseDate;
-    private boolean visibility;
+    private boolean visibility = true;
     private HDBManager projectManager;
     private int officerSlot;
     private List<HDBOfficer> officerSlotList;
@@ -27,7 +22,7 @@ public class Project {
     private ArrayList<Application> applicationList;
     private ArrayList<Enquiry> enquiryList;
     
-    public Project(String projectName, String neighborhood, int num2Room, int sellingPrice2Room, int num3Room, int sellingPrice3Room, LocalDate applicationOpenDate, LocalDate applicationCloseDate, HDBManager projectManager, int officerSlot, List<HDBOfficer> officerSlotList) {
+    public Project(String projectName, String neighborhood, int num2Room, float sellingPrice2Room, int num3Room, float sellingPrice3Room, LocalDate applicationOpenDate, LocalDate applicationCloseDate, HDBManager projectManager, int officerSlot, List<HDBOfficer> officerSlotList) {
     	this.projectName = projectName;
     	this.neighborhood = neighborhood;
     	this.num2Room = num2Room;
@@ -36,8 +31,8 @@ public class Project {
     	this.applicationOpenDate = applicationOpenDate;
     	this.applicationCloseDate = applicationCloseDate;
     	this.officerSlot = officerSlot;
-    	this.numAvailable2Room = 0;
-    	this.numAvailable3Room = 0;
+    	this.numAvailable2Room = num2Room;
+    	this.numAvailable3Room = num3Room;
     	this.officerSlotList = officerSlotList;
         this.applicationList = new ArrayList<>();
         this.registrationList = new ArrayList<>();
@@ -52,11 +47,11 @@ public class Project {
     	return this.neighborhood;
     }
     
-    public int getSellingPrice(flatType type) {
-    	if(type == flatType.TWOROOMS) {
+    public float getSellingPrice(FlatType type) {
+    	if(type == FlatType.TWOROOMS) {
     		return sellingPrice2Room;
     	}
-    	else if(type == flatType.THREEROOMS) {
+    	else if(type == FlatType.THREEROOMS) {
     		return sellingPrice3Room;
     	}
     	return 0;
@@ -105,40 +100,48 @@ public class Project {
     public void printProjectDetails() {
         System.out.printf("Name: %s\nNeighborhood: %s\n Number of 2-room flats: %d\tSelling price: %d"
         		+ "\\n Number of 2-room flats: %d\\tSelling price: %d\n Application period: %s - %s",
-        		projectName, neighborhood, numAvailable2Room, sellingPrice2Room, numAvailable3Room, sellingPrice3Room, dateFormat.format(this.applicationOpenDate),dateFormat.format(this.applicationCloseDate));
+        		projectName, neighborhood, numAvailable2Room, sellingPrice2Room, numAvailable3Room, sellingPrice3Room, this.applicationOpenDate, this.applicationCloseDate);
     }
 
     public boolean checkOpeningPeriod() {
         return true;
     }
 
-    public int getNumFlatAvailable(flatType type) {
-    	if(type == flatType.TWOROOMS) {
+    public int getNumFlatAvailable(FlatType type) {
+    	if(type == FlatType.TWOROOMS) {
     		return numAvailable2Room;
     	}
-    	if(type == flatType.THREEROOMS) {
+    	if(type == FlatType.THREEROOMS) {
     		return numAvailable3Room;
     	}
     	return 0;//handle error
     }
 
-    public void addOccupiedFlat(flatType type, int num) {
-    	if(type == flatType.TWOROOMS) {
+    public void addOccupiedFlat(FlatType type, int num) {
+    	if(type == FlatType.TWOROOMS) {
     		numAvailable2Room -= 1;
     	}
-    	if(type == flatType.THREEROOMS) {
+    	if(type == FlatType.THREEROOMS) {
     		numAvailable3Room -= 1;
     	}
     	//add error
     }
     
-    public void removeOccupiedFlat(flatType type, int num) {
-    	if(type == flatType.TWOROOMS) {
+    public void removeOccupiedFlat(FlatType type, int num) {
+    	if(type == FlatType.TWOROOMS) {
     		numAvailable2Room += 1;
     	}
-    	if(type == flatType.THREEROOMS) {
+    	if(type == FlatType.THREEROOMS) {
     		numAvailable3Room += 1;
     	}
     	//add error
+    }
+
+    public LocalDate getOpenDate() {
+        return this.applicationOpenDate;
+    }
+
+    public LocalDate getCloseDate() {
+        return this.applicationCloseDate;
     }
 }
