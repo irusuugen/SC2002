@@ -28,6 +28,7 @@ public class Project {
     	this.num2Room = num2Room;
     	this.num3Room = num3Room;
     	this.sellingPrice2Room = sellingPrice2Room;
+        this.sellingPrice3Room = sellingPrice3Room;
     	this.applicationOpenDate = applicationOpenDate;
     	this.applicationCloseDate = applicationCloseDate;
     	this.officerSlot = officerSlot;
@@ -137,14 +138,6 @@ public class Project {
     	if(type == FlatType.THREEROOMS) {
     		numAvailable3Room += 1;
     	}
-    }
-
-    public LocalDate getOpenDate() {
-        return this.applicationOpenDate;
-    }
-
-    public LocalDate getCloseDate() {
-        return this.applicationCloseDate;
     }
 
     public LocalDate getOpenDate() {

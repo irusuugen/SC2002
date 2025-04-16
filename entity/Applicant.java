@@ -20,4 +20,12 @@ public class Applicant extends User {
     public List<Enquiry> getEnquiries() {
         return enquiries;
     }
+
+    public void setApplication(Application application) {
+        this.application = application;
+    }
+
+    public void addEnquiry(Enquiry enquiry) {
+        enquiries.add(enquiry);
+    }
 }

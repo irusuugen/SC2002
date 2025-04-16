@@ -2,14 +2,14 @@ package boundary;
 
 import entity.*;
 import java.util.Scanner;
-import utils.*;
 import repository.*;
+import utils.*;
 
 public class Login {
     private final Scanner sc;
 
     public Login() {
-        this.sc = new Scanner(System.in); // Use one scanner for the entire class
+        this.sc = new Scanner(System.in);
     }
 
     public void login() {
@@ -46,7 +46,7 @@ public class Login {
 
                 // Adds a delay before moving to the next page
                 try {
-                    Thread.sleep(1000); // Reduced delay for a better user experience
+                    Thread.sleep(1000); 
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

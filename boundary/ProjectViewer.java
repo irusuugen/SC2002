@@ -8,6 +8,20 @@ import java.util.List;
 public class ProjectViewer {
     private static final int BOX_WIDTH = 74;
 
+    public static void printOneProject(Project project) {
+        System.out.println("Here is the project information:");
+        printTopBorder();
+        printRow("Project Name", project.getProjectName());
+        printRow("Neighborhood", project.getNeighborhood());
+        printRow("Units for 2-Room Flats", String.valueOf(project.getNumFlatAvailable(FlatType.TWOROOMS)));
+        printRow("Price for 2-Room Flats", String.format("$%.2f", project.getSellingPrice(FlatType.TWOROOMS)));
+        printRow("Units for 3-Room Flats", String.valueOf(project.getNumFlatAvailable(FlatType.THREEROOMS)));
+        printRow("Price for 3-Room Flats", String.format("$%.2f", project.getSellingPrice(FlatType.THREEROOMS)));
+        printRow("Application Period", project.getOpenDate() + " to " + project.getCloseDate());
+        printBottomBorder();
+    }
+
+
     public static void printProjects(List<Project> projects) {
         if (projects.isEmpty()) {
             System.out.println("No projects to display.");
