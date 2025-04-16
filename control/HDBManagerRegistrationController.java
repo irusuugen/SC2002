@@ -1,20 +1,19 @@
 package control;
 
-import java.util.*;
 import entity.*;
 
 public class HDBManagerRegistrationController {
-    public void approveOfficer(Project project, HDBOfficer officer) {
+    public void approveOfficer(Project project, Registration registration) {
         if (project.checkOfficerSlot()) {
-            project.addOfficer(officer);
-            project.unregisterOfficer(officer);
+            project.addOfficer(registration.getRegisteredOfficer());
+            project.unregisterOfficer(registration);
         } else {
             System.out.println("No more officer slots available for this project.");
         }
     }
 
-    public void rejectOfficer(Project project, HDBOfficer officer) {
-        project.unregisterOfficer(officer);
+    public void rejectOfficer(Project project, Registration registration) {
+        project.unregisterOfficer(registration);
     }
 
     public void approveApplication(Application application) {
