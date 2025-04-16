@@ -23,7 +23,7 @@ public class Project {
     private HDBManager projectManager;
     private int officerSlot;
     private List<HDBOfficer> officerSlotList;
-    private ArrayList<HDBOfficer> registrationList;
+    private ArrayList<Registration> registrationList;
     private ArrayList<Application> applicationList;
     private ArrayList<Enquiry> enquiryList;
     
@@ -66,6 +66,10 @@ public class Project {
     	return this.visibility;
     }
 
+    public void setVisibility(boolean vis){
+        this.visibility = vis;
+    }
+
     public void addApplication(Application application) {
         applicationList.add(application);
     }
@@ -94,12 +98,12 @@ public class Project {
     	officerSlotList.remove(officer);
     }
     
-    public void registerOfficer(HDBOfficer officer) {
-    	registrationList.add(officer);
+    public void registerOfficer(Registration registration) {
+    	registrationList.add(registration);
     }
 
-    public void unregisterOfficer(HDBOfficer officer) {
-    	registrationList.remove(officer);
+    public void unregisterOfficer(Registration registration) {
+    	registrationList.remove(registration);
     }
     
     public void printProjectDetails() {
@@ -129,7 +133,6 @@ public class Project {
     	if(type == flatType.THREEROOMS) {
     		numAvailable3Room -= 1;
     	}
-    	//add error
     }
     
     public void removeOccupiedFlat(flatType type, int num) {
@@ -139,6 +142,5 @@ public class Project {
     	if(type == flatType.THREEROOMS) {
     		numAvailable3Room += 1;
     	}
-    	//add error
     }
 }
