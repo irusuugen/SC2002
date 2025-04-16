@@ -5,6 +5,7 @@ import java.util.*;
 import entity.HDBOfficer;
 import entity.Project;
 import entity.Registration;
+import entity.Status;
 
 public class HDBOfficerRegistrationController{
 	public void registerForProject(HDBOfficer officer, Project project)
@@ -15,7 +16,7 @@ public class HDBOfficerRegistrationController{
 		registrationList.add(registration);
 		officer.setRegistrationList(registrationList);
 	}
-	public String checkRegistrationStatus(HDBOfficer officer, Project project)
+	public Status checkRegistrationStatus(HDBOfficer officer, Project project)
 	{
 		return officer.getRegistrationList().stream().filter(r -> r.getProject() == project).findFirst().get().getStatus();
 	}
