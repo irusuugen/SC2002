@@ -174,6 +174,10 @@ public class ApplicantController {
         int number = sc.nextInt();
         sc.nextLine();
         Enquiry enquiry = applicant.getEnquiries().get(number-1);
+        if (!enquiry.getAnswer().equals("No reply yet")) {
+            System.out.println("Enquiry already has a reply. Unable to edit.");
+            return;
+        }
         System.out.println("Enter your new enquiry:");
         String message = sc.nextLine();
         System.out.print("Confirm edit (Y/N): ");
@@ -197,6 +201,10 @@ public class ApplicantController {
         int number = sc.nextInt();
         sc.nextLine();
         Enquiry enquiry = enquiryList.get(number-1);
+        if (!enquiry.getAnswer().equals("No reply yet")) {
+            System.out.println("Enquiry already has a reply. Unable to delete.");
+            return;
+        }
         System.out.print("Confirm removal (Y/N): ");
         String choice = sc.nextLine();
         if (choice.equalsIgnoreCase("Y")) {
