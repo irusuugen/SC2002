@@ -1,5 +1,7 @@
 package control;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import entity.*;
 import repository.*;
@@ -18,10 +20,11 @@ public class HDBOfficerApplicationController{
 	
 	public static void updateApplication(HDBOfficer officer)
 	{
+		Application application;
 		while(true){
 			System.out.print("Please enter applicant's NRIC: ");
 			String nric = sc.nextLine();
-			Application application = fetchApplicationFromNRIC(nric);
+			application = fetchApplicationFromNRIC(nric);
 			if(application == null){
 				System.out.print("Application was not found. Retry? (Y/N): ");
                 String retry = sc.nextLine();
@@ -38,7 +41,21 @@ public class HDBOfficerApplicationController{
 				break;
 			}
 		}
-		// generate receipt
+		printBookingReceipt(application, officer);
 	}
 	
+	public static void printBookingReceipt(Application application, HDBOfficer officer){
+		System.out.printf("=== HDB FLAT BOOKING RECEIPT ===\n" + 
+						"Receipt No: %s\n" + 
+						"Booking Date: %s\n\n","REC-" + System.currentTimeMillis(), LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));  
+		System.out.printf("=== APPLICANT DETAILS ===\n" + 
+						"Name: %s\n" + 
+						"NRIC: %s\n" + 
+						"Age: %d\n\n", application.getApplicant().getName(), application.getApplicant().getNric(), application.getApplicant().getAge()); 
+		System.out.printf("=== FLAT DETAILS ===\n" +
+						"Project: %s\n" +
+						"Flat Type: %s\n" +  
+						"Price: $%d\n" +
+						"==========================\n\n", application.getProject().getProjectName(), application.getFlatType(), application.getProject().getSellingPrice(application.getFlatType()));
+	}
 }
