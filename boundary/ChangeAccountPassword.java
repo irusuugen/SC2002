@@ -5,7 +5,7 @@ import java.util.Scanner;
 import utils.*;
 
 public class ChangeAccountPassword {
-    public void changePassword(Role role, User user) {
+    public static void changePassword(Role role, User user) {
         String newPassword;
         String newPassword2;
         Scanner sc = new Scanner(System.in);
