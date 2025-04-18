@@ -91,7 +91,7 @@ public class HDBOfficerMenu {
                 	HDBOfficerRegistrationController.registerForProject(officer);
                     break;
                 case 13:
-                	ProjectViewer.printOneProject(officer.getAssignedProject());
+                	ProjectViewer.printOneProject(officer.getAssignedProject(), officer);
                     break;
                 case 14:
                 	HDBOfficerEnquiryHandler.viewHandlingProjectEnquiries(officer);
@@ -100,7 +100,7 @@ public class HDBOfficerMenu {
                 	HDBOfficerEnquiryHandler.replyEnquiry(officer);
                     break;
                 case 16:
-                	HDBOfficerApplicationController.updateApplication();
+                	HDBOfficerApplicationController.updateApplication(officer);
                     break;
                 case 17:
                 	// Log out
