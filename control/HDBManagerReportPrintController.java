@@ -1,10 +1,14 @@
 package control;
 
-import java.util.*;
 import entity.*;
+import java.util.*;
 
 public class HDBManagerReportPrintController {
-    public List<Application> generateReport(List<Application> allApplications, String filter) {
+    private Scanner sc = new Scanner(System.in);
+
+    public void generateAndPrintReport(List<Application> allApplications) {
+        System.out.print("Filter (married/single/all): ");
+        String filter = sc.nextLine();
         List<Application> result = new ArrayList<>();
         for (Application app : allApplications) {
             if (filter.equalsIgnoreCase("married") && app.getApplicant().isMarried()) {
@@ -15,6 +19,8 @@ public class HDBManagerReportPrintController {
                 result.add(app);
             }
         }
-        return result;
+        for (Application app : result) {
+            System.out.println(app);
+        }
     }
 }
