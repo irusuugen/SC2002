@@ -81,7 +81,7 @@ public class Project {
     }
 
     public List<Enquiry> getEnquiries() {
-        return Collections.unmodifiableList(enquiryList);
+        return enquiryList;
     }
 
     public int getNumFlatAvailable(FlatType type) {

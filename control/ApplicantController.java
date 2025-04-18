@@ -157,7 +157,7 @@ public class ApplicantController {
         System.out.print("Confirm submission (Y/N): ");
         String choice = sc.nextLine();
         if (choice.equalsIgnoreCase("Y")) {
-            applicant.addEnquiry(new Enquiry(message, project));
+            applicant.addEnquiry(new Enquiry(applicant, message, project));
         }
         else {
             System.out.println("Request cancelled.");

@@ -1,6 +1,8 @@
 import boundary.*;
 import repository.ApplicationRepository;
 import repository.ApplicationService;
+import repository.EnquiryRepository;
+import repository.EnquiryService;
 import repository.ProjectRepository;
 import repository.ProjectService;
 import repository.UserRepository;
@@ -17,6 +19,7 @@ public class Main {
         UserService.startUserStorage(new UserRepository());
         ProjectService.startProjectStorage(new ProjectRepository());
         ApplicationService.startApplicationStorage(new ApplicationRepository());
+        EnquiryService.startEnquiryStorage(new EnquiryRepository());
 
         Welcome welcome = new Welcome();
         Scanner scanner = new Scanner(System.in);
