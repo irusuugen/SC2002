@@ -10,13 +10,6 @@ import utils.*;
 public class HDBOfficerApplicationController{
 
 	private static Scanner sc = new Scanner(System.in);
-
-	public static Application fetchApplicationFromNRIC(String NRIC){
-		List<User> users = UserService.getAllUsers();
-		User user = users.stream().filter(u -> u.getNric().equals(NRIC)).findFirst().orElse(null);
-		if(user != null && (user instanceof Applicant)) return ((Applicant) user).getApplication(); 
-		return null;
-	}
 	
 	public static void updateApplication(HDBOfficer officer)
 	{
@@ -24,7 +17,7 @@ public class HDBOfficerApplicationController{
 		while(true){
 			System.out.print("Please enter applicant's NRIC: ");
 			String nric = sc.nextLine();
-			application = fetchApplicationFromNRIC(nric);
+			application = ApplicationService.fetchApplicationFromNRIC(nric);
 			if(application == null){
 				System.out.print("Application was not found. Retry? (Y/N): ");
                 String retry = sc.nextLine();

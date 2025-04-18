@@ -9,8 +9,8 @@ public class Application {
     private Applicant applicant;
     private LocalDate date;
     private Status status;
-    private boolean bookingRequested = false;
-    private boolean withdrawalRequested = false;
+    private boolean bookingRequested;
+    private boolean withdrawalRequested;
 
     public Application(Project project, FlatType flatType, Applicant applicant) 
     {
@@ -19,6 +19,19 @@ public class Application {
         this.applicant = applicant;
         this.date = LocalDate.now();
         this.status = Status.PENDING;
+        this.bookingRequested = false;
+        this.withdrawalRequested = false;
+    }
+
+    public Application(Project project, FlatType flatType, Applicant applicant, Status status, LocalDate date, boolean bookingRequested, boolean withdrawalRequested) 
+    {
+        this.project = project;
+        this.flatType = flatType;
+        this.applicant = applicant;
+        this.date = date;
+        this.status = status;
+        this.bookingRequested = bookingRequested;
+        this.withdrawalRequested = withdrawalRequested;
     }
 
     public Project getProject() 
