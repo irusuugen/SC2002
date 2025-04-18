@@ -6,7 +6,7 @@ import java.util.Scanner;
 import utils.*;
 
 public class HDBOfficerMenu {
-    public static void hdbOfficerMenu(HDBOfficer officer) {
+    public static void officerMenu(HDBOfficer officer) {
         Scanner sc = new Scanner(System.in);
         
         while (true) {  // Main menu loop
@@ -34,82 +34,86 @@ public class HDBOfficerMenu {
             ║  17. Logout                                ║
             ╚════════════════════════════════════════════╝
             """);
-            
-            System.out.print("Enter your choice: ");
-            
-            int choice = sc.nextInt();
-            sc.nextLine();  // Consume the newline character
+
+            // Obtaining user's choice
+            int choice;
+            while (true) {
+                choice = IntGetter.readInt("➤ Enter your choice: ");
+                if (choice >= 1 && choice <= 17) break;
+                System.out.println("Please enter a number between 1 and 17.");
+            }
+            ClearPage.clearPage(); // Clears terminal for the page for the corresponding options
+                
             switch (choice) {
                 case 1:
-                    // Change password functionality
-                    System.out.println("Change password selected");
+                	ChangeAccountPassword.changePassword(Role.HDB_OFFICER,officer);
                     break;
                 case 2:
-                    // View projects functionality
+                    // View projects
                     ApplicantController.viewOpenProjects(officer);
-                    System.out.println("Press enter to go back");
-                    sc.nextLine();
                     break;
                 case 3:
                     // Apply for project
+                    ApplicantController.applyForProject(officer);
                     break;
                 case 4:
                     // View application
+                    ApplicantController.viewApplication(officer);
                     break;
                 case 5:
                     // Book with officer
+                    ApplicantController.requestBooking(officer);
                     break;
                 case 6:
                     // Request withdrawal
+                    ApplicantController.requestWithdrawal(officer);
                     break;
                 case 7:
                     // Submit enquiry
+                    ApplicantController.submitEnquiry(officer);
                     break;
                 case 8:
                     // View enquiry
+                    ApplicantController.viewEnquiries(officer);
                     break;
                 case 9:
                     // Edit enquiry
+                    ApplicantController.editEnquiry(officer);
                     break;
                 case 10:
                     // Delete enquiry
+                    ApplicantController.deleteEnquiry(officer);
                     break;
                 case 11:
-                    HDBOfficerRegistrationController.registerForProject(officer);
-                    System.out.println("Press Enter to go back");
-                    sc.nextLine();
+                	HDBOfficerRegistrationController.registerForProject(officer);
                     break;
                 case 12:
-                    HDBOfficerRegistrationController.registerForProject(officer);
-                    System.out.println("Press Enter to go back");
-                    sc.nextLine();
+                	HDBOfficerRegistrationController.registerForProject(officer);
                     break;
                 case 13:
-                    ProjectViewer.printOneProject(officer.getAssignedProject(), officer);
-                    System.out.println("Press Enter to go back");
-                    sc.nextLine();
+                	ProjectViewer.printOneProject(officer.getAssignedProject());
                     break;
                 case 14:
-                    HDBOfficerEnquiryHandler.viewHandlingProjectEnquiries(officer);
-                    System.out.println("Press Enter to go back");
-                    sc.nextLine();
+                	HDBOfficerEnquiryHandler.viewHandlingProjectEnquiries(officer);
                     break;
                 case 15:
-                    HDBOfficerEnquiryHandler.replyEnquiry(officer);
-                    System.out.println("Press Enter to go back");
-                    sc.nextLine();
+                	HDBOfficerEnquiryHandler.replyEnquiry(officer);
                     break;
                 case 16:
-                    HDBOfficerApplicationController.updateApplication();
-                    System.out.println("Press Enter to go back");
-                    sc.nextLine();
+                	HDBOfficerApplicationController.updateApplication();
                     break;
                 case 17:
+                	// Log out
                     System.out.println("Logging out...");
+                    try {
+                        Thread.sleep(1000); 
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     return;
-                default:
-                    System.out.println("Invalid choice. Please enter a number from 1-17.");
             }
+            System.out.println("➤ Press Enter to go back.");
+            sc.nextLine(); 
         }
     }
 }
