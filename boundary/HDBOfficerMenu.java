@@ -10,10 +10,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class HDBOfficerMenu {
-    private static final Scanner sc = new Scanner(System.in);
-
-    public static void officerMenu(UserSession session) {
-        HDBOfficer officer = (HDBOfficer) session.getUser();
+    public static void officerMenu(HDBOfficer officer) {
+        Scanner sc = new Scanner(System.in);
         
         while (true) {
             ClearPage.clearPage();
