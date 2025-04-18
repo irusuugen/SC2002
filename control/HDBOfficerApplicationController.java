@@ -35,6 +35,11 @@ public class HDBOfficerApplicationController{
             	String retry = sc.nextLine();
                 if (retry.equalsIgnoreCase("N")) return;
 			}
+			else if(!application.isBookingRequested()){
+				System.out.print("Booking request has not been submitted. Retry? (Y/N): ");
+            	String retry = sc.nextLine();
+                if (retry.equalsIgnoreCase("N")) return;
+			}
 			else{
 				application.getProject().addOccupiedFlat(application.getFlatType());
 				application.markBooked();
