@@ -29,4 +29,11 @@ public class HDBManagerApplicationController {
             }
         }
     }
+    public static List<Application> getAllApplications(HDBManager manager){
+        List<Application>  ret = new ArrayList<>();
+        for(Project p: manager.getCreatedProjects()){
+            ret.addAll(p.getApplications());
+        }
+        return ret;
+    }
 }

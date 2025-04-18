@@ -2,17 +2,21 @@ package boundary;
 
 import java.util.*;
 import entity.*;
+import repository.ProjectService;
 import control.*;
 import utils.*;
 
 public class HDBManagerMenu {
-    public static void managerMenu(HDBManager manager, List<Project> allProjects, List<Application> allApplications) {
+    public static void managerMenu(HDBManager manager) {
         Scanner sc = new Scanner(System.in);
         HDBManagerProjectController projectController = new HDBManagerProjectController();
         HDBManagerRegistrationController registrationController = new HDBManagerRegistrationController();
         HDBManagerApplicationController applicationController = new HDBManagerApplicationController();
         HDBManagerEnquiryController enquiryController = new HDBManagerEnquiryController();
         HDBManagerReportPrintController reportController = new HDBManagerReportPrintController();
+
+        List<Project> allProjects = ProjectService.getAllProjects();
+        List<Application> allApplications = HDBManagerApplicationController.getAllApplications(manager);
 
         while (true) {
             ClearPage.clearPage();

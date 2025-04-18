@@ -95,6 +95,10 @@ public class Project {
         return registrationList;
     }
 
+    public List<Application> getApplications(){
+        return applicationList;
+    }
+
     // === Setters ===
     public void setVisibility(boolean visibility) {
         this.visibility = visibility;
