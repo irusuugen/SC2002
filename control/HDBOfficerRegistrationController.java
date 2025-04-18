@@ -63,11 +63,11 @@ public class HDBOfficerRegistrationController{
     		if(registrationList.isEmpty())
     		{
     			System.out.println("No registration");
-    			break;
+    			return;
     		}
     		for(Registration registration : registrationList)
     		{
-    			System.out.println("Project Name: %s, Status: %s",registration.getProject().getProjectName(),registration.getStatus());
+    			System.out.printf("Project Name: %s, Status: %s\n",registration.getProject().getProjectName(),registration.getStatus());
     		}
 	}
 }
