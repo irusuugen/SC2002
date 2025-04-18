@@ -13,7 +13,7 @@ public class Applicant extends User {
     public Applicant(String name, String nric, String password, int age, boolean isMarried) {
         super(name, nric, password, age, isMarried);
         this.enquiries = new ArrayList<>();
-        this.application = ApplicationService.fetchApplicationFromNRIC(nric);
+        this.application = null;
     }
 
     public Application getApplication() {
