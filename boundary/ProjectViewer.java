@@ -12,9 +12,12 @@ public class ProjectViewer {
         System.out.println("Here is the project information:");
         BoxPrinter.printTopBorder();
 
-        if (user instanceof Applicant applicant) {
+        if (user instanceof HDBOfficer) {
+            showFullProjectDetails(project);
+        }
+        else if (user instanceof Applicant applicant) {
             filterProjectDetailsForApplicants(project, applicant);
-        } else if (user instanceof HDBOfficer || user instanceof HDBManager) {
+        } else if (user instanceof HDBManager) {
             showFullProjectDetails(project);
         }
 
@@ -32,9 +35,12 @@ public class ProjectViewer {
         for (int i = 0; i < projects.size(); i++) {
             Project project = projects.get(i);
 
-            if (user instanceof Applicant applicant) {
+            if (user instanceof HDBOfficer) {
+                showFullProjectDetails(project);
+            }
+            else if (user instanceof Applicant applicant) {
                 filterProjectDetailsForApplicants(project, applicant);
-            } else if (user instanceof HDBOfficer || user instanceof HDBManager) {
+            } else if (user instanceof HDBManager) {
                 showFullProjectDetails(project);
             }
 

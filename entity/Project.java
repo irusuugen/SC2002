@@ -24,7 +24,7 @@ public class Project {
     private int officerSlot;
     private List<HDBOfficer> officerSlotList;
 
-    private final List<Registration> registrationList = new ArrayList<>();
+    private List<Registration> registrationList = new ArrayList<>();
     private List<Application> applicationList = new ArrayList<>();
     private List<Enquiry> enquiryList = new ArrayList<>();
 
@@ -81,7 +81,7 @@ public class Project {
     }
 
     public List<Enquiry> getEnquiries() {
-        return Collections.unmodifiableList(enquiryList);
+        return enquiryList;
     }
 
     public int getNumFlatAvailable(FlatType type) {
@@ -106,6 +106,14 @@ public class Project {
 
     public void updateOfficerSlot(int newSlotCount) {
         this.officerSlot = newSlotCount;
+    }
+
+    public void addEnquiry(Enquiry enquiry) {
+        enquiryList.add(enquiry);
+    }
+
+    public void removeEnquiry(Enquiry enquiry) {
+        enquiryList.remove(enquiry);
     }
 
     // === Officer Management ===
@@ -156,21 +164,6 @@ public class Project {
     }
 
     // === Utility Methods ===
-    public void printProjectDetails() {
-        System.out.printf("""
-            Name: %s
-            Neighborhood: %s
-            Number of 2-room flats: %d\tSelling price: %.2f
-            Number of 3-room flats: %d\tSelling price: %.2f
-            Application period: %s - %s
-            """,
-            projectName, neighborhood,
-            numAvailable2Room, sellingPrice2Room,
-            numAvailable3Room, sellingPrice3Room,
-            applicationOpenDate, applicationCloseDate
-        );
-    }
-
     public boolean checkOpeningPeriod() {
         LocalDate today = LocalDate.now();
         return (today.isEqual(applicationOpenDate) || today.isAfter(applicationOpenDate))

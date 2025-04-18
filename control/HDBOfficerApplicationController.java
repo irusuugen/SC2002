@@ -25,13 +25,13 @@ public class HDBOfficerApplicationController{
 			System.out.print("Please enter applicant's NRIC: ");
 			String nric = sc.nextLine();
 			application = fetchApplicationFromNRIC(nric);
-			if(application == null){
+			if (application == null){
 				System.out.print("Application was not found. Retry? (Y/N): ");
                 String retry = sc.nextLine();
                 if (retry.equalsIgnoreCase("N")) return;
 			}
-			else if(application.getProject() != officer.getAssignedProject()){
-				System.out.print("Officer is not responsible for the project. Retry? (Y/N): ");
+			else if (!officer.getAssignedProjects().contains(application.getProject())){
+				System.out.print("Officer is not responsible for the applicant's project. Retry? (Y/N): ");
             	String retry = sc.nextLine();
                 if (retry.equalsIgnoreCase("N")) return;
 			}
@@ -40,27 +40,53 @@ public class HDBOfficerApplicationController{
             	String retry = sc.nextLine();
                 if (retry.equalsIgnoreCase("N")) return;
 			}
-			else{
-				application.getProject().addOccupiedFlat(application.getFlatType());
-				application.markBooked();
-				break;
+			else {
+				System.out.println("Application found. Confirm successful booking? (Y/N): ");
+				String confirm = sc.nextLine();
+				if (confirm.equalsIgnoreCase("Y")) {
+					application.getProject().addOccupiedFlat(application.getFlatType());
+					application.markBooked();
+					break;
+				} else {
+					System.out.println("Application was not booked. Retry? (Y/N): ");
+					String retry = sc.nextLine();
+					if (retry.equalsIgnoreCase("N")) return;
+				}
 			}
 		}
+		ClearPage.clearPage();
 		printBookingReceipt(application, officer);
 	}
-	
-	public static void printBookingReceipt(Application application, HDBOfficer officer){
-		System.out.printf("=== HDB FLAT BOOKING RECEIPT ===\n" + 
-						"Receipt No: %s\n" + 
-						"Booking Date: %s\n\n","REC-" + System.currentTimeMillis(), LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));  
-		System.out.printf("=== APPLICANT DETAILS ===\n" + 
-						"Name: %s\n" + 
-						"NRIC: %s\n" + 
-						"Age: %d\n\n", application.getApplicant().getName(), application.getApplicant().getNric(), application.getApplicant().getAge()); 
-		System.out.printf("=== FLAT DETAILS ===\n" +
-						"Project: %s\n" +
-						"Flat Type: %s\n" +  
-						"Price: $%d\n" +
-						"==========================\n\n", application.getProject().getProjectName(), application.getFlatType(), application.getProject().getSellingPrice(application.getFlatType()));
+
+	public static void printBookingReceipt(Application application, HDBOfficer officer) {
+		BoxPrinter.printTopBorder();
+		System.out.println("         HDB FLAT BOOKING RECEIPT");
+
+		// Receipt Details
+		BoxPrinter.printDivider();
+		System.out.println("║" + " ".repeat((BoxPrinter.BOX_WIDTH - 2 - 24) / 2) + "RECEIPT DETAILS" + " ".repeat((BoxPrinter.BOX_WIDTH - 2 - 24 + 1) / 2) + "║");
+		BoxPrinter.printDivider();
+		BoxPrinter.printRow("Receipt No", "REC-" + System.currentTimeMillis());
+		BoxPrinter.printRow("Booking Date", LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+
+		// Applicant Details
+		BoxPrinter.printDivider();
+		System.out.println("║" + " ".repeat((BoxPrinter.BOX_WIDTH - 2 - 26) / 2) + "APPLICANT DETAILS" + " ".repeat((BoxPrinter.BOX_WIDTH - 2 - 26 + 1) / 2) + "║");
+		BoxPrinter.printDivider();
+		BoxPrinter.printRow("Name", application.getApplicant().getName());
+		BoxPrinter.printRow("NRIC", application.getApplicant().getNric());
+		BoxPrinter.printRow("Age", String.valueOf(application.getApplicant().getAge()));
+		BoxPrinter.printRow("Marital Status", application.getApplicant().getUserGroup().toString());
+
+		// Flat Details
+		BoxPrinter.printDivider();
+		System.out.println("║" + " ".repeat((BoxPrinter.BOX_WIDTH - 2 - 22) / 2) + "FLAT DETAILS" + " ".repeat((BoxPrinter.BOX_WIDTH - 2 - 22 + 1) / 2) + "║");
+		BoxPrinter.printDivider();
+		BoxPrinter.printRow("Project", application.getProject().getProjectName());
+		BoxPrinter.printRow("Flat Type", application.getFlatType().toString());
+		BoxPrinter.printRow("Price", "$" + application.getProject().getSellingPrice(application.getFlatType()));
+
+		BoxPrinter.printBottomBorder();
 	}
+
 }

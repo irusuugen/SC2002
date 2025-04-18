@@ -26,8 +26,8 @@ public class HDBOfficerMenu {
             ║  9. Edit enquiries                         ║
             ║  10. Delete enquiries                      ║
             ║  11. Register to join a project            ║
-            ║  12. View registration                     ║
-            ║  13. View handling project                 ║
+            ║  12. View registrations                    ║
+            ║  13. View assigned projects                ║
             ║  14. View enquiries on handling project    ║
             ║  15. Reply enquiries on handling project   ║
             ║  16. Update successful application         ║
@@ -85,21 +85,27 @@ public class HDBOfficerMenu {
                     ApplicantController.deleteEnquiry(officer);
                     break;
                 case 11:
+                    // Register for a project
                 	HDBOfficerRegistrationController.registerForProject(officer);
                     break;
                 case 12:
-                	HDBOfficerRegistrationController.registerForProject(officer);
+                    // View registered projects
+                	HDBOfficerRegistrationController.viewRegistrations(officer);
                     break;
                 case 13:
-                	ProjectViewer.printOneProject(officer.getAssignedProject(), officer);
+                    // View assigned projects
+                	ProjectViewer.printProjects(officer.getAssignedProjects(), officer);
                     break;
                 case 14:
-                	HDBOfficerEnquiryHandler.viewHandlingProjectEnquiries(officer);
+                    // View enquiries for assigned projects
+                	HDBOfficerEnquiryHandler.viewAssignedProjectsEnquiries(officer);
                     break;
                 case 15:
+                    // Reply to enquiries for assigned projects
                 	HDBOfficerEnquiryHandler.replyEnquiry(officer);
                     break;
                 case 16:
+                    // Update successful applications
                 	HDBOfficerApplicationController.updateApplication(officer);
                     break;
                 case 17:

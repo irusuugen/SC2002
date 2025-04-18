@@ -52,7 +52,7 @@ public class ApplicantController {
         // Checks for the project that user wants to apply for
         Project project;
         while (true) {
-        System.out.println("Please enter the name of the project you'd like to apply for (case-sensitive!): ");
+        System.out.println("Please enter the name of the project you'd like to apply for: ");
         String inputTitle = sc.nextLine();
             project = getOpenProjects(applicant).stream()
                         .filter(p -> inputTitle.equals(p.getProjectName()))
@@ -89,6 +89,7 @@ public class ApplicantController {
         String choice = sc.nextLine();
         if (choice.equalsIgnoreCase("Y")) {
             applicant.setApplication(new Application(project, flatType, applicant));
+            project.addApplication(new Application(project, flatType, applicant));
         }
         else {
             System.out.println("Request cancelled.");
@@ -158,6 +159,7 @@ public class ApplicantController {
         String choice = sc.nextLine();
         if (choice.equalsIgnoreCase("Y")) {
             applicant.addEnquiry(new Enquiry(message, project));
+            project.addEnquiry(new Enquiry(message, project));
         }
         else {
             System.out.println("Request cancelled.");
@@ -209,6 +211,7 @@ public class ApplicantController {
         String choice = sc.nextLine();
         if (choice.equalsIgnoreCase("Y")) {
             enquiryList.remove(enquiry);
+            applicant.getApplication().getProject().removeEnquiry(enquiry);
         }
         else {
             System.out.println("Request cancelled.");
@@ -220,6 +223,7 @@ public class ApplicantController {
         if (enquiries.isEmpty()) {
             System.out.println("No enquiries submitted.");
         } else {
+            System.out.println("Here are your enquiries:");
             EnquiriesViewer.printEnquiries(enquiries);
         }
     }

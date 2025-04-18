@@ -6,7 +6,6 @@ import entity.*;
 
 public class EnquiriesViewer {
     public static void printEnquiries(List<Enquiry> enquiries) {
-        System.out.println("Here is a list of your enquiries:");
         BoxPrinter.printTopBorder();
 
         for (int i = 0; i < enquiries.size(); i++) {
@@ -19,7 +18,7 @@ public class EnquiriesViewer {
             if (i < enquiries.size() - 1) {
                 BoxPrinter.printDivider(); // Inner separator
             } else {
-                BoxPrinter.printBottomBorder(); // End of final project
+                BoxPrinter.printBottomBorder(); // End of final enquiry
             }
         }
         
