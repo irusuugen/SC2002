@@ -2,6 +2,7 @@ package control;
 
 import entity.*;
 import java.util.*;
+import utils.*;
 
 public class HDBManagerRegistrationController {
     private Scanner sc = new Scanner(System.in);
@@ -18,7 +19,7 @@ public class HDBManagerRegistrationController {
                 int idx = IntGetter.readInt("Select officer: ") - 1;
                 Registration reg = regs.get(idx);
                 if (approve) {
-                    if (project.checkOfficerSlot()) {
+                    if (project.hasAvailableOfficerSlot()) {
                         project.addOfficer(reg.getRegisteredOfficer());
                         project.unregisterOfficer(reg);
                         System.out.println("Officer approved.");
