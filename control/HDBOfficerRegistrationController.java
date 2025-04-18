@@ -20,7 +20,7 @@ public class HDBOfficerRegistrationController{
 		List<Project> registrableProjects = new ArrayList<>();
     		for (Project project : ProjectService.getAllProjects())
     		{
-            		if (project.getVisibility() && project!=officer.getAssignedProject() && (officer.getApplication()==null || project!=officer.getApplication().getProject()))
+            		if (project.isVisible() && project!=officer.getAssignedProject() && (officer.getApplication()==null || project!=officer.getApplication().getProject()))
             		{
             			registrableProjects.add(project);
             		}
