@@ -2,7 +2,7 @@ package entity;
 
 import java.util.*;
 
-public class HDBOfficer extends User{
+public class HDBOfficer extends Applicant{
 	private String officerID;
 	private Project assignedProject;
 	private List<Registration> registrationList = new ArrayList<>();
