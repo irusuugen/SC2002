@@ -6,7 +6,7 @@ import java.util.Scanner;
 import utils.*;
 
 public class HDBOfficerMenu {
-    public static void officerMenu(HDBOfficer officer) {
+    public static void hdbOfficerMenu(HDBOfficer officer) {
         Scanner sc = new Scanner(System.in);
         
         while (true) {  // Main menu loop
