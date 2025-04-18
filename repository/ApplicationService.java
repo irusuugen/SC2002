@@ -14,6 +14,11 @@ public class ApplicationService {
         applicationRepository = repo;
         applicationList.clear();
         applicationList = applicationRepository.loadAllApplications();
+        //assign application to applicants and projects
+        for(Application app: applicationList){
+            app.getApplicant().setApplication(app);
+            app.getProject().getApplications().add(app);
+        }
         return true;
     }
 

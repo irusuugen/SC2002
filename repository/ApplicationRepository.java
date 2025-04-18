@@ -13,7 +13,7 @@ import java.util.List;
 public class ApplicationRepository {
     public List<Application> loadAllApplications() {
         List<Application> allApplications = new ArrayList<>();
-        allApplications.addAll(readApplications("data/ProjectList.csv"));
+        allApplications.addAll(readApplications("data/ApplicationList.csv"));
         return allApplications;
     }
 
