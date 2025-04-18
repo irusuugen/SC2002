@@ -18,13 +18,13 @@ public class ApplicantController {
         List<Project> openProjects = new ArrayList<>();
         if (applicant.getUserGroup() == UserGroup.MARRIED) {
             for (Project project : ProjectService.getAllProjects()) {
-                if (project.getVisibility() && (project.getNumFlatAvailable(FlatType.TWOROOMS) > 0 || project.getNumFlatAvailable(FlatType.THREEROOMS) > 0)) {
+                if (project.isVisible() && (project.getNumFlatAvailable(FlatType.TWOROOMS) > 0 || project.getNumFlatAvailable(FlatType.THREEROOMS) > 0)) {
                     openProjects.add(project);
                 }
             }
         } else if (applicant.getUserGroup() == UserGroup.SINGLE) {
             for (Project project : ProjectService.getAllProjects()) {
-                if (project.getNumFlatAvailable(FlatType.TWOROOMS) > 0 && project.getVisibility()) {
+                if (project.getNumFlatAvailable(FlatType.TWOROOMS) > 0 && project.isVisible()) {
                     openProjects.add(project);
                 }
             }
