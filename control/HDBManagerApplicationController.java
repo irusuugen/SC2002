@@ -1,20 +1,32 @@
 package control;
 
 import entity.*;
+import java.util.*;
 
 public class HDBManagerApplicationController {
-    public void approveApplication(Application application) {
-        Project project = application.getProject();
-        FlatType type = application.getFlatType();
-        if (project.getNumFlatAvailable(type) > 0) {
-            application.markSuccessful();
-            project.addOccupiedFlat(type);
-        } else {
-            application.markUnsuccessful();
-        }
-    }
+    private Scanner sc = new Scanner(System.in);
 
-    public void rejectApplication(Application application) {
-        application.markUnsuccessful();
+    public void processApplication(List<Application> allApplications, boolean approve) {
+        System.out.print("Enter applicant NRIC: ");
+        String nric = sc.nextLine();
+        for (Application app : allApplications) {
+            if (app.getApplicant().getNric().equalsIgnoreCase(nric)) {
+                if (approve) {
+                    Project project = app.getProject();
+                    FlatType type = app.getFlatType();
+                    if (project.getNumFlatAvailable(type) > 0) {
+                        app.markSuccessful();
+                        project.addOccupiedFlat(type);
+                        System.out.println("Application approved.");
+                    } else {
+                        app.markUnsuccessful();
+                        System.out.println("No available flats.");
+                    }
+                } else {
+                    app.markUnsuccessful();
+                    System.out.println("Application rejected.");
+                }
+            }
+        }
     }
 }
