@@ -10,6 +10,12 @@ public class Registration {
 		this.registeredProject=project;
 		this.registrationStatus=Status.PENDING;
 	}
+	public Registration(HDBOfficer officer,Project project, Status status)
+	{
+    this.registeredOfficer=officer;
+		this.registeredProject=project;
+		this.registrationStatus=status;
+	}
 	public void setStatus(Status status)
 	{
 		this.registrationStatus=status;

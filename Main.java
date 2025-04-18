@@ -1,12 +1,5 @@
 import boundary.*;
-import repository.ApplicationRepository;
-import repository.ApplicationService;
-import repository.EnquiryRepository;
-import repository.EnquiryService;
-import repository.ProjectRepository;
-import repository.ProjectService;
-import repository.UserRepository;
-import repository.UserService;
+import repository.*;
 import entity.Project;
 import entity.FlatType;
 import entity.Filter;
@@ -20,6 +13,7 @@ public class Main {
         ProjectService.startProjectStorage(new ProjectRepository());
         ApplicationService.startApplicationStorage(new ApplicationRepository());
         EnquiryService.startEnquiryStorage(new EnquiryRepository());
+        RegistrationService.startRegistrationStorage(new RegistrationRepository());
 
         Welcome welcome = new Welcome();
         Scanner scanner = new Scanner(System.in);
