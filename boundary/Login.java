@@ -63,10 +63,10 @@ public class Login {
                 ApplicantMenu.applicantMenu((Applicant) user);
                 return;
             case HDB_OFFICER:
-                HDBOfficerMenu.hdbOfficerMenu((HDBOfficer) user);
+                HDBOfficerMenu.officerMenu((HDBOfficer) user);
                 return;
             case HDB_MANAGER:
-                HDBManagerMenu.hdbManagerMenu((HDBManager) user);
+                HDBManagerMenu.managerMenu((HDBManager) user);
                 return;
         }
     }
