@@ -22,11 +22,11 @@ public class Project {
 
     private final HDBManager projectManager;
     private int officerSlot;
-    private final List<HDBOfficer> officerSlotList;
+    private List<HDBOfficer> officerSlotList;
 
     private final List<Registration> registrationList = new ArrayList<>();
-    private final List<Application> applicationList = new ArrayList<>();
-    private final List<Enquiry> enquiryList = new ArrayList<>();
+    private List<Application> applicationList = new ArrayList<>();
+    private List<Enquiry> enquiryList = new ArrayList<>();
 
     public Project(String projectName, String neighborhood, int num2Room, float sellingPrice2Room,
                    int num3Room, float sellingPrice3Room, LocalDate applicationOpenDate,
