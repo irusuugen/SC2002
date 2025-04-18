@@ -60,18 +60,18 @@ public class HDBOfficerApplicationController{
 
 	public static void printBookingReceipt(Application application, HDBOfficer officer) {
 		BoxPrinter.printTopBorder();
-		System.out.println("         HDB FLAT BOOKING RECEIPT");
+		System.out.println(BoxPrinter.centerInBox("HDB FLAT BOOKING RECEIPT"));
 
 		// Receipt Details
 		BoxPrinter.printDivider();
-		System.out.println("║" + " ".repeat((BoxPrinter.BOX_WIDTH - 2 - 24) / 2) + "RECEIPT DETAILS" + " ".repeat((BoxPrinter.BOX_WIDTH - 2 - 24 + 1) / 2) + "║");
+		System.out.println(BoxPrinter.centerInBox("RECEIPT DETAILS"));
 		BoxPrinter.printDivider();
 		BoxPrinter.printRow("Receipt No", "REC-" + System.currentTimeMillis());
 		BoxPrinter.printRow("Booking Date", LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
 
 		// Applicant Details
 		BoxPrinter.printDivider();
-		System.out.println("║" + " ".repeat((BoxPrinter.BOX_WIDTH - 2 - 26) / 2) + "APPLICANT DETAILS" + " ".repeat((BoxPrinter.BOX_WIDTH - 2 - 26 + 1) / 2) + "║");
+		System.out.println(BoxPrinter.centerInBox("APPLICANT DETAILS"));
 		BoxPrinter.printDivider();
 		BoxPrinter.printRow("Name", application.getApplicant().getName());
 		BoxPrinter.printRow("NRIC", application.getApplicant().getNric());
@@ -80,7 +80,7 @@ public class HDBOfficerApplicationController{
 
 		// Flat Details
 		BoxPrinter.printDivider();
-		System.out.println("║" + " ".repeat((BoxPrinter.BOX_WIDTH - 2 - 22) / 2) + "FLAT DETAILS" + " ".repeat((BoxPrinter.BOX_WIDTH - 2 - 22 + 1) / 2) + "║");
+		System.out.println(BoxPrinter.centerInBox("FLAT DETAILS"));
 		BoxPrinter.printDivider();
 		BoxPrinter.printRow("Project", application.getProject().getProjectName());
 		BoxPrinter.printRow("Flat Type", application.getFlatType().toString());

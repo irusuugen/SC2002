@@ -12,27 +12,27 @@ public class HDBOfficerMenu {
         while (true) {  // Main menu loop
             ClearPage.clearPage();
             System.out.println("""
-            ╔════════════════════════════════════════════╗
-            ║               Officer Menu                 ║
-            ╠════════════════════════════════════════════╣
-            ║  1. Change password                        ║
-            ║  2. View all open projects                 ║
-            ║  3. Apply for a project                    ║
-            ║  4. View application                       ║
-            ║  5. Book flat                              ║
-            ║  6. Request withdrawal for application     ║
-            ║  7. Submit enquiry about a project         ║
-            ║  8. View enquiries                         ║
-            ║  9. Edit enquiries                         ║
-            ║  10. Delete enquiries                      ║
-            ║  11. Register to join a project            ║
-            ║  12. View registrations                    ║
-            ║  13. View assigned projects                ║
-            ║  14. View enquiries on handling project    ║
-            ║  15. Reply enquiries on handling project   ║
-            ║  16. Update successful application         ║
-            ║  17. Logout                                ║
-            ╚════════════════════════════════════════════╝
+            ╔════════════════════════════════════════════════════════╗
+            ║                    Officer Menu                        ║
+            ╠════════════════════════════════════════════════════════╣
+            ║  1.  Change password                                   ║
+            ║  2.  View all open projects                            ║
+            ║  3.  Apply for a project                               ║
+            ║  4.  View application                                  ║
+            ║  5.  Book flat                                         ║
+            ║  6.  Request withdrawal for application                ║
+            ║  7.  Submit enquiry about a project                    ║
+            ║  8.  View enquiries                                    ║
+            ║  9.  Edit enquiries                                    ║
+            ║ 10.  Delete enquiries                                  ║
+            ║ 11.  Register to join a project                        ║
+            ║ 12.  View registrations                                ║
+            ║ 13.  View assigned projects                            ║
+            ║ 14.  View enquiries on assigned projects               ║
+            ║ 15.  Reply to enquiries on assigned projects           ║
+            ║ 16.  Update successful application                     ║
+            ║ 17.  Logout                                            ║
+            ╚════════════════════════════════════════════════════════╝
             """);
 
             // Obtaining user's choice
