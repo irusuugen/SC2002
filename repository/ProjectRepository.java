@@ -85,8 +85,9 @@ public class ProjectRepository {
             row.add("3-Room");
             row.add(String.valueOf(p.getNumFlatAvailable(FlatType.THREEROOMS)));
             row.add(String.valueOf(p.getSellingPrice(FlatType.THREEROOMS)));
-            row.add(p.getOpenDate().toString());
-            row.add(p.getOpenDate().toString());
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("d/M/yy");
+            row.add(p.getOpenDate().format(dateFormatter));
+            row.add(p.getOpenDate().format(dateFormatter));
             row.add(p.getManager().getName());
             row.add(String.valueOf(p.getOfficerSlot()));
             List<String> officers = new ArrayList<>();

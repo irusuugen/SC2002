@@ -72,7 +72,8 @@ public class ApplicationRepository {
                 row.add("3-Room");
             }
             row.add(a.getApplicant().getNric());
-            row.add(a.getDate().toString());
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("d/M/yy");
+            row.add(a.getDate().format(dateFormatter));
             row.add(a.getStatusString());
             row.add(a.isBookingRequested()? "0" : "1");
             row.add(a.isWithdrawalRequested()? "0" : "1");
