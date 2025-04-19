@@ -3,6 +3,9 @@ package repository;
 import entity.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,5 +46,25 @@ public class RegistrationRepository {
             System.out.println("Error reading file: " + e.getMessage());
         }
         return registrations;
+    }
+
+    public static void writeToRegistrationList(String filename, List<Registration> registrations){
+        List<String> rows = new ArrayList<>();
+        String header = "NRIC,project,status";
+        rows.add(header);
+        for(Registration r: registrations){
+            List<String> row = new ArrayList<>();
+            row.add(r.getRegisteredOfficer().getNric());
+            row.add(r.getProject().getProjectName());
+            row.add(r.getStatus().toString());
+            rows.add(String.join(",", row));
+        }
+        try (PrintWriter writer = new PrintWriter(new FileWriter(filename))) {
+            for (String row : rows) {
+                writer.println(row);
+            }
+        } catch (IOException e) {
+            System.out.println("Error writing file: " + e.getMessage());
+        }
     }
 }

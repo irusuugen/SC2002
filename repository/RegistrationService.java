@@ -25,4 +25,8 @@ public class RegistrationService {
     public static List<Registration> getAllRegitrations() {
         return registrationList;
     }
+
+    public static void updateRegistrations(){
+        RegistrationRepository.writeToRegistrationList("data/RegistrationList.csv", registrationList);
+    }
 }
