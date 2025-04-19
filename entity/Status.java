@@ -2,5 +2,7 @@ package entity;
 
 public enum Status 
 {
-        PENDING, WITHDRAWN, UNSUCCESSFUL, SUCCESSFUL, BOOKED
+        PENDING, // both
+        WITHDRAWN, UNSUCCESSFUL, SUCCESSFUL, BOOKED, // for applications
+        APPROVED, REJECTED; // for registrations
 }

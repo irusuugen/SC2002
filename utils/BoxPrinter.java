@@ -18,4 +18,11 @@ public class BoxPrinter {
     public static void printRow(String label, String value) {
         System.out.printf("║ %-25s | %-42s ║\n", label, value);
     }
+
+    public static String centerInBox(String text) {
+        int padding = (BoxPrinter.BOX_WIDTH - 2 - text.length());
+        int leftPadding = padding / 2;
+        int rightPadding = padding - leftPadding;
+        return "║" + " ".repeat(leftPadding) + text + " ".repeat(rightPadding) + "║";
+    }
 }

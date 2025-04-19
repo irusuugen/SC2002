@@ -4,7 +4,7 @@ import control.ApplicantController;
 import entity.*;
 import repository.ProjectService;
 import utils.ClearPage;
-import utils.IntGetter;
+import utils.InputHelper;
 import java.util.Scanner;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,8 +36,14 @@ public class ApplicantMenu {
             ╚════════════════════════════════════════════╝
             """);
 
-            int choice = IntGetter.readInt("➤ Enter your choice (1-12): ");
-            ClearPage.clearPage();
+            // Obtaining user's choice
+            int choice;
+            while (true) {
+                choice = InputHelper.readInt("➤ Enter your choice: ");
+                if (choice >= 1 && choice <= 11) break;
+                System.out.println("Please enter a number between 1 and 11.");
+            }
+            ClearPage.clearPage(); // Clears terminal for the page for the corresponding options
                 
             switch (choice) {
                 case 1:
@@ -140,7 +146,7 @@ public class ApplicantMenu {
             
             printCurrentFilters(filter);
             
-            int choice = IntGetter.readInt("➤ Enter choice (1-5): ");
+            int choice = InputHelper.readInt("➤ Enter choice (1-5): ");
             
             switch (choice) {
                 case 1:

@@ -7,80 +7,85 @@ import control.*;
 import utils.*;
 
 public class HDBManagerMenu {
-    private static final Scanner sc = new Scanner(System.in);
-
     public static void managerMenu(UserSession session) {
         HDBManager manager = (HDBManager) session.getUser();
-        HDBManagerProjectController projectController = new HDBManagerProjectController();
-        HDBManagerRegistrationController registrationController = new HDBManagerRegistrationController();
-        HDBManagerApplicationController applicationController = new HDBManagerApplicationController();
-        HDBManagerEnquiryController enquiryController = new HDBManagerEnquiryController();
-        HDBManagerReportPrintController reportController = new HDBManagerReportPrintController();
-
+        Scanner sc = new Scanner(System.in);
         List<Project> allProjects = ProjectService.getAllProjects();
         List<Application> allApplications = HDBManagerApplicationController.getAllApplications(manager);
 
         while (true) {
             ClearPage.clearPage();
             System.out.println("""
-                    ╔═══════════════════════════════════════════╗
-                    ║              HDB Manager Menu             ║
-                    ╠═══════════════════════════════════════════╣
-                    ║  1. Create new project                    ║
-                    ║  2. Toggle project visibility             ║
-                    ║  3. View all projects (Filtered)          ║
-                    ║  4. Set Project Filters                   ║
-                    ║  5. View all enquiries                    ║
-                    ║  6. Reply to enquiry                      ║
-                    ║  7. Approve officer registration          ║
-                    ║  8. Reject officer registration           ║
-                    ║  9. Approve application                   ║
-                    ║ 10. Reject application                    ║
-                    ║ 11. Approve withdrawal                    ║
-                    ║ 12. Generate application report           ║
-                    ║ 13. Logout                                ║
-                    ╚═══════════════════════════════════════════╝
-                    """);
+            ╔═══════════════════════════════════════════╗
+            ║             HDB Manager Menu              ║
+            ╠═══════════════════════════════════════════╣
+            ║  1. Create new project                    ║
+            ║  2. Edit existing project                 ║
+            ║  3. Delete existing project               ║
+            ║  4. Toggle project visibility             ║
+            ║  5. View all projects                     ║
+            ║  6. View all enquiries                    ║
+            ║  7. Reply to enquiries                    ║
+            ║  8. View officer registrations            ║
+            ║  9. Process officer registrations         ║
+            ║  10. Process applications                 ║
+            ║  11. Process withdrawal requests          ║
+            ║  12. Generate application report          ║
+            ║  13. Logout                               ║
+            ╚═══════════════════════════════════════════╝
+            """);
 
-            int choice = IntGetter.readInt("➤ Enter your choice (1-13): ");
+            int choice;
+            while (true) {
+                choice = InputHelper.readInt("➤ Enter your choice: ");
+                if (choice >= 1 && choice <= 13)
+                    break;
+                System.out.println("Please enter a number between 1 and 13.");
+            }
             ClearPage.clearPage();
             
             switch (choice) {
                 case 1:
-                    projectController.createProject(manager, allProjects);
+                    // Create new project
+                    HDBManagerProjectController.createProject(manager, allProjects);
                     break;
                 case 2:
-                    projectController.toggleProjectVisibility(manager);
+                    // Edit existing project
+                    HDBManagerProjectController.editProject(manager);
                     break;
                 case 3:
-                    viewProjectsWithFilters(session, allProjects);
+                    // Delete existing project
+                    HDBManagerProjectController.deleteProject(manager, allProjects);
                     break;
                 case 4:
-                    showFilterMenu(session);
+                    // Toggle project visibility
+                    HDBManagerProjectController.toggleProjectVisibility(manager);
                     break;
                 case 5:
-                    enquiryController.viewAllEnquiries(allProjects);
+                    // View all projects
+                    HDBManagerProjectController.viewAllProjects(manager, allProjects);
                     break;
                 case 6:
-                    enquiryController.replyToEnquiry(allProjects);
+                    // View all enquiries
+                    HDBManagerEnquiryController.viewAllEnquiries(allProjects);
                     break;
                 case 7:
-                    registrationController.handleRegistration(manager, true);
+                    HDBManagerEnquiryController.replyEnquiry(manager);
                     break;
                 case 8:
-                    registrationController.handleRegistration(manager, false);
+                    HDBManagerRegistrationController.viewRegistrations(manager);
                     break;
                 case 9:
-                    applicationController.processApplication(allApplications, true);
+                    HDBManagerRegistrationController.processRegistrations(manager);
                     break;
                 case 10:
-                    applicationController.processApplication(allApplications, false);
+                    HDBManagerApplicationController.processApplication(manager);
                     break;
                 case 11:
-                    registrationController.approveWithdrawal(allApplications);
+                    HDBManagerApplicationController.processWithdrawal(manager);
                     break;
                 case 12:
-                    reportController.generateAndPrintReport(allApplications);
+                    HDBManagerReportPrintController.generateAndPrintReport(allApplications);
                     break;
                 case 13:
                     System.out.println("Logging out...");
@@ -123,6 +128,7 @@ public class HDBManagerMenu {
 
     private static void showFilterMenu(UserSession session) {
         ProjectFilter filter = session.getProjectFilter();
+        Scanner sc = new Scanner(System.in);
         
         while (true) {
             ClearPage.clearPage();
@@ -141,7 +147,7 @@ public class HDBManagerMenu {
             
             printCurrentFilters(filter);
             
-            int choice = IntGetter.readInt("➤ Enter choice (1-6): ");
+            int choice = InputHelper.readInt("➤ Enter choice (1-6): ");
             
             switch (choice) {
                 case 1:

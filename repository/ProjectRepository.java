@@ -37,19 +37,21 @@ public class ProjectRepository {
                 float num2SellingPrice = Float.parseFloat(projectInfo[4]);
                 int num3Room = Integer.parseInt(projectInfo[6]);
                 float num3SellingPrice = Float.parseFloat(projectInfo[7]);
-                DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("d/M/yy");
+                DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                 LocalDate applicationOpenDate = LocalDate.parse(projectInfo[8], dateFormatter);
                 LocalDate applicationCloseDate = LocalDate.parse(projectInfo[9], dateFormatter);
+
                 HDBManager projectManager = UserService.getManagers().stream()
                     .filter(m -> m.getNric().equals(projectInfo[10]))
                     .findFirst()
                     .orElse(null);
+
                 int officerSlots = Integer.parseInt(projectInfo[11]);
                 String[] officerNric = projectInfo[12].replace("\"", "").split(",");
                 List<HDBOfficer> officerSlotList = UserService.getOfficers().stream()
                     .filter(o->Arrays.asList(officerNric).contains(o.getNric()))
                     .collect(Collectors.toList());;
-                
+
                 // Creates a project and adds to projectList
                 Project project = new Project(
                     projectName,
@@ -64,7 +66,11 @@ public class ProjectRepository {
                     officerSlots,
                     officerSlotList
                 );
+
                 projects.add(project);
+                if (projectManager != null) {
+                    projectManager.addCreatedProject(project);
+                }
             }
         } catch (Exception e) {
             System.out.println("Error reading file: " + e.getMessage());
@@ -91,7 +97,7 @@ public class ProjectRepository {
             row.add(p.getManager().getNric());
             row.add(String.valueOf(p.getOfficerSlot()));
             List<String> officers = new ArrayList<>();
-            for(HDBOfficer o: p.getOfficerList()){
+            for(HDBOfficer o: p.getOfficerSlotList()){
                 officers.add(o.getNric());
             }
             row.add("\""+String.join(",",officers)+"\"");
