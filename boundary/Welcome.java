@@ -2,6 +2,8 @@
 package boundary;
 
 import java.util.Scanner;
+
+import entity.UserSession;
 import utils.ClearPage;
 
 public class Welcome {
@@ -34,7 +36,10 @@ public class Welcome {
             switch (choice) {
                 case 1: 
                     Login login = new Login(); // Pass users from the system
-                    login.login(); // Call login method
+                    UserSession session = login.login(); // Call login method and get session
+                    if (session != null) {
+                        login.startUserSession(session); // Start the correct menu based on role
+                    }
                     return;
                 case 2: 
                     Exit exit = new Exit();

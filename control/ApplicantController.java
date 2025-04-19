@@ -64,7 +64,7 @@ public class ApplicantController {
 
     // Creates an application
     public static void applyForProject(Applicant applicant) {
-        // Check for existing application and if existing applcation was unsuccessful
+        // Check for existing application and if existing application was unsuccessful
         if (applicant.getApplication() != null && applicant.getApplication().getStatus() != Status.UNSUCCESSFUL && applicant.getApplication().getStatus() != Status.WITHDRAWN) {
             System.out.println("You have already applied for a project.");
             return;
