@@ -5,6 +5,9 @@ package repository;
 import entity.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -53,5 +56,35 @@ public class ApplicationRepository {
             System.out.println("Error reading file: " + e.getMessage());
         }
         return applications;
+    }
+
+    public static void writeToApplicationList(String filename, List<Application> applications){
+        List<String> rows = new ArrayList<>();
+        String header = "project,flatType,NRIC,date,status,bookingRequested,withdrawalRequested";
+        rows.add(header);
+        for(Application a: applications){
+            List<String> row = new ArrayList<>();
+            row.add(a.getProject().getProjectName());
+            if(a.getFlatType() == FlatType.TWOROOMS){
+                row.add("2-Room");
+            }
+            else{
+                row.add("3-Room");
+            }
+            row.add(a.getApplicant().getNric());
+            row.add(a.getDate().toString());
+            row.add(a.getStatusString());
+            row.add(a.isBookingRequested()? "0" : "1");
+            row.add(a.isWithdrawalRequested()? "0" : "1");
+            rows.add(String.join(",", row));
+        }
+
+        try (PrintWriter writer = new PrintWriter(new FileWriter(filename))) {
+            for (String row : rows) {
+                writer.println(row);
+            }
+        } catch (IOException e) {
+            System.out.println("Error writing file: " + e.getMessage());
+        }
     }
 }

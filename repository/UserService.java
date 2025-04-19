@@ -54,16 +54,16 @@ public class UserService {
 
     public static void updateApplicants(){
         List<User> users = new ArrayList<>(applicantList);
-        UserRepository.updateUsers("data/ApplicantList.csv", users);
+        UserRepository.wrtieToUserList("data/ApplicantList.csv", users);
     }
 
     public static void updateOfficers(){
         List<User> users = new ArrayList<>(officerList);
-        UserRepository.updateUsers("data/OfficerList.csv", users);
+        UserRepository.wrtieToUserList("data/OfficerList.csv", users);
     }
 
     public static void updateManagers(){
         List<User> users = new ArrayList<>(managerList);
-        UserRepository.updateUsers("data/ManagerList.csv", users);
+        UserRepository.wrtieToUserList("data/ManagerList.csv", users);
     }
 }

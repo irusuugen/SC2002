@@ -56,7 +56,7 @@ public class UserRepository {
         }
         return users; 
     }
-    public static void updateUsers(String filename, List<User> users){
+    public static void wrtieToUserList(String filename, List<User> users){
         List<String> rows = new ArrayList<>();
         String header = "Name,NRIC,Age,Marital Status,Password";
         rows.add(header);

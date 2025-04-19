@@ -33,4 +33,8 @@ public class ApplicationService {
         }
 		return application;
 	}
+
+    public static void updateApplications(){
+        ApplicationRepository.writeToApplicationList("data/ApplicationList.csv", applicationList);
+    }
 }
