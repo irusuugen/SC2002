@@ -34,7 +34,7 @@ public class ProjectRepository {
                 float num2SellingPrice = Float.parseFloat(projectInfo[4]);
                 int num3Room = Integer.parseInt(projectInfo[6]);
                 float num3SellingPrice = Float.parseFloat(projectInfo[7]);
-                DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("d/M/yy");
+                DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                 LocalDate applicationOpenDate = LocalDate.parse(projectInfo[8], dateFormatter);
                 LocalDate applicationCloseDate = LocalDate.parse(projectInfo[9], dateFormatter);
                 HDBManager projectManager = UserService.getManagers().stream()
