@@ -80,6 +80,14 @@ public class Project {
         return applicationCloseDate;
     }
 
+    public HDBManager getManager(){
+        return projectManager;
+    }
+
+    public int getOfficerSlot(){
+        return officerSlot;
+    }
+
     public List<Enquiry> getEnquiries() {
         return enquiryList;
     }
@@ -97,6 +105,10 @@ public class Project {
 
     public List<Application> getApplications(){
         return applicationList;
+    }
+
+    public List<HDBOfficer> getOfficerList(){
+        return officerSlotList;
     }
 
     // === Setters ===

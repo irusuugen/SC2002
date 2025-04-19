@@ -20,4 +20,8 @@ public class ProjectService {
     public static List<Project> getAllProjects() {
         return projectList;
     }
+
+    public static void updateProjects(){
+        ProjectRepository.writeToProjectList("data/ProjectList.csv", projectList);
+    }
 }
