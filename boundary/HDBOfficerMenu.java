@@ -2,14 +2,19 @@ package boundary;
 
 import control.*;
 import entity.*;
+import repository.ProjectService;
+import utils.ClearPage;
+import utils.InputHelper;
 import java.util.Scanner;
-import utils.*;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class HDBOfficerMenu {
-    public static void officerMenu(HDBOfficer officer) {
+    public static void officerMenu(UserSession session) {
+        HDBOfficer officer = (HDBOfficer) session.getUser();
         Scanner sc = new Scanner(System.in);
         
-        while (true) {  // Main menu loop
+        while (true) {
             ClearPage.clearPage();
             System.out.println("""
             ╔════════════════════════════════════════════════════════╗
@@ -46,42 +51,33 @@ public class HDBOfficerMenu {
                 
             switch (choice) {
                 case 1:
-                	ChangeAccountPassword.changePassword(Role.HDB_OFFICER,officer);
+                    ChangeAccountPassword.changePassword(Role.HDB_OFFICER, officer);
                     break;
                 case 2:
-                    // View projects
-                    ApplicantController.viewOpenProjects(officer);
+                    viewOpenProjectsWithFilters(session);
                     break;
                 case 3:
-                    // Apply for project
                     ApplicantController.applyForProject(officer);
                     break;
                 case 4:
-                    // View application
                     ApplicantController.viewApplication(officer);
                     break;
                 case 5:
-                    // Book with officer
                     ApplicantController.requestBooking(officer);
                     break;
                 case 6:
-                    // Request withdrawal
                     ApplicantController.requestWithdrawal(officer);
                     break;
                 case 7:
-                    // Submit enquiry
                     ApplicantController.submitEnquiry(officer);
                     break;
                 case 8:
-                    // View enquiry
                     ApplicantController.viewEnquiries(officer);
                     break;
                 case 9:
-                    // Edit enquiry
                     ApplicantController.editEnquiry(officer);
                     break;
                 case 10:
-                    // Delete enquiry
                     ApplicantController.deleteEnquiry(officer);
                     break;
                 case 11:
@@ -109,17 +105,108 @@ public class HDBOfficerMenu {
                 	HDBOfficerApplicationController.updateApplication(officer);
                     break;
                 case 17:
-                	// Log out
+                    HDBOfficerApplicationController.updateApplication(officer);
+                    break;
+                case 18:
                     System.out.println("Logging out...");
-                    try {
-                        Thread.sleep(1000); 
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    try { Thread.sleep(1000); } catch (Exception e) {}
                     return;
             }
-            System.out.println("➤ Press Enter to go back.");
+            System.out.println("➤ Press Enter to continue...");
             sc.nextLine(); 
         }
+    }
+
+    private static void viewOpenProjectsWithFilters(UserSession session) {
+        HDBOfficer officer = (HDBOfficer) session.getUser();
+        
+        List<Project> projects = ProjectService.getAllProjects().stream()
+            .filter(Project::isVisible)
+            .collect(Collectors.toList());
+        
+        projects = session.getProjectFilter().applyFilters(projects);
+        
+        System.out.println("\n════════════════════════════════════════");
+        System.out.println("   AVAILABLE PROJECTS (FILTERED)");
+        System.out.println("════════════════════════════════════════");
+        printCurrentFilters(session.getProjectFilter());
+        System.out.println("════════════════════════════════════════\n");
+        
+        if (projects.isEmpty()) {
+            System.out.println("No projects match your current filters.");
+            return;
+        }
+        
+        System.out.printf("%-25s %-15s %-10s %-10s %-15s %-15s\n",
+            "PROJECT", "LOCATION", "2-ROOM", "3-ROOM", "OPEN DATE", "CLOSE DATE");
+        
+        projects.forEach(p -> System.out.printf("%-25s %-15s %-10d %-10d %-15s %-15s\n",
+            p.getProjectName(),
+            p.getNeighborhood(),
+            p.getNumFlatAvailable(FlatType.TWOROOMS),
+            p.getNumFlatAvailable(FlatType.THREEROOMS),
+            p.getOpenDate(),
+            p.getCloseDate()
+        ));
+    }
+
+    private static void showFilterMenu(UserSession session) {
+        ProjectFilter filter = session.getProjectFilter();
+        Scanner sc = new Scanner(System.in);
+        
+        while (true) {
+            ClearPage.clearPage();
+            System.out.println("""
+            ╔════════════════════════════════════════════╗
+            ║            PROJECT FILTERS                 ║
+            ╠════════════════════════════════════════════╣
+            ║  1. Filter by Location                     ║
+            ║  2. Filter by Flat Type                    ║
+            ║  3. Toggle Sort Order                      ║
+            ║  4. Clear All Filters                      ║
+            ║  5. Back to Main Menu                      ║
+            ╚════════════════════════════════════════════╝
+            """);
+            
+            printCurrentFilters(filter);
+            
+            int choice = InputHelper.readInt("➤ Enter choice (1-5): ");
+            
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter location (e.g., 'Yishun' or leave blank): ");
+                    String loc = sc.nextLine().trim();
+                    filter.setLocationFilter(loc.isEmpty() ? null : loc);
+                    break;
+                case 2:
+                    System.out.print("Enter flat type (2-Room/3-Room or leave blank): ");
+                    String type = sc.nextLine().trim();
+                    filter.setFlatTypeFilter(type.isEmpty() ? null : type);
+                    break;
+                case 3:
+                    boolean newSort = !filter.isSortByAlphabetical();
+                    filter.setSortByAlphabetical(newSort);
+                    System.out.println("Sort order set to: " + (newSort ? "A-Z" : "Z-A"));
+                    break;
+                case 4:
+                    filter.clearFilters();
+                    System.out.println("All filters cleared");
+                    break;
+                case 5:
+                    return;
+            }
+        }
+    }
+
+    private static void printCurrentFilters(ProjectFilter filter) {
+        System.out.println("\nCurrent Filters:");
+        System.out.println("📍 Location: " + 
+            (filter.getLocationFilter() != null ? filter.getLocationFilter() : "None"));
+        System.out.println("🏠 Flat Type: " + 
+            (filter.getFlatTypeFilter() != null ? 
+                (filter.getFlatTypeFilter() == FlatType.TWOROOMS ? "2-Room" : "3-Room") 
+                : "None"));
+        System.out.println("🔃 Sort Order: " + 
+            (filter.isSortByAlphabetical() ? "A → Z" : "Z → A"));
     }
 }

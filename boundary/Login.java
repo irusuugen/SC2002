@@ -12,11 +12,10 @@ public class Login {
         this.sc = new Scanner(System.in);
     }
 
-    public void login() {
+    public UserSession login() {
         ClearPage.clearPage();
-        Role userRole = roleSelection(); // Carries out UI for role selection and stores the role
+        Role userRole = roleSelection();
         
-        // Carry out UI for logging in
         ClearPage.clearPage();
         System.out.println("""
         ╔═══════════════════════════════════════╗
@@ -43,31 +42,28 @@ public class Login {
             try {
                 user = validate(nric, password);
                 System.out.println("Login successful! Welcome, " + user.getName());
-
-                // Adds a delay before moving to the next page
-                try {
-                    Thread.sleep(1000); 
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                break; // Break out of the loop after successful login
+                Thread.sleep(1000);
+                return new UserSession(user); // Return new UserSession with initialized filters
             } catch (Exception e) {
                 System.err.print(e.getMessage());
                 System.out.println(" Please try again.");
             }
         }
+        return null; // Fallback (should never reach here)
+    }
 
-        // Direct to menu based on user's role
-        switch (userRole) {
+    public void startUserSession(UserSession session) {
+        ClearPage.clearPage();
+        switch (session.getUser().getRole()) {
             case APPLICANT:
-                ApplicantMenu.applicantMenu((Applicant) user);
-                return;
+                ApplicantMenu.applicantMenu(session);
+                break;
             case HDB_OFFICER:
-                HDBOfficerMenu.officerMenu((HDBOfficer) user);
-                return;
+                HDBOfficerMenu.officerMenu(session);
+                break;
             case HDB_MANAGER:
-                HDBManagerMenu.managerMenu((HDBManager) user);
-                return;
+                HDBManagerMenu.managerMenu(session);
+                break;
         }
     }
 
@@ -82,40 +78,32 @@ public class Login {
         ╚═══════════════════════════════════════╝
         """);
         System.out.println("➤ Select your role (1-3): ");
-        int choice;
         while (true) {
-            choice = sc.nextInt();
-            sc.nextLine(); // consume newline
+            int choice = sc.nextInt();
+            sc.nextLine();
             switch (choice) {
-                case 1:
-                    return Role.APPLICANT;
-                case 2:
-                    return Role.HDB_OFFICER;
-                case 3:
-                    return Role.HDB_MANAGER;
-                default:
-                    System.out.println("Invalid option. Please try again.");
+                case 1: return Role.APPLICANT;
+                case 2: return Role.HDB_OFFICER;
+                case 3: return Role.HDB_MANAGER;
+                default: System.out.println("Invalid option. Please try again.");
             }
         }
     }
 
     public User validate(String nric, String password) {
-        // Check for valid NRIC format
         if (!nric.matches("^[ST]\\d{7}[A-Z]$")) {
             throw new IllegalArgumentException("Invalid NRIC.");
         }
 
-        // Check for NRIC in database
         User user = UserService.getAllUsers().stream()
             .filter(u -> u.getNric().equals(nric))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException("User not found."));
 
-        // Verify password
         if (!user.getPassword().equals(password)) {
             throw new IllegalArgumentException("Incorrect password.");
         }
 
-        return user; // Returns the logged-in user
+        return user;
     }
 }

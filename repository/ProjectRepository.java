@@ -5,6 +5,9 @@ package repository;
 import entity.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -44,9 +47,9 @@ public class ProjectRepository {
                     .orElse(null);
 
                 int officerSlots = Integer.parseInt(projectInfo[11]);
-                String[] officerNrics = projectInfo[12].replace("\"", "").split(",");
+                String[] officerNric = projectInfo[12].replace("\"", "").split(",");
                 List<HDBOfficer> officerSlotList = UserService.getOfficers().stream()
-                    .filter(o->Arrays.asList(officerNrics).contains(o.getNric()))
+                    .filter(o->Arrays.asList(officerNric).contains(o.getNric()))
                     .collect(Collectors.toList());;
 
                 // Creates a project and adds to projectList
@@ -73,5 +76,40 @@ public class ProjectRepository {
             System.out.println("Error reading file: " + e.getMessage());
         }
         return projects;
+    }
+    public static void writeToProjectList(String filename, List<Project> projects){
+        List<String> rows = new ArrayList<>();
+        String header = "Project Name,Neighborhood,Type 1,Number of units for Type 1,Selling price for Type 1,Type 2,Number of units for Type 2,Selling price for Type 2,Application opening date,Application closing date,Manager,Officer Slot,Officer";
+        rows.add(header);
+        for(Project p: projects){
+            List<String> row = new ArrayList<>();
+            row.add(p.getProjectName());
+            row.add(p.getNeighborhood());
+            row.add("2-Room");
+            row.add(String.valueOf(p.getNumFlatAvailable(FlatType.TWOROOMS)));
+            row.add(String.valueOf(p.getSellingPrice(FlatType.TWOROOMS)));
+            row.add("3-Room");
+            row.add(String.valueOf(p.getNumFlatAvailable(FlatType.THREEROOMS)));
+            row.add(String.valueOf(p.getSellingPrice(FlatType.THREEROOMS)));
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("d/M/yy");
+            row.add(p.getOpenDate().format(dateFormatter));
+            row.add(p.getOpenDate().format(dateFormatter));
+            row.add(p.getManager().getNric());
+            row.add(String.valueOf(p.getOfficerSlot()));
+            List<String> officers = new ArrayList<>();
+            for(HDBOfficer o: p.getOfficerSlotList()){
+                officers.add(o.getNric());
+            }
+            row.add("\""+String.join(",",officers)+"\"");
+            rows.add(String.join(",", row));
+        }
+
+        try (PrintWriter writer = new PrintWriter(new FileWriter(filename))) {
+            for (String row : rows) {
+                writer.println(row);
+            }
+        } catch (IOException e) {
+            System.out.println("Error writing file: " + e.getMessage());
+        }
     }
 }

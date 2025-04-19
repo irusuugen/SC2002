@@ -13,6 +13,32 @@ import utils.*;
 public class ApplicantController {
     private static Scanner sc = new Scanner(System.in);
 
+    // Implementation of changePassword 
+    public static void changePassword(Applicant applicant) {
+        System.out.println("\n=== Change Password ===");
+        System.out.print("Enter current password: ");
+        String currentPassword = sc.nextLine();
+        
+        if (!currentPassword.equals(applicant.getPassword())) {
+            System.out.println("Incorrect current password!");
+            return;
+        }
+        
+        System.out.print("Enter new password: ");
+        String newPassword = sc.nextLine();
+        System.out.print("Confirm new password: ");
+        String confirmPassword = sc.nextLine();
+        
+        if (!newPassword.equals(confirmPassword)) {
+            System.out.println("Passwords don't match!");
+            return;
+        }
+        
+        applicant.changePassword(newPassword);
+        System.out.println("Password changed successfully!");
+    }
+
+    // Return a list of projects based on applicant's user group, flat availability, project visibility
     public static List<Project> getOpenProjects(Applicant applicant) {
         List<Project> openProjects = new ArrayList<>();
         for (Project project : ProjectService.getAllProjects()) {
@@ -36,9 +62,11 @@ public class ApplicantController {
         ProjectViewer.printProjects(openProjects, applicant);
     }
 
+    // Creates an application
     public static void applyForProject(Applicant applicant) {
-        if (applicant.getApplication() != null) {
-            System.out.println("You have already registered for a project.");
+        // Check for existing application and if existing applcation was unsuccessful
+        if (applicant.getApplication() != null && applicant.getApplication().getStatus() != Status.UNSUCCESSFUL && applicant.getApplication().getStatus() != Status.WITHDRAWN) {
+            System.out.println("You have already applied for a project.");
             return;
         }
 
@@ -151,7 +179,7 @@ public class ApplicantController {
         System.out.println("Your enquiry is: " + message);
 
         if (InputHelper.confirm("Confirm submission")) {
-            Enquiry enquiry = new Enquiry(message, project);
+            Enquiry enquiry = new Enquiry(applicant, message, project);
             applicant.addEnquiry(enquiry);
             project.addEnquiry(enquiry);
             System.out.println("Enquiry submitted.");
