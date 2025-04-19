@@ -8,7 +8,7 @@ import utils.*;
 
 
 public class HDBOfficerRegistrationController{
-	
+
 	private static Scanner sc = new Scanner(System.in);
 
 	public static List<Project> getRegistrableProjects(HDBOfficer officer) {
@@ -16,20 +16,22 @@ public class HDBOfficerRegistrationController{
 
 		for (Project project : ProjectService.getAllProjects()) {
 			boolean isAlreadyAssigned = officer.getAssignedProjects().contains(project);
-			boolean hasAppliedToThisProject = officer.getApplication() != null &&
-					project.equals(officer.getApplication().getProject());
 
-			// Check for overlap in application periods with any already assigned project
+			// Check if the officer has already registered for this project
+			boolean hasAlreadyRegistered = officer.getRegistrationList().stream()
+					.anyMatch(reg -> reg.getProject().equals(project));
+
 			boolean hasDateClash = officer.getAssignedProjects().stream()
 					.anyMatch(assigned -> DateOverlap.applicationPeriodsOverlap(assigned, project));
 
-			if (!isAlreadyAssigned && !hasAppliedToThisProject && !hasDateClash) {
+			if (!isAlreadyAssigned && !hasAlreadyRegistered && !hasDateClash) {
 				registrableProjects.add(project);
 			}
 		}
 
 		return registrableProjects;
 	}
+
 
 	public static void viewRegistrableProjects(HDBOfficer officer)
 	{
@@ -40,7 +42,7 @@ public class HDBOfficerRegistrationController{
 	public static void registerForProject(HDBOfficer officer) {
 		viewRegistrableProjects(officer);
 		Project project;
-			// Loop until a valid project is selected
+		// Loop until a valid project is selected
 		while (true) {
 			System.out.println("Please enter the name of the project you'd like to register for: ");
 			String projectName = sc.nextLine();
