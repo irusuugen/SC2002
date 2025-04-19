@@ -13,6 +13,31 @@ import utils.*;
 public class ApplicantController {
     private static Scanner sc = new Scanner(System.in);
 
+    // Implementation of changePassword 
+    public static void changePassword(Applicant applicant) {
+        System.out.println("\n=== Change Password ===");
+        System.out.print("Enter current password: ");
+        String currentPassword = sc.nextLine();
+        
+        if (!currentPassword.equals(applicant.getPassword())) {
+            System.out.println("Incorrect current password!");
+            return;
+        }
+        
+        System.out.print("Enter new password: ");
+        String newPassword = sc.nextLine();
+        System.out.print("Confirm new password: ");
+        String confirmPassword = sc.nextLine();
+        
+        if (!newPassword.equals(confirmPassword)) {
+            System.out.println("Passwords don't match!");
+            return;
+        }
+        
+        applicant.changePassword(newPassword);
+        System.out.println("Password changed successfully!");
+    }
+
     // Return a list of projects based on applicant's user group, flat availability, project visibility
     public static List<Project> getOpenProjects(Applicant applicant) {
         List<Project> openProjects = new ArrayList<>();

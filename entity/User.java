@@ -7,14 +7,16 @@ public abstract class User {
     private int age;
     private boolean isMarried;
     private UserGroup userGroup;
+    private final Role role;
 
-
-    public User(String name, String nric, String password, int age, boolean isMarried) {
+    public User(String name, String nric, String password, int age, boolean isMarried, Role role) {
         this.nric = nric;
         this.password = password;
         this.age = age;
         this.isMarried = isMarried;
         this.name = name;
+        this.role = role;
+        
         if (age >= 35 && !isMarried) {
             userGroup = UserGroup.SINGLE;
         } else if (age >= 21 && isMarried) {
@@ -22,6 +24,10 @@ public abstract class User {
         } else {
             userGroup = UserGroup.NEITHER;
         }
+    }
+
+    public Role getRole() {
+        return this.role;
     }
 
     public void changePassword(String password) {

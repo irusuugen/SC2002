@@ -11,7 +11,7 @@ public class Applicant extends User {
     private List<Enquiry> enquiries;
 
     public Applicant(String name, String nric, String password, int age, boolean isMarried) {
-        super(name, nric, password, age, isMarried);
+        super(name, nric, password, age, isMarried, Role.APPLICANT);
         this.enquiries = new ArrayList<>();
         this.application = null;
     }
