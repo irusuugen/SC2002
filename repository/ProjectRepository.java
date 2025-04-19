@@ -37,14 +37,16 @@ public class ProjectRepository {
                 DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                 LocalDate applicationOpenDate = LocalDate.parse(projectInfo[8], dateFormatter);
                 LocalDate applicationCloseDate = LocalDate.parse(projectInfo[9], dateFormatter);
+
                 HDBManager projectManager = UserService.getManagers().stream()
-                    .filter(m -> m.getName().equals(projectInfo[10]))
+                    .filter(m -> m.getNric().equals(projectInfo[10]))
                     .findFirst()
                     .orElse(null);
+
                 int officerSlots = Integer.parseInt(projectInfo[11]);
-                String[] officerNames = projectInfo[12].replace("\"", "").split(",");
+                String[] officerNrics = projectInfo[12].replace("\"", "").split(",");
                 List<HDBOfficer> officerSlotList = UserService.getOfficers().stream()
-                    .filter(o->Arrays.asList(officerNames).contains(o.getName()))
+                    .filter(o->Arrays.asList(officerNrics).contains(o.getNric()))
                     .collect(Collectors.toList());;
 
                 // Creates a project and adds to projectList
@@ -61,6 +63,7 @@ public class ProjectRepository {
                     officerSlots,
                     officerSlotList
                 );
+
                 projects.add(project);
                 if (projectManager != null) {
                     projectManager.addCreatedProject(project);
