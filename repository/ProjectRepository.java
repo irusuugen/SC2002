@@ -41,13 +41,13 @@ public class ProjectRepository {
                 LocalDate applicationOpenDate = LocalDate.parse(projectInfo[8], dateFormatter);
                 LocalDate applicationCloseDate = LocalDate.parse(projectInfo[9], dateFormatter);
                 HDBManager projectManager = UserService.getManagers().stream()
-                    .filter(m -> m.getName().equals(projectInfo[10]))
+                    .filter(m -> m.getNric().equals(projectInfo[10]))
                     .findFirst()
                     .orElse(null);
                 int officerSlots = Integer.parseInt(projectInfo[11]);
-                String[] officerNames = projectInfo[12].replace("\"", "").split(",");
+                String[] officerNric = projectInfo[12].replace("\"", "").split(",");
                 List<HDBOfficer> officerSlotList = UserService.getOfficers().stream()
-                    .filter(o->Arrays.asList(officerNames).contains(o.getName()))
+                    .filter(o->Arrays.asList(officerNric).contains(o.getNric()))
                     .collect(Collectors.toList());;
                 
                 // Creates a project and adds to projectList
@@ -88,11 +88,11 @@ public class ProjectRepository {
             DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("d/M/yy");
             row.add(p.getOpenDate().format(dateFormatter));
             row.add(p.getOpenDate().format(dateFormatter));
-            row.add(p.getManager().getName());
+            row.add(p.getManager().getNric());
             row.add(String.valueOf(p.getOfficerSlot()));
             List<String> officers = new ArrayList<>();
             for(HDBOfficer o: p.getOfficerList()){
-                officers.add(o.getName());
+                officers.add(o.getNric());
             }
             row.add("\""+String.join(",",officers)+"\"");
             rows.add(String.join(",", row));
