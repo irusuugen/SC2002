@@ -20,4 +20,12 @@ public class ProjectService {
     public static List<Project> getAllProjects() {
         return projectList;
     }
+
+    public static void addProject(Project p) {
+       projectList.add(p);
+    }
+
+    public static void removeProject(Project p) {
+        projectList.remove(p);
+    }
 }

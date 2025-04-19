@@ -31,6 +31,7 @@ public class HDBManagerApplicationController {
         Project project = selectedApp.getProject();
 
         // Show application again before decision
+        ClearPage.clearPage();
         System.out.println("\nSelected Application:");
         ApplicationViewer.printApplication(selectedApp);
 

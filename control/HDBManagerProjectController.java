@@ -58,7 +58,7 @@ public class HDBManagerProjectController {
         ProjectViewer.printOneProject(p, manager);
         sc.nextLine(); // Consume newline;
         if (InputHelper.confirm("Confirm project creation?")) {
-            allProjects.add(p);
+            ProjectService.addProject(p);
             manager.addCreatedProject(p);
             System.out.println("Project created.");
         } else {
@@ -212,7 +212,7 @@ public class HDBManagerProjectController {
         ProjectViewer.printOneProject(project, manager);
         if (InputHelper.confirm("Confirm deletion of project")) {
             createdProjects.remove(project);
-            allProjects.remove(project);
+            ProjectService.removeProject(project);
             System.out.println("Project deleted successfully.");
         } else {
             System.out.println("Request cancelled.");
