@@ -51,7 +51,7 @@ public class ApplicantMenu {
                     ApplicantController.changePassword(applicant);
                     break;
                 case 2:
-                    List<Project> allProjects = ApplicantController.getOpenProjects(applicant); // Assuming this returns open projects only
+                    List<Project> allProjects = ApplicantController.getOpenProjects(applicant);
                     ProjectFilterMenu.viewFilteredProjects(session, allProjects);
                     break;
                 case 3:

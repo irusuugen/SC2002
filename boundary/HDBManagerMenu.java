@@ -23,7 +23,7 @@ public class HDBManagerMenu {
             ║  2. Edit existing project                 ║
             ║  3. Delete existing project               ║
             ║  4. Toggle project visibility             ║
-            ║  5. View all projects                     ║
+            ║  5. View all projects (filtered)          ║
             ║  6. View all enquiries                    ║
             ║  7. Reply to enquiries                    ║
             ║  8. View officer registrations            ║
@@ -31,7 +31,8 @@ public class HDBManagerMenu {
             ║  10. Process applications                 ║
             ║  11. Process withdrawal requests          ║
             ║  12. Generate application report          ║
-            ║  13. Logout                               ║
+            ║  13. Set project filters                  ║
+            ║  14. Logout                               ║
             ╚═══════════════════════════════════════════╝
             """);
 
@@ -63,6 +64,7 @@ public class HDBManagerMenu {
                     break;
                 case 5:
                     // View all projects
+                    ProjectFilterMenu.viewFilteredProjects(session, allProjects);
                     HDBManagerProjectController.viewAllProjects(manager, allProjects);
                     break;
                 case 6:
@@ -88,6 +90,9 @@ public class HDBManagerMenu {
                     HDBManagerReportPrintController.generateAndPrintReport(allApplications);
                     break;
                 case 13:
+                    ProjectFilterMenu.showFilterMenu(session);
+                    break;
+                case 14:
                     System.out.println("Logging out...");
                     try { Thread.sleep(1000); } catch (Exception e) {}
                     return;

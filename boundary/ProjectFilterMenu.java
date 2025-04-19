@@ -51,13 +51,9 @@ public class ProjectFilterMenu {
             ClearPage.clearPage();
 
             BoxPrinter.printTopBorder();
-            System.out.println(BoxPrinter.centerInBox("            PROJECT FILTERS"));
-            BoxPrinter.printBottomBorder();
-
-            printCurrentFilters(filter);
-
+            System.out.println(BoxPrinter.centerInBox("PROJECT FILTERS"));
+            BoxPrinter.printDivider();
             System.out.println("""
-            ╠════════════════════════════════════════════╣
             ║  1. Filter by Location                     ║
             ║  2. Filter by Flat Type                    ║
             ║  3. Toggle Sort Order                      ║
