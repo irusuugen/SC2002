@@ -25,4 +25,8 @@ public class EnquiryService {
     public static List<Enquiry> getAllEnquiries() {
         return enquiryList;
     }
+
+    public static void updateEnquiries(){
+        EnquiryRepository.writeToEnquiryList("data/EnquiryList.csv", enquiryList);
+    }
 }

@@ -5,6 +5,9 @@ package repository;
 import entity.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,4 +43,27 @@ public class EnquiryRepository {
         }
         return enquiries;
     }
+
+    public static void writeToEnquiryList(String filename, List<Enquiry> enquiries){
+        List<String> rows = new ArrayList<>();
+        String header = "NRIC,message,project,answer";
+        rows.add(header);
+        for(Enquiry e: enquiries){
+            List<String> row = new ArrayList<>();
+            row.add(e.getApplicant().getNric());
+            row.add(e.getMessage());
+            row.add(e.getProject().getProjectName());
+            row.add(e.getAnswer().equals("(No reply yet)")? "":e.getAnswer());
+            rows.add(String.join(",", row));
+        }
+
+        try (PrintWriter writer = new PrintWriter(new FileWriter(filename))) {
+            for (String row : rows) {
+                writer.println(row);
+            }
+        } catch (IOException e) {
+            System.out.println("Error writing file: " + e.getMessage());
+        }
+    }
+    
 }
