@@ -96,7 +96,7 @@ public class HDBOfficerEnquiryHandler{
 		}
 
 		while (true) {
-			int choice = IntGetter.readInt("Enter choice (0 to cancel): ");
+			int choice = InputHelper.readInt("Enter choice (0 to cancel): ");
 			if (choice == 0) return null;
 			if (choice >= 1 && choice <= projects.size()) {
 				return projects.get(choice - 1);

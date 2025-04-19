@@ -38,7 +38,7 @@ public class HDBOfficerMenu {
             // Obtaining user's choice
             int choice;
             while (true) {
-                choice = IntGetter.readInt("➤ Enter your choice: ");
+                choice = InputHelper.readInt("➤ Enter your choice: ");
                 if (choice >= 1 && choice <= 17) break;
                 System.out.println("Please enter a number between 1 and 17.");
             }

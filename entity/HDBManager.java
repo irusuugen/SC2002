@@ -13,4 +13,8 @@ public class HDBManager extends User {
     public List<Project> getCreatedProjects() {
         return createdProjects;
     }
+
+    public void addCreatedProject(Project p) {
+        this.createdProjects.add(p);
+    }
 }

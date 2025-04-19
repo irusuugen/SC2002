@@ -46,7 +46,7 @@ public class ProjectRepository {
                 List<HDBOfficer> officerSlotList = UserService.getOfficers().stream()
                     .filter(o->Arrays.asList(officerNames).contains(o.getName()))
                     .collect(Collectors.toList());;
-                
+
                 // Creates a project and adds to projectList
                 Project project = new Project(
                     projectName,
@@ -62,6 +62,9 @@ public class ProjectRepository {
                     officerSlotList
                 );
                 projects.add(project);
+                if (projectManager != null) {
+                    projectManager.addCreatedProject(project);
+                }
             }
         } catch (Exception e) {
             System.out.println("Error reading file: " + e.getMessage());

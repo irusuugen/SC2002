@@ -10,11 +10,6 @@ import utils.*;
 public class HDBOfficerRegistrationController{
 	
 	private static Scanner sc = new Scanner(System.in);
-	
-	public static Status checkRegistrationStatus(HDBOfficer officer, Project project)
-	{
-		return officer.getRegistrationList().stream().filter(r -> r.getProject() == project).findFirst().get().getStatus();
-	}
 
 	public static List<Project> getRegistrableProjects(HDBOfficer officer) {
 		List<Project> registrableProjects = new ArrayList<>();

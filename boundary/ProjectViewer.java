@@ -42,6 +42,7 @@ public class ProjectViewer {
                 filterProjectDetailsForApplicants(project, applicant);
             } else if (user instanceof HDBManager) {
                 showFullProjectDetails(project);
+                BoxPrinter.printRow("Number of Officer Slots", String.valueOf(project.getOfficerSlot()));
             }
 
             if (i < projects.size() - 1) {

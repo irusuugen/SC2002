@@ -11,6 +11,8 @@ public class ApplicationViewer {
         String nric = application.getApplicant().getNric();
         String maskedNric = "****" + nric.substring(nric.length() - 4);
         BoxPrinter.printRow("Applicant", (application.getApplicant().getName() + " (" + maskedNric + ")"));
+        BoxPrinter.printRow("Age", String.valueOf(application.getApplicant().getAge()));
+        BoxPrinter.printRow("Marital Status", application.getApplicant().isMarried() ? "Married" : "Single");
         BoxPrinter.printRow("Application Date", application.getDate().toString());
         BoxPrinter.printRow("Flat Type Applied For", application.getFlatType().toString());
         BoxPrinter.printRow("Application Status", application.getStatus().toString());

@@ -4,19 +4,19 @@ import java.time.LocalDate;
 import java.util.*;
 
 public class Project {
-    private final String projectName;
-    private final String neighborhood;
+    private String projectName;
+    private String neighborhood;
 
-    private final int num2Room;
-    private final int num3Room;
+    private int num2Room;
+    private int num3Room;
     private int numAvailable2Room;
     private int numAvailable3Room;
 
-    private final float sellingPrice2Room;
-    private final float sellingPrice3Room;
+    private float sellingPrice2Room;
+    private float sellingPrice3Room;
 
-    private final LocalDate applicationOpenDate;
-    private final LocalDate applicationCloseDate;
+    private LocalDate applicationOpenDate;
+    private LocalDate applicationCloseDate;
 
     private boolean visibility = true;
 
@@ -80,6 +80,10 @@ public class Project {
         return applicationCloseDate;
     }
 
+    public int getOfficerSlot (){
+        return officerSlot;
+    }
+
     public List<Enquiry> getEnquiries() {
         return enquiryList;
     }
@@ -91,6 +95,14 @@ public class Project {
         };
     }
 
+    public int getNumRoom(FlatType type) {
+        return switch (type) {
+            case TWOROOMS -> num2Room;
+            case THREEROOMS -> num3Room;
+        };
+    }
+
+
     public List<Registration> getRegistrations(){
         return registrationList;
     }
@@ -99,12 +111,20 @@ public class Project {
         return applicationList;
     }
 
+    public List<HDBOfficer> getOfficerSlotList() {
+        return officerSlotList;
+    }
+
+    public HDBManager getManager() {
+        return projectManager;
+    }
+
     // === Setters ===
     public void setVisibility(boolean visibility) {
         this.visibility = visibility;
     }
 
-    public void updateOfficerSlot(int newSlotCount) {
+    public void setOfficerSlots(int newSlotCount) {
         this.officerSlot = newSlotCount;
     }
 
@@ -114,6 +134,34 @@ public class Project {
 
     public void removeEnquiry(Enquiry enquiry) {
         enquiryList.remove(enquiry);
+    }
+
+    public void setNeighborhood(String neighborhood) {
+        this.neighborhood = neighborhood;
+    }
+
+    public void setNum2Room(int num2Room) {
+        this.num2Room = num2Room;
+    }
+
+    public void setNum3Room(int num3Room) {
+        this.num3Room = num3Room;
+    }
+
+    public void setSellingPrice2Room(float sellingPrice2Room) {
+        this.sellingPrice2Room = sellingPrice2Room;
+    }
+
+    public void setSellingPrice3Room(float sellingPrice3Room) {
+        this.sellingPrice3Room = sellingPrice3Room;
+    }
+
+    public void setOpenDate(LocalDate openDate) {
+        this.applicationOpenDate = openDate;
+    }
+
+    public void setCloseDate(LocalDate closeDate) {
+        this.applicationCloseDate = closeDate;
     }
 
     // === Officer Management ===
