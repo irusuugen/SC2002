@@ -70,27 +70,23 @@ public class ProjectFilterMenu {
                     String loc = sc.nextLine().trim();
                     filter.setLocationFilter(loc.isEmpty() ? null : loc);
                     System.out.println();
-                    printCurrentFilters(filter);
                 }
                 case 2 -> {
                     System.out.print("Enter flat type (2-Room/3-Room or leave blank): ");
                     String type = sc.nextLine().trim();
                     filter.setFlatTypeFilter(type.isEmpty() ? null : type);
                     System.out.println();
-                    printCurrentFilters(filter);
                 }
                 case 3 -> {
                     boolean newSort = !filter.isSortByAlphabetical();
                     filter.setSortByAlphabetical(newSort);
                     System.out.println("Sort order set to: " + (newSort ? "A-Z" : "Z-A"));
                     System.out.println();
-                    printCurrentFilters(filter);
                 }
                 case 4 -> {
                     filter.clearFilters();
                     System.out.println("All filters cleared");
                     System.out.println();
-                    printCurrentFilters(filter);
                 }
                 case 5 -> {return; }
             }
