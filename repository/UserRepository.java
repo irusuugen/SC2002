@@ -3,6 +3,9 @@ package repository;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import entity.*;
@@ -51,6 +54,33 @@ public class UserRepository {
         } catch (Exception e) {
             System.out.println("Error reading file: " + e.getMessage());
         }
-        return users;
+        return users; 
+    }
+    public static void updateUsers(String filename, List<User> users){
+        List<String> rows = new ArrayList<>();
+        String header = "Name,NRIC,Age,Marital Status,Password";
+        rows.add(header);
+        for(User u: users){
+            List<String> row = new ArrayList<>();
+            row.add(u.getName());
+            row.add(u.getNric());
+            row.add(String.valueOf(u.getAge()));
+            if(u.isMarried()){
+                row.add("Married");
+            }
+            else{
+                row.add("Single");
+            }
+            row.add(u.getPassword());
+            rows.add(String.join(",", row));
+        }
+
+        try (PrintWriter writer = new PrintWriter(new FileWriter(filename))) {
+            for (String row : rows) {
+                writer.println(row);
+            }
+        } catch (IOException e) {
+            System.out.println("Error writing file: " + e.getMessage());
+        }
     }
 }

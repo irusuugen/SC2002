@@ -25,9 +25,9 @@ public class EnquiryRepository {
                 // Obtaining the basic information
                 String[] enquiryInfo = currentLine.split(",");
                 String NRIC = enquiryInfo[0];
-                List<Applicant> applicantList = UserService.getApplicants();
-                applicantList.addAll(UserService.getOfficers());
-                Applicant applicant  = applicantList.stream().filter(a -> a.getNric().equals(NRIC)).findFirst().get();
+                List<Applicant> combinedList = new ArrayList<>(UserService.getApplicants());
+                combinedList.addAll(UserService.getOfficers());
+                Applicant applicant  = combinedList.stream().filter(a -> a.getNric().equals(NRIC)).findFirst().get();
                 String message = enquiryInfo[1].replace("\"", "");
                 String projectName = enquiryInfo[2];
                 Project project = ProjectService.getAllProjects().stream().filter(p -> p.getProjectName().equals(projectName)).findFirst().get();

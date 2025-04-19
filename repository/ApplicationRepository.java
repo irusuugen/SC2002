@@ -37,9 +37,9 @@ public class ApplicationRepository {
                     flatType = FlatType.THREEROOMS;
                 }
                 String NRIC = applicationInfo[2];
-                List<Applicant> applicantList = UserService.getApplicants();
-                applicantList.addAll(UserService.getOfficers());
-                Applicant applicant  = applicantList.stream().filter(a -> a.getNric().equals(NRIC)).findFirst().get();
+                List<Applicant> combinedList = new ArrayList<>(UserService.getApplicants());
+                combinedList.addAll(UserService.getOfficers());
+                Applicant applicant  = combinedList.stream().filter(a -> a.getNric().equals(NRIC)).findFirst().get();
                 Status status = Status.valueOf(applicationInfo[3]);
                 DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("d/M/yy");
                 LocalDate applicationDate = LocalDate.parse(applicationInfo[4], dateFormatter);

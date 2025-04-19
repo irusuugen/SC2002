@@ -24,12 +24,12 @@ public class UserService {
         userList = userRepository.loadAllUsers();
 
         for (User user : userList) {
-            if (user instanceof Applicant a) {
-                applicantList.add(a);
-            } else if (user instanceof HDBManager m) {
+            if (user instanceof HDBManager m) {
                 managerList.add(m);
             } else if (user instanceof HDBOfficer o) {
                 officerList.add(o);
+            } else if (user instanceof Applicant a) {
+                applicantList.add(a);
             }
         }
 
@@ -50,5 +50,20 @@ public class UserService {
 
     public static List<User> getAllUsers() {
         return userList;
+    }
+
+    public static void updateApplicants(){
+        List<User> users = new ArrayList<>(applicantList);
+        UserRepository.updateUsers("data/ApplicantList.csv", users);
+    }
+
+    public static void updateOfficers(){
+        List<User> users = new ArrayList<>(officerList);
+        UserRepository.updateUsers("data/OfficerList.csv", users);
+    }
+
+    public static void updateManagers(){
+        List<User> users = new ArrayList<>(managerList);
+        UserRepository.updateUsers("data/ManagerList.csv", users);
     }
 }
