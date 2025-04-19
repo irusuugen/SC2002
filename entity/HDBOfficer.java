@@ -2,7 +2,7 @@ package entity;
 
 import java.util.*;
 
-public class HDBOfficer extends User {  // Changed from Applicant to User
+public class HDBOfficer extends Applicant {  // Changed from Applicant to User
     private Project assignedProject;
     private List<Registration> registrationList = new ArrayList<>();
     

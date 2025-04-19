@@ -16,6 +16,12 @@ public class Applicant extends User {
         this.application = null;
     }
 
+    public Applicant(String name, String nric, String password, int age, boolean isMarried, Role role) {
+        super(name, nric, password, age, isMarried, role);
+        this.enquiries = new ArrayList<>();
+        this.application = null;
+    }
+
     public Application getApplication() {
         return application;
     }
