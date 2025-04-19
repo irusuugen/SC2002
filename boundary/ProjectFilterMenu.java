@@ -50,16 +50,16 @@ public class ProjectFilterMenu {
         while (true) {
             ClearPage.clearPage();
 
-            BoxPrinter.printTopBorder();
-            System.out.println(BoxPrinter.centerInBox("PROJECT FILTERS"));
-            BoxPrinter.printDivider();
             System.out.println("""
-            ║  1. Filter by Location                     ║
-            ║  2. Filter by Flat Type                    ║
-            ║  3. Toggle Sort Order                      ║
-            ║  4. Clear All Filters                      ║
-            ║  5. Back to Main Menu                      ║
-            ╚════════════════════════════════════════════╝
+            ╔════════════════════════════════════════════════════════════════════════╗
+            ║                            PROJECT FILTERS                             ║
+            ╠════════════════════════════════════════════════════════════════════════╣
+            ║  1. Filter by Location                                                 ║
+            ║  2. Filter by Flat Type                                                ║
+            ║  3. Toggle Sort Order                                                  ║
+            ║  4. Clear All Filters                                                  ║
+            ║  5. Back to Main Menu                                                  ║
+            ╚════════════════════════════════════════════════════════════════════════╝
             """);
 
             int choice = InputHelper.readInt("➤ Enter choice (1-5): ");
@@ -69,22 +69,30 @@ public class ProjectFilterMenu {
                     System.out.print("Enter location (e.g., 'Yishun' or leave blank): ");
                     String loc = sc.nextLine().trim();
                     filter.setLocationFilter(loc.isEmpty() ? null : loc);
+                    System.out.println();
+                    printCurrentFilters(filter);
                 }
                 case 2 -> {
                     System.out.print("Enter flat type (2-Room/3-Room or leave blank): ");
                     String type = sc.nextLine().trim();
                     filter.setFlatTypeFilter(type.isEmpty() ? null : type);
+                    System.out.println();
+                    printCurrentFilters(filter);
                 }
                 case 3 -> {
                     boolean newSort = !filter.isSortByAlphabetical();
                     filter.setSortByAlphabetical(newSort);
                     System.out.println("Sort order set to: " + (newSort ? "A-Z" : "Z-A"));
+                    System.out.println();
+                    printCurrentFilters(filter);
                 }
                 case 4 -> {
                     filter.clearFilters();
                     System.out.println("All filters cleared");
+                    System.out.println();
+                    printCurrentFilters(filter);
                 }
-                case 5 -> { return; }
+                case 5 -> {return; }
             }
         }
     }
