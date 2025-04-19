@@ -106,19 +106,19 @@ public class HDBManagerRegistrationController {
 
         if (decision == 1) {
             if (project.hasAvailableOfficerSlot()) {
+                selectedReg.setStatus(Status.APPROVED); // Set status first
                 project.addOfficer(officer);
-                project.unregisterOfficer(selectedReg);
-                selectedReg.setStatus(Status.APPROVED);
                 officer.addAssignedProject(project);
                 System.out.println("Officer registration approved.");
             } else {
                 System.out.println("Approval failed. No officer slots available in this project.");
+                return;
             }
         } else {
-            selectedReg.setStatus(Status.REJECTED);
-            project.unregisterOfficer(selectedReg);
+            selectedReg.setStatus(Status.REJECTED); // Set status first
             System.out.println("Officer registration rejected.");
         }
+
 
         System.out.println("Registration processed.");
     }
