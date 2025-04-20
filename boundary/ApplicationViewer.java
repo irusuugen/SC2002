@@ -13,9 +13,9 @@ public class ApplicationViewer {
         BoxPrinter.printRow("Applicant", (application.getApplicant().getName() + " (" + maskedNric + ")"));
         BoxPrinter.printRow("Age", String.valueOf(application.getApplicant().getAge()));
         BoxPrinter.printRow("Marital Status", application.getApplicant().isMarried() ? "Married" : "Single");
-        BoxPrinter.printRow("Application Date", application.getDate().toString() + (application.isWithdrawalRequested() ? " (Withdrawal Requested)" : "") );
+        BoxPrinter.printRow("Application Date", application.getDate().toString() );
         BoxPrinter.printRow("Flat Type Applied For", application.getFlatType().toString());
-        BoxPrinter.printRow("Application Status", application.getStatus().toString());
+        BoxPrinter.printRow("Application Status", application.getStatus().toString() + ((application.isWithdrawalRequested() && application.getStatus()!=Status.UNSUCCESSFUL)? " (Withdrawal Requested)" : ""));
         BoxPrinter.printDivider();
         ProjectViewer.filterProjectDetailsForApplicants(application.getProject(), application.getApplicant());
         BoxPrinter.printBottomBorder();

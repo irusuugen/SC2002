@@ -42,10 +42,8 @@ public class HDBManagerProjectController {
         String neighborhood = sc.nextLine();
         int twoRooms = InputHelper.readInt("Enter the number of 2-room units: ");
         int threeRooms = InputHelper.readInt("Enter the number of 3-room units: ");
-        System.out.print("Enter 2-room price: $");
-        float twoRoomsPrice = sc.nextFloat();
-        System.out.print("Enter 3-room price: $");
-        float threeRoomsPrice = sc.nextFloat();
+        float twoRoomsPrice = InputHelper.readFloat("Enter 2-room price: $");
+        float threeRoomsPrice = InputHelper.readFloat("Enter 3-room price: $");
         int officerSlots;
         while (true) {
             officerSlots = InputHelper.readInt("Enter the number of officer slots (max 10): ");
@@ -57,7 +55,6 @@ public class HDBManagerProjectController {
 
         ClearPage.clearPage();
         ProjectViewer.printOneProject(p, manager);
-        sc.nextLine(); // Consume newline;
         if (InputHelper.confirm("Confirm project creation?")) {
             ProjectService.addProject(p);
             manager.addCreatedProject(p);
@@ -87,9 +84,9 @@ public class HDBManagerProjectController {
         // Copy original values into temporary variables
         String neighborhood = original.getNeighborhood();
         int twoRooms = original.getNumRoom(FlatType.TWOROOMS);
-        int threeRooms = original.getNumRoom(FlatType.TWOROOMS);
+        int threeRooms = original.getNumRoom(FlatType.THREEROOMS);
         float price2 = original.getSellingPrice(FlatType.TWOROOMS);
-        float price3 = original.getSellingPrice(FlatType.TWOROOMS);
+        float price3 = original.getSellingPrice(FlatType.THREEROOMS);
         int officerSlots = original.getOfficerSlot();
         LocalDate openDate = original.getOpenDate();
         LocalDate closeDate = original.getCloseDate();
@@ -106,19 +103,43 @@ public class HDBManagerProjectController {
 
         System.out.print("New 2-room unit count: ");
         input = sc.nextLine();
-        if (!input.isEmpty()) twoRooms = Integer.parseInt(input);
+        if (!input.isEmpty()) {
+            try {
+                twoRooms = Integer.parseInt(input);
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Keeping original value.");
+            }
+        }
 
         System.out.print("New 3-room unit count: ");
         input = sc.nextLine();
-        if (!input.isEmpty()) threeRooms = Integer.parseInt(input);
+        if (!input.isEmpty()) {
+            try {
+                threeRooms = Integer.parseInt(input);
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Keeping original value.");
+            }
+        }
 
         System.out.print("New 2-room price: $");
         input = sc.nextLine();
-        if (!input.isEmpty()) price2 = Float.parseFloat(input);
+        if (!input.isEmpty()) {
+            try {
+                price2 = Float.parseFloat(input);
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Keeping original value.");
+            }
+        }
 
         System.out.print("New 3-room price: $");
         input = sc.nextLine();
-        if (!input.isEmpty()) price3 = Float.parseFloat(input);
+        if (!input.isEmpty()) {
+            try {
+                price3 = Float.parseFloat(input);
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Keeping original value.");
+            }
+        }
 
         while (true) {
             System.out.print("New officer slots: ");
@@ -160,6 +181,7 @@ public class HDBManagerProjectController {
                 return;
             }
         }
+
         // Check overlap against manager’s other projects
         for (Project other : createdProjects) {
             if (!other.equals(original)) {

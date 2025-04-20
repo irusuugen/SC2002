@@ -50,8 +50,13 @@ public class HDBManagerEnquiryController {
         viewUnrepliedEnquiries(project);
         if (unreplied.isEmpty()) return;
 
-        int choice = InputHelper.readInt(
-                "Enter enquiry number (1-" + unreplied.size() + "): ");
+        int choice;
+        while (true) {
+            choice = InputHelper.readInt("Enter enquiry number (1-" + unreplied.size() + "): ");
+            if (choice >= 1 && choice <= unreplied.size()) break;
+            System.out.println("Invalid input. Please choose a number from 1 to " + unreplied.size() + ".");
+        }
+
         Enquiry enquiry = unreplied.get(choice - 1);
 
         System.out.println("Enter your response:");
@@ -62,6 +67,7 @@ public class HDBManagerEnquiryController {
             System.out.println("Reply successful.");
         }
     }
+
 
     // Allows manager to select a *created* project to look at enquiries for
     private static Project selectProject(List<Project> projects) {

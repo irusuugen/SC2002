@@ -41,8 +41,18 @@ public class HDBManagerApplicationController {
         }
 
         if (decision == 1) {
+            boolean confirmed = InputHelper.confirm("Are you sure you want to approve this application?");
+            if (!confirmed) {
+                System.out.println("Approval cancelled.");
+                return;
+            }
             processApproval(selectedApp, project);
         } else {
+            boolean confirmed = InputHelper.confirm("Are you sure you want to reject this application?");
+            if (!confirmed) {
+                System.out.println("Rejection cancelled.");
+                return;
+            }
             selectedApp.markUnsuccessful();
             System.out.println("Application rejected.");
         }
@@ -73,7 +83,7 @@ public class HDBManagerApplicationController {
 
         // Collect all withdrawal requests
         for (Application app : getAllApplications(manager)) {
-            if (app.isWithdrawalRequested()) {
+            if (app.isWithdrawalRequested() && app.getStatus() == Status.PENDING) {
                 withdrawalRequests.add(app);
             }
         }
@@ -123,12 +133,23 @@ public class HDBManagerApplicationController {
         }
 
         if (decision == 1) {
+            boolean confirmed = InputHelper.confirm("Are you sure you want to approve this withdrawal?");
+            if (!confirmed) {
+                System.out.println("Withdrawal approval cancelled.");
+                return;
+            }
+
             selectedApp.withdraw();
             if (selectedApp.getStatus() == Status.BOOKED) {
                 project.removeOccupiedFlat(selectedApp.getFlatType());
             }
             System.out.println("Withdrawal approved.");
         } else {
+            boolean confirmed = InputHelper.confirm("Are you sure you want to reject this withdrawal?");
+            if (!confirmed) {
+                System.out.println("Withdrawal rejection cancelled.");
+                return;
+            }
             System.out.println("Withdrawal rejected.");
         }
     }

@@ -12,13 +12,13 @@ import utils.*;
 public class HDBOfficerApplicationController{
 
 	private static Scanner sc = new Scanner(System.in);
-	
-	public static void updateApplication(HDBOfficer officer)
-	{
+
+	public static void updateApplication(HDBOfficer officer) {
 		Application application;
-		while(true){
+		while (true) {
 			System.out.print("Please enter applicant's NRIC: ");
 			String nric = sc.nextLine();
+
 			application = Stream.concat(
 							UserService.getOfficers().stream(),
 							UserService.getApplicants().stream()
@@ -27,38 +27,27 @@ public class HDBOfficerApplicationController{
 					.map(Applicant::getApplication)
 					.findFirst()
 					.orElse(null);
-			if(application == null){
-				System.out.print("Application was not found. Retry? (Y/N): ");
-                String retry = sc.nextLine();
-                if (retry.equalsIgnoreCase("N")) return;
-			}
-			else if (!officer.getAssignedProjects().contains(application.getProject())){
-				System.out.print("Officer is not responsible for the applicant's project. Retry? (Y/N): ");
-            	String retry = sc.nextLine();
-                if (retry.equalsIgnoreCase("N")) return;
-			}
-			else if(!application.isBookingRequested()){
-				System.out.print("Booking request has not been submitted. Retry? (Y/N): ");
-            	String retry = sc.nextLine();
-                if (retry.equalsIgnoreCase("N")) return;
-			}
-			else {
-				System.out.println("Application found. Confirm successful booking? (Y/N): ");
-				String confirm = sc.nextLine();
-				if (confirm.equalsIgnoreCase("Y")) {
+
+			if (application == null) {
+				if (!InputHelper.confirm("Application was not found. Retry?")) return;
+			} else if (!officer.getAssignedProjects().contains(application.getProject())) {
+				if (!InputHelper.confirm("Officer is not responsible for the applicant's project. Retry?")) return;
+			} else if (!application.isBookingRequested()) {
+				if (!InputHelper.confirm("Booking request has not been submitted. Retry?")) return;
+			} else {
+				if (InputHelper.confirm("Application found. Confirm successful booking?")) {
 					application.getProject().addOccupiedFlat(application.getFlatType());
 					application.markBooked();
 					break;
 				} else {
-					System.out.println("Application was not booked. Retry? (Y/N): ");
-					String retry = sc.nextLine();
-					if (retry.equalsIgnoreCase("N")) return;
+					if (!InputHelper.confirm("Application was not booked. Retry?")) return;
 				}
 			}
 		}
 		ClearPage.clearPage();
 		printBookingReceipt(application, officer);
 	}
+
 
 	public static void printBookingReceipt(Application application, HDBOfficer officer) {
 		BoxPrinter.printTopBorder();

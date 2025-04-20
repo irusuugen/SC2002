@@ -30,7 +30,7 @@ public class ChangeAccountPassword {
                 // Error message is printed within isValidPassword
             } else {
                 user.changePassword(newPassword);
-                System.out.println("✅ Password updated successfully.");
+                System.out.println("Password updated successfully.");
                 System.out.println("Please log in again with your new password.");
                 System.out.println("Returning to home screen...");
                 try {

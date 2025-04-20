@@ -52,4 +52,18 @@ public class InputHelper {
         return date;
     }
 
+    public static float readFloat(String prompt) {
+        while (true) {
+            try {
+                System.out.print(prompt);
+                float value = sc.nextFloat();
+                sc.nextLine(); // consume newline
+                return value;
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a number.");
+                sc.nextLine(); // clear invalid input
+            }
+        }
+    }
+
 }

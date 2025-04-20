@@ -64,10 +64,17 @@ public class ApplicantController {
 
     // Creates an application
     public static void applyForProject(Applicant applicant) {
-        // Check for existing application and if existing application was unsuccessful
-        if (applicant.getApplication() != null && applicant.getApplication().getStatus() != Status.UNSUCCESSFUL && applicant.getApplication().getStatus() != Status.WITHDRAWN) {
-            System.out.println("You have already applied for a project.");
-            return;
+        Application previousApplication = applicant.getApplication();
+
+        if (previousApplication != null) {
+            Status status = previousApplication.getStatus();
+            Project prevProject = previousApplication.getProject();
+
+            // Block if the status is neither UNSUCCESSFUL nor WITHDRAWN
+            if (status != Status.UNSUCCESSFUL) {
+                System.out.println("You have already applied for a project.");
+                return;
+            }
         }
 
         viewOpenProjects(applicant);
@@ -77,9 +84,15 @@ public class ApplicantController {
             System.out.print("Please enter the name of the project you'd like to apply for: ");
             String inputTitle = sc.nextLine();
             project = findProjectByName(applicant, inputTitle);
+
             if (project == null) {
                 if (!InputHelper.confirm("Project not found. Retry?")) return;
             } else {
+                // Check if trying to reapply for the same project
+                if (previousApplication != null && project.equals(previousApplication.getProject())) {
+                    System.out.println("You cannot reapply for the same project you were previously rejected or withdrew from.");
+                    return;
+                }
                 break;
             }
         }
@@ -115,6 +128,7 @@ public class ApplicantController {
             System.out.println("Request cancelled.");
         }
     }
+
 
     public static void viewApplication(Applicant applicant) {
         Application application = applicant.getApplication();
