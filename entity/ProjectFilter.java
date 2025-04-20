@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 public class ProjectFilter {
     private String locationFilter;
     private FlatType flatTypeFilter;
-    private Boolean sortByAlphabetical = true; // true = A-Z, false = Z-A, null = no sort
+    private Boolean sortByAlphabetical = null; // true = A-Z, false = Z-A, null = no sort
 
     // Setters
     public void setLocationFilter(String location) {

@@ -292,10 +292,6 @@ public class HDBManagerProjectController {
 
         ClearPage.clearPage();
         System.out.println("Here are the list of projects:");
-        System.out.println("Testing original:");
-        ProjectViewer.printProjects(projectsToShow, manager);
-        System.out.println();
-        System.out.println("Testing the filtered version: ");
         ProjectFilterMenu.viewFilteredProjects(session, projectsToShow);
     }
 }
