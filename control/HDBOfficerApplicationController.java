@@ -3,6 +3,8 @@ package control;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Stream;
+
 import entity.*;
 import repository.*;
 import utils.*;
@@ -17,7 +19,14 @@ public class HDBOfficerApplicationController{
 		while(true){
 			System.out.print("Please enter applicant's NRIC: ");
 			String nric = sc.nextLine();
-			application = ApplicationService.fetchApplicationFromNRIC(nric);
+			application = Stream.concat(
+							UserService.getOfficers().stream(),
+							UserService.getApplicants().stream()
+					)
+					.filter(user -> user.getNric().equals(nric))
+					.map(Applicant::getApplication)
+					.findFirst()
+					.orElse(null);
 			if(application == null){
 				System.out.print("Application was not found. Retry? (Y/N): ");
                 String retry = sc.nextLine();

@@ -1,5 +1,6 @@
 package control;
 
+import boundary.ProjectFilterMenu;
 import boundary.ProjectViewer;
 import entity.*;
 
@@ -246,7 +247,7 @@ public class HDBManagerProjectController {
         }
     }
 
-    public static void viewAllProjects(HDBManager manager, List<Project> allProjects) {
+    public static void viewAllProjects(HDBManager manager, List<Project> allProjects, UserSession session) {
         // Filter for own projects
         System.out.println("Would you like to:");
         System.out.println("1. View only your own created projects");
@@ -269,6 +270,10 @@ public class HDBManagerProjectController {
 
         ClearPage.clearPage();
         System.out.println("Here are the list of projects:");
+        System.out.println("Testing original:");
         ProjectViewer.printProjects(projectsToShow, manager);
+        System.out.println();
+        System.out.println("Testing the filtered version: ");
+        ProjectFilterMenu.viewFilteredProjects(session, projectsToShow);
     }
 }

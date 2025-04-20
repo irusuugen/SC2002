@@ -8,7 +8,7 @@ import boundary.*;
 public class HDBManagerApplicationController {
     public static void processApplication(HDBManager manager) {
         List<Application> applications = getAllApplications(manager).stream()
-                .filter(app -> app.getStatus() == Status.PENDING)
+                .filter(app -> app.getStatus() == Status.PENDING && !app.isWithdrawalRequested())
                 .toList();
 
         if (applications.isEmpty()) {

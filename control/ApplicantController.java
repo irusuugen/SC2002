@@ -154,8 +154,12 @@ public class ApplicantController {
 
         ApplicationViewer.printApplication(application);
         if (InputHelper.confirm("Are you sure you want to withdraw your application?")) {
-            application.setWithdrawalRequested(true);
-            System.out.println("Withdrawal request has been sent.");
+            if (application.isWithdrawalRequested()) {
+                System.out.println("A withdrawal request has already been made.");
+            } else {
+                application.setWithdrawalRequested(true);
+                System.out.println("Withdrawal request has been sent.");
+            }
         } else {
             System.out.println("Request cancelled.");
         }

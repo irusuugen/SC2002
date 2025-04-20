@@ -13,7 +13,7 @@ public class ApplicationViewer {
         BoxPrinter.printRow("Applicant", (application.getApplicant().getName() + " (" + maskedNric + ")"));
         BoxPrinter.printRow("Age", String.valueOf(application.getApplicant().getAge()));
         BoxPrinter.printRow("Marital Status", application.getApplicant().isMarried() ? "Married" : "Single");
-        BoxPrinter.printRow("Application Date", application.getDate().toString());
+        BoxPrinter.printRow("Application Date", application.getDate().toString() + (application.isWithdrawalRequested() ? " (Withdrawal Requested)" : "") );
         BoxPrinter.printRow("Flat Type Applied For", application.getFlatType().toString());
         BoxPrinter.printRow("Application Status", application.getStatus().toString());
         BoxPrinter.printDivider();

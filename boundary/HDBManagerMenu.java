@@ -39,9 +39,9 @@ public class HDBManagerMenu {
             int choice;
             while (true) {
                 choice = InputHelper.readInt("➤ Enter your choice: ");
-                if (choice >= 1 && choice <= 13)
+                if (choice >= 1 && choice <= 14)
                     break;
-                System.out.println("Please enter a number between 1 and 13.");
+                System.out.println("Please enter a number between 1 and 14.");
             }
             ClearPage.clearPage();
             
@@ -64,8 +64,7 @@ public class HDBManagerMenu {
                     break;
                 case 5:
                     // View all projects
-                    ProjectFilterMenu.viewFilteredProjects(session, allProjects);
-                    HDBManagerProjectController.viewAllProjects(manager, allProjects);
+                    HDBManagerProjectController.viewAllProjects(manager, allProjects, session);
                     break;
                 case 6:
                     // View all enquiries
