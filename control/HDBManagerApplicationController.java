@@ -91,7 +91,7 @@ public class HDBManagerApplicationController {
 
         // Collect all withdrawal requests
         for (Application app : getAllApplications(manager)) {
-            if (app.isWithdrawalRequested() && app.getStatus() == Status.PENDING) {
+            if (app.isWithdrawalRequested() && (app.getStatus() == Status.PENDING || app.getStatus() == Status.SUCCESSFUL || app.getStatus() == Status.BOOKED)) {
                 withdrawalRequests.add(app);
             }
         }
