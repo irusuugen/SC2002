@@ -48,7 +48,7 @@ public class ApplicationCsvRepository implements ApplicationRepository {
                 combinedList.addAll(UserService.getOfficers());
                 Applicant applicant  = combinedList.stream().filter(a -> a.getNric().equals(NRIC)).findFirst().get();
                 Status status = Status.valueOf(applicationInfo[3]);
-                DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("d/M/yy");
+                DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                 LocalDate applicationDate = LocalDate.parse(applicationInfo[4], dateFormatter);
                 boolean bookingRequested = Boolean.parseBoolean(applicationInfo[5]);
                 boolean withdrawalRequested = Boolean.parseBoolean(applicationInfo[6]);
@@ -76,7 +76,7 @@ public class ApplicationCsvRepository implements ApplicationRepository {
                 row.add("3-Room");
             }
             row.add(a.getApplicant().getNric());
-            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("d/M/yy");
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             row.add(a.getDate().format(dateFormatter));
             row.add(a.getStatusString());
             row.add(a.isBookingRequested()? "0" : "1");

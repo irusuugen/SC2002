@@ -93,7 +93,7 @@ public class ProjectCsvRepository implements ProjectRepository {
             row.add("3-Room");
             row.add(String.valueOf(p.getNumFlatAvailable(FlatType.THREEROOMS)));
             row.add(String.valueOf(p.getSellingPrice(FlatType.THREEROOMS)));
-            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("d/M/yy");
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             row.add(p.getOpenDate().format(dateFormatter));
             row.add(p.getOpenDate().format(dateFormatter));
             row.add(p.getManager().getNric());
