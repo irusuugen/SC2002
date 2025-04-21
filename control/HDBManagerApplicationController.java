@@ -1,6 +1,9 @@
 package control;
 
 import entity.*;
+import repository.ApplicationService;
+import repository.ProjectService;
+
 import java.util.*;
 import utils.*;
 import boundary.*;
@@ -54,8 +57,10 @@ public class HDBManagerApplicationController {
                 return;
             }
             selectedApp.markUnsuccessful();
+            ApplicationService.updateApplications();
             System.out.println("Application rejected.");
         }
+        
     }
 
     private static void processApproval(Application selectedApp, Project project) {
@@ -63,9 +68,12 @@ public class HDBManagerApplicationController {
         if (project.getNumFlatAvailable(type) > 0) {
             selectedApp.markSuccessful();
             project.addOccupiedFlat(type);
+            ApplicationService.updateApplications();
+            ProjectService.updateProjects();
             System.out.println("Application approved.");
         } else {
             selectedApp.markUnsuccessful();
+            ApplicationService.updateApplications();
             System.out.println("No available flats. Application marked as unsuccessful.");
         }
     }
@@ -140,8 +148,10 @@ public class HDBManagerApplicationController {
             }
 
             selectedApp.withdraw();
+            ApplicationService.updateApplications();
             if (selectedApp.getStatus() == Status.BOOKED) {
                 project.removeOccupiedFlat(selectedApp.getFlatType());
+                ProjectService.updateProjects();
             }
             System.out.println("Withdrawal approved.");
         } else {

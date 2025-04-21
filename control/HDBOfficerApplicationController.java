@@ -38,6 +38,8 @@ public class HDBOfficerApplicationController{
 				if (InputHelper.confirm("Application found. Confirm successful booking?")) {
 					application.getProject().addOccupiedFlat(application.getFlatType());
 					application.markBooked();
+					ProjectService.updateProjects();
+					UserService.updateApplicants();
 					break;
 				} else {
 					if (!InputHelper.confirm("Application was not booked. Retry?")) return;

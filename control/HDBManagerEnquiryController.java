@@ -3,7 +3,7 @@ package control;
 import boundary.EnquiriesViewer;
 import entity.*;
 import java.util.*;
-import repository.ProjectService;
+import repository.*;
 import utils.*;
 
 public class HDBManagerEnquiryController {
@@ -64,6 +64,7 @@ public class HDBManagerEnquiryController {
 
         if (InputHelper.confirm("Confirm reply")) {
             enquiry.reply(response);
+            EnquiryService.updateEnquiries();
             System.out.println("Reply successful.");
         }
     }

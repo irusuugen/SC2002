@@ -57,6 +57,7 @@ public class HDBManagerProjectController {
         ProjectViewer.printOneProject(p, manager);
         if (InputHelper.confirm("Confirm project creation?")) {
             ProjectService.addProject(p);
+            ProjectService.updateProjects();
             manager.addCreatedProject(p);
             System.out.println("Project created.");
         } else {
@@ -210,7 +211,7 @@ public class HDBManagerProjectController {
             original.setOfficerSlots(officerSlots);
             original.setOpenDate(openDate);
             original.setCloseDate(closeDate);
-
+            ProjectService.updateProjects();
             System.out.println("Project updated successfully.");
         } else {
             System.out.println("Changes discarded.");
@@ -236,6 +237,7 @@ public class HDBManagerProjectController {
         if (InputHelper.confirm("Confirm deletion of project")) {
             createdProjects.remove(project);
             ProjectService.removeProject(project);
+            ProjectService.updateProjects();
             System.out.println("Project deleted successfully.");
         } else {
             System.out.println("Request cancelled.");
@@ -262,6 +264,7 @@ public class HDBManagerProjectController {
         System.out.println("Current visibility: " + (project.isVisible() ? "Visible" : "Hidden"));
         if (InputHelper.confirm("Would you like to toggle this project's visibility")) {
             project.setVisibility(!project.isVisible());
+            ProjectService.updateProjects();
             System.out.println("Project visibility toggled.");
             System.out.println("New visibility: " + (project.isVisible() ? "Visible" : "Hidden"));
         } else {

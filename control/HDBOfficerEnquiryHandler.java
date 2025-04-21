@@ -4,6 +4,7 @@ import java.util.*;
 
 import boundary.EnquiriesViewer;
 import entity.*;
+import repository.EnquiryService;
 import utils.*;
 
 public class HDBOfficerEnquiryHandler{
@@ -77,6 +78,7 @@ public class HDBOfficerEnquiryHandler{
 		String confirm = sc.nextLine();
 		if (confirm.equalsIgnoreCase("Y")) {
 			enquiry.reply(response);
+			EnquiryService.updateEnquiries();
 			System.out.println("Enquiry replied successfully.");
 		} else {
 			System.out.println("Reply cancelled.");
