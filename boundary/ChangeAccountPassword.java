@@ -1,6 +1,8 @@
 package boundary;
 
 import entity.*;
+import repository.UserService;
+
 import java.util.Scanner;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -16,6 +18,14 @@ public class ChangeAccountPassword {
         ClearPage.clearPage();
         displayPasswordRequirements();
 
+        System.out.println("\n=== Change Password ===");
+        System.out.print("Please enter your current password: ");
+        String currentPassword = sc.nextLine();
+        
+        if (!currentPassword.equals(oldPassword)) {
+            System.out.println("Incorrect current password!");
+            return;
+        }
         while (true) {
             System.out.print("Please enter your new password: ");
             newPassword = sc.nextLine();
@@ -30,6 +40,7 @@ public class ChangeAccountPassword {
                 // Error message is printed within isValidPassword
             } else {
                 user.changePassword(newPassword);
+                UserService.updateUsers(user);
                 System.out.println("Password updated successfully.");
                 System.out.println("Please log in again with your new password.");
                 System.out.println("Returning to home screen...");
