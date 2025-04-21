@@ -21,6 +21,16 @@ import java.util.Scanner;
 import java.util.List;
 
 public class HDBOfficerMenu {
+    /**
+     * Launches the manager menu interface in a loop until the user logs out.
+     *
+     * This method retrieves the currently logged-in applicant from the session
+     * and provides options via a text-based menu. Each menu option invokes
+     * relevant actions such as managing bookings, managing enquiries,
+     * and submitting registrations
+     *
+     * @param session The current user session containing the authenticated officer
+     */
     public static void officerMenu(UserSession session) {
         HDBOfficer officer = (HDBOfficer) session.getUser();
         Scanner sc = new Scanner(System.in);

@@ -1,12 +1,9 @@
 /**
- * Manages all enquiry-related actions by applicants.
+ * This class manages all enquiry-related actions by applicants.
  *
  * This includes submitting enquiries for projects, as well as editing,
  * deleting, and viewing previously submitted enquiries.
  *
- * @author
- * @version 1.0
- * @since 2025-04-21
  */
 
 package control;

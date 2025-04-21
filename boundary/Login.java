@@ -114,12 +114,18 @@ public class Login {
     }
 
     /**
-     * Validates user credentials against stored records.
-     * @param nric User's NRIC
-     * @param password User's password
-     * @param userRole Expected user role
+     * Validates user credentials against the specified role's user repository.
+     *
+     * @param nric User's NRIC to validate
+     * @param password User's password to verify
+     * @param userRole Expected role for authorization
      * @return Authenticated User object
-     * @throws IllegalArgumentException if validation fails
+     * @throws IllegalArgumentException if validation fails for any reason:
+     *  <ul>
+     *  *   <li>Invalid NRIC</li>
+     *  *   <li>User not found</li>
+     *  *   <li>Password mismatch</li>
+     *  * </ul>
      */
     public User validate(String nric, String password, Role userRole) throws IllegalArgumentException {
         if (!nric.matches("^[ST]\\d{7}[A-Z]$")) {

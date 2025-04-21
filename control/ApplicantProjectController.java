@@ -6,10 +6,6 @@
  *
  * It does not handle application or enquiry functionality.
  *
- * @author Michelle Aye
- * @version 1.0
- * @since 2025-04-21
- *
  */
 
 package control;
@@ -20,6 +16,7 @@ import repository.ProjectService;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class ApplicantProjectController {
     public static List<Project> getOpenProjects(Applicant applicant) {

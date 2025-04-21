@@ -1,9 +1,7 @@
 /**
  * This class represents an applicant in the BTO Management System.
  *
- * @author Michelle Aye
- * @version 1.0
- * @since 2025-04-21
+ *
  */
 
 package entity;

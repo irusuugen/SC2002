@@ -6,13 +6,6 @@
  * settings for the display of projects. The session instance is passed
  * between boundary classes (like menus) to provide consistent access to
  * session-specific data.
- *
- * @author Iniya Murali
- * @version 1.0
- * @since 2025-04-21
- *
- * @see User
- * @see ProjectFilter
  */
 
 

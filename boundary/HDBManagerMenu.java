@@ -72,7 +72,7 @@ public class HDBManagerMenu {
             switch (choice) {
                 case 1:
                     // Change password
-                    ChangeAccountPassword.changePassword(Role.HDB_MANAGER, manager);
+                    ChangeAccountPassword.changePassword(manager);
                     break;
                 case 2:
                     // Create new project

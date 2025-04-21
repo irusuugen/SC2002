@@ -3,9 +3,6 @@
  *
  * This includes applying for a BTO project, viewing application status,making a booking request, and requesting application withdrawal.
  *
- * @author Michelle Aye
- * @version 1.0
- * @since 2025-04-21
  */
 
 package control;
