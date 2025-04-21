@@ -29,4 +29,12 @@ public class EnquiryService {
     public static void updateEnquiries(){
         enquiryRepository.saveAllEnquiries(enquiryList);
     }
+
+    public static void addEnquiry(Enquiry e) {
+        enquiryList.add(e);
+    }
+
+    public static void removeEnquiry(Enquiry e) {
+        enquiryList.remove(e);
+    }
 }

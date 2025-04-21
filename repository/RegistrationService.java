@@ -29,4 +29,12 @@ public class RegistrationService {
     public static void updateRegistrations(){
         registrationRepository.saveAllRegistrations(registrationList);
     }
+
+    public static void addRegistration(Registration r) {
+        registrationList.add(r);
+     }
+ 
+    public static void removeRegistration(Registration r) {
+        registrationList.remove(r);
+    }
 }

@@ -52,6 +52,23 @@ public class UserService {
         return userList;
     }
 
+    public static void updateUsers(User user){
+        Role role = user.getRole();
+        switch (role) {
+            case APPLICANT:
+                updateApplicants();
+                break;
+            case HDB_OFFICER:
+                updateOfficers();
+                break;
+            case HDB_MANAGER:
+                updateManagers();
+                break;
+            default:
+                break;
+        }
+    }
+
     public static void updateApplicants(){
         List<User> users = new ArrayList<>(applicantList);
         userRepository.saveApplicant(users);

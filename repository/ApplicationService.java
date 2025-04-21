@@ -37,4 +37,12 @@ public class ApplicationService {
     public static void updateApplications(){
         applicationRepository.saveAllApplications(applicationList);
     }
+
+    public static void addApplication(Application a) {
+        applicationList.add(a);
+    }
+
+    public static void removeApplication(Application a) {
+        applicationList.remove(a);
+    }
 }
