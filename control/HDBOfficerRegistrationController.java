@@ -1,5 +1,6 @@
 package control;
 
+import java.time.LocalDate;
 import java.util.*;
 import boundary.ProjectViewer;
 import entity.*;
@@ -15,16 +16,19 @@ public class HDBOfficerRegistrationController{
 		List<Project> registrableProjects = new ArrayList<>();
 
 		for (Project project : ProjectService.getAllProjects()) {
-			boolean isAlreadyAssigned = officer.getAssignedProjects().contains(project);
+			boolean isAlreadyAssigned = officer.getAssignedProject() != null && officer.getAssignedProject().equals(project);
 
 			// Check if the officer has already registered for this project
 			boolean hasAlreadyRegistered = officer.getRegistrationList().stream()
 					.anyMatch(reg -> reg.getProject().equals(project));
 
-			boolean hasDateClash = officer.getAssignedProjects().stream()
-					.anyMatch(assigned -> DateOverlap.applicationPeriodsOverlap(assigned, project));
+			boolean hasDateClash = officer.getAssignedProject() != null && DateOverlap.applicationPeriodsOverlap(officer.getAssignedProject(), project);
 
-			if (!isAlreadyAssigned && !hasAlreadyRegistered && !hasDateClash) {
+			LocalDate today = LocalDate.now();
+			
+			boolean isClosed = project.getCloseDate().isBefore(today);
+
+			if (!isAlreadyAssigned && !hasAlreadyRegistered && !hasDateClash && !isClosed) {
 				registrableProjects.add(project);
 			}
 		}
@@ -40,6 +44,9 @@ public class HDBOfficerRegistrationController{
 	}
 
 	public static void registerForProject(HDBOfficer officer) {
+		if(officer.getAssignedProject() != null && officer.getAssignedProject().checkOpeningPeriod()){
+			System.out.println("You are currently an officer of an active project");
+		}
 		viewRegistrableProjects(officer);
 		Project project;
 		// Loop until a valid project is selected
@@ -69,6 +76,8 @@ public class HDBOfficerRegistrationController{
 			String choice = sc.nextLine();
 			if (choice.equalsIgnoreCase("Y")) {
 				Registration registration = new Registration(officer, project);
+				RegistrationService.addRegistration(registration);
+				RegistrationService.updateRegistrations();
 				project.registerOfficer(registration);
 				officer.addRegistration(registration);
 				System.out.println("Registered successfully!");
@@ -105,5 +114,13 @@ public class HDBOfficerRegistrationController{
 				BoxPrinter.printBottomBorder();
 			}
 		}
+	}
+
+	public static void printAssignedProject(HDBOfficer officer){
+		if(officer.getAssignedProject() == null){
+			System.out.println("You are not assigned to any projects.");
+			return;
+		}
+		ProjectViewer.printOneProject(officer.getAssignedProject(), officer);
 	}
 }

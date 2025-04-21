@@ -3,7 +3,7 @@ package entity;
 import java.util.*;
 
 public class HDBOfficer extends Applicant {
-	private List<Project> assignedProjects = new ArrayList<>();
+	private Project assignedProject;
 	private List<Registration> registrationList = new ArrayList<>();
 
 	public HDBOfficer(String name, String nric, String password, int age, boolean isMarried) {
@@ -27,16 +27,16 @@ public class HDBOfficer extends Applicant {
 		return true;
 	}
 
-	public void addAssignedProject(Project project) {
-		assignedProjects.add(project);
+	public void setAssignedProject(Project project) {
+		assignedProject = project;
 	}
 
 	public void addRegistration(Registration registration) {
 		registrationList.add(registration);
 	}
 
-	public List<Project> getAssignedProjects()	{
-		return this.assignedProjects;
+	public Project getAssignedProject()	{
+		return this.assignedProject;
 	}
 	public List<Registration> getRegistrationList() {
 		return this.registrationList;

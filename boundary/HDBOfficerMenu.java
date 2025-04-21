@@ -43,7 +43,7 @@ public class HDBOfficerMenu {
             ║  10.  Delete enquiries                                 ║
             ║  11.  Register to join a project                       ║
             ║  12.  View registrations                               ║
-            ║  13.  View assigned projects                           ║
+            ║  13.  View assigned project                            ║
             ║  14.  View enquiries on assigned projects              ║
             ║  15.  Reply to enquiries on assigned projects          ║
             ║  16.  Update successful application                    ║
@@ -103,7 +103,7 @@ public class HDBOfficerMenu {
                     break;
                 case 13:
                     // View assigned project
-                    ProjectViewer.printProjects(officer.getAssignedProjects(), officer);
+                    HDBOfficerRegistrationController.printAssignedProject(officer);
                     break;
                 case 14:
                     // View enquiries for assigned projects

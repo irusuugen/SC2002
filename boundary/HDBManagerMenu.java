@@ -42,79 +42,84 @@ public class HDBManagerMenu {
             ╔═══════════════════════════════════════════╗
             ║             HDB Manager Menu              ║
             ╠═══════════════════════════════════════════╣
-            ║  1. Create new project                    ║
-            ║  2. Edit existing project                 ║
-            ║  3. Delete existing project               ║
-            ║  4. Toggle project visibility             ║
-            ║  5. View all projects (filtered)          ║
-            ║  6. View all enquiries                    ║
-            ║  7. Reply to enquiries                    ║
-            ║  8. View officer registrations            ║
-            ║  9. Process officer registrations         ║
-            ║  10. Process applications                 ║
-            ║  11. Process withdrawal requests          ║
-            ║  12. Generate application report          ║
-            ║  13. Set project filters                  ║
-            ║  14. Logout                               ║
+            ║  1. Change password                       ║
+            ║  2. Create new project                    ║
+            ║  3. Edit existing project                 ║
+            ║  4. Delete existing project               ║
+            ║  5. Toggle project visibility             ║
+            ║  6. View all projects (filtered)          ║
+            ║  7. View all enquiries                    ║
+            ║  8. Reply to enquiries                    ║
+            ║  9. View officer registrations            ║
+            ║  10. Process officer registrations        ║
+            ║  11. Process applications                 ║
+            ║  12. Process withdrawal requests          ║
+            ║  13. Generate application report          ║
+            ║  14. Set project filters                  ║
+            ║  15. Logout                               ║
             ╚═══════════════════════════════════════════╝
             """);
 
             int choice;
             while (true) {
                 choice = InputHelper.readInt("➤ Enter your choice: ");
-                if (choice >= 1 && choice <= 14)
+                if (choice >= 1 && choice <= 15)
                     break;
-                System.out.println("Please enter a number between 1 and 14.");
+                System.out.println("Please enter a number between 1 and 15.");
             }
             ClearPage.clearPage();
             
             switch (choice) {
                 case 1:
+                    // Change password
+                    ChangeAccountPassword.changePassword(Role.HDB_MANAGER, manager);
+                    break;
+                case 2:
                     // Create new project
                     HDBManagerProjectController.createProject(manager, allProjects);
                     break;
-                case 2:
+                case 3:
                     // Edit existing project
                     HDBManagerProjectController.editProject(manager);
                     break;
-                case 3:
+                case 4:
                     // Delete existing project
                     HDBManagerProjectController.deleteProject(manager, allProjects);
                     break;
-                case 4:
+                case 5:
                     // Toggle project visibility
                     HDBManagerProjectController.toggleProjectVisibility(manager);
                     break;
-                case 5:
+                case 6:
                     // View all projects
                     HDBManagerProjectController.viewAllProjects(manager, allProjects, session);
                     break;
-                case 6:
+                case 7:
                     // View all enquiries
                     HDBManagerEnquiryController.viewAllEnquiries(allProjects);
                     break;
-                case 7:
+                case 8:
                     HDBManagerEnquiryController.replyEnquiry(manager);
                     break;
-                case 8:
+                case 9:
                     HDBManagerRegistrationController.viewRegistrations(manager);
                     break;
-                case 9:
+                case 10:
                     HDBManagerRegistrationController.processRegistrations(manager);
                     break;
-                case 10:
+                case 11:
                     HDBManagerApplicationController.processApplication(manager);
                     break;
-                case 11:
+                case 12:
                     HDBManagerApplicationController.processWithdrawal(manager);
                     break;
-                case 12:
+                case 13:
                     HDBManagerReportPrintController.generateAndPrintReport(allApplications);
                     break;
-                case 13:
+                case 14:
                     ProjectFilterMenu.showFilterMenu(session);
                     break;
-                case 14:
+                case 15:
                     System.out.println("Logging out...");
                     try { Thread.sleep(1000); } catch (Exception e) {}
                     return;

@@ -98,9 +98,6 @@ public class ProjectCsvRepository implements IProjectRepository {
                 );
 
                 projects.add(project);
-                if (projectManager != null) {
-                    projectManager.addCreatedProject(project);
-                }
             }
         } catch (Exception e) {
             System.out.println("Error reading file: " + e.getMessage());
@@ -133,7 +130,7 @@ public class ProjectCsvRepository implements IProjectRepository {
             row.add(String.valueOf(p.getSellingPrice(FlatType.THREEROOMS)));
             DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             row.add(p.getOpenDate().format(dateFormatter));
-            row.add(p.getOpenDate().format(dateFormatter));
+            row.add(p.getCloseDate().format(dateFormatter));
             row.add(p.getManager().getNric());
             row.add(String.valueOf(p.getOfficerSlot()));
             List<String> officers = new ArrayList<>();
@@ -145,9 +142,7 @@ public class ProjectCsvRepository implements IProjectRepository {
         }
 
         try (PrintWriter writer = new PrintWriter(new FileWriter(filename))) {
-            for (String row : rows) {
-                writer.println(row);
-            }
+            writer.print(String.join("\n",rows));
         } catch (IOException e) {
             System.out.println("Error writing file: " + e.getMessage());
         }

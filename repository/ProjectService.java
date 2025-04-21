@@ -31,6 +31,10 @@ public class ProjectService {
         projectRepository = repo;
         projectList.clear();
         projectList = projectRepository.loadAllProjects();
+        for(Project p: projectList){
+            p.getManager().addCreatedProject(p);
+            p.getOfficerSlotList().stream().forEach(o -> o.setAssignedProject(p));
+        }
         return true;
     }
 

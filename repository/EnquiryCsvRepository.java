@@ -93,9 +93,7 @@ public class EnquiryCsvRepository implements IEnquiryRepository {
         }
 
         try (PrintWriter writer = new PrintWriter(new FileWriter(filename))) {
-            for (String row : rows) {
-                writer.println(row);
-            }
+            writer.print(String.join("\n",rows));
         } catch (IOException e) {
             System.out.println("Error writing file: " + e.getMessage());
         }

@@ -1,8 +1,11 @@
 package control;
 
 import entity.*;
+import repository.ProjectService;
+import repository.RegistrationService;
 import utils.*;
 
+import java.time.LocalDate;
 import java.util.*;
 
 public class HDBManagerRegistrationController {
@@ -45,10 +48,11 @@ public class HDBManagerRegistrationController {
 
     private static List<Registration> getFilteredRegistrations(HDBManager manager, Status filterStatus) {
         List<Registration> filteredList = new ArrayList<>();
-
+        LocalDate today = LocalDate.now();
         for (Project project : manager.getCreatedProjects()) {
             for (Registration reg : project.getRegistrations()) {
-                if (filterStatus == null || reg.getStatus() == filterStatus) {
+                HDBOfficer officer = reg.getRegisteredOfficer();
+                if ((officer.getAssignedProject() == null || officer.getAssignedProject().getCloseDate().isBefore(today)) && (filterStatus == null || reg.getStatus() == filterStatus)) {
                     filteredList.add(reg);
                 }
             }
@@ -115,14 +119,17 @@ public class HDBManagerRegistrationController {
         if (decision == 1) {
             if (project.hasAvailableOfficerSlot()) {
                 selectedReg.setStatus(Status.APPROVED);
+                RegistrationService.updateRegistrations();
                 project.addOfficer(officer);
-                officer.addAssignedProject(project);
+                ProjectService.updateProjects();
+                officer.setAssignedProject(project);
                 System.out.println("Officer registration approved.");
             } else {
                 System.out.println("Approval failed. No officer slots available in this project.");
             }
         } else {
             selectedReg.setStatus(Status.REJECTED);
+            RegistrationService.updateRegistrations();
             System.out.println("Officer registration rejected.");
         }
 
