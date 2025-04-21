@@ -13,11 +13,11 @@ public class HDBOfficerEnquiryHandler{
 	
 	public static void viewAssignedProjectsEnquiries(HDBOfficer officer)
 	{
-		Project selectedProject = selectProject(officer.getAssignedProjects());
-		if (selectedProject == null) {
+		Project project = officer.getAssignedProject();
+		if (project == null) {
 			return;
 		}
-		List<Enquiry> enquiries = selectedProject.getEnquiries();
+		List<Enquiry> enquiries = project.getEnquiries();
 		if (enquiries.isEmpty())
 		{
 			System.out.println("No enquiries found.");
@@ -50,11 +50,11 @@ public class HDBOfficerEnquiryHandler{
 	}
 
 	public static void replyEnquiry(HDBOfficer officer) {
-		Project selectedProject = selectProject(officer.getAssignedProjects());
-		if (selectedProject == null) return;
+		Project project = officer.getAssignedProject();
+		if (project == null) return;
 
-		List<Enquiry> unrepliedEnquiries = getAssignedProjectUnrepliedEnquiries(officer, selectedProject);
-		viewAssignedProjectUnrepliedEnquiries(officer, selectedProject);
+		List<Enquiry> unrepliedEnquiries = getAssignedProjectUnrepliedEnquiries(officer, project);
+		viewAssignedProjectUnrepliedEnquiries(officer, project);
 		if (unrepliedEnquiries.isEmpty()) return;
 
 		int enquiry_choice;
@@ -84,28 +84,5 @@ public class HDBOfficerEnquiryHandler{
 			System.out.println("Reply cancelled.");
 		}
 	}
-
-
-	private static Project selectProject(List<Project> projects) {
-		if (projects.isEmpty()) {
-			System.out.println("No projects available.");
-			return null;
-		}
-
-		System.out.println("Select a project:");
-		for (int i = 0; i < projects.size(); i++) {
-			System.out.printf("(%d) %s\n", i + 1, projects.get(i).getProjectName());
-		}
-
-		while (true) {
-			int choice = InputHelper.readInt("Enter choice (0 to cancel): ");
-			if (choice == 0) return null;
-			if (choice >= 1 && choice <= projects.size()) {
-				return projects.get(choice - 1);
-			}
-			System.out.println("Invalid choice. Please select a number from 1 to " + projects.size() + ", or 0 to cancel.");
-		}
-	}
-
 
 }
