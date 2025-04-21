@@ -40,9 +40,9 @@ public class HDBManagerMenu {
             int choice;
             while (true) {
                 choice = InputHelper.readInt("➤ Enter your choice: ");
-                if (choice >= 1 && choice <= 14)
+                if (choice >= 1 && choice <= 15)
                     break;
-                System.out.println("Please enter a number between 1 and 14.");
+                System.out.println("Please enter a number between 1 and 15.");
             }
             ClearPage.clearPage();
             

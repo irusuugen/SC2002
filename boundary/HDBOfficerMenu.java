@@ -90,7 +90,7 @@ public class HDBOfficerMenu {
                     break;
                 case 13:
                     // View assigned project
-                    ProjectViewer.printOneProject(officer.getAssignedProject(), officer);
+                    HDBOfficerRegistrationController.printAssignedProject(officer);
                     break;
                 case 14:
                     // View enquiries for assigned projects

@@ -6,7 +6,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.rmi.registry.Registry;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,9 +65,7 @@ public class RegistrationCsvRepository implements RegistrationRepository{
             rows.add(String.join(",", row));
         }
         try (PrintWriter writer = new PrintWriter(new FileWriter(filename))) {
-            for (String row : rows) {
-                writer.println(row);
-            }
+            writer.print(String.join("\n",rows));
         } catch (IOException e) {
             System.out.println("Error writing file: " + e.getMessage());
         }

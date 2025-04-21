@@ -30,7 +30,7 @@ public class HDBOfficerApplicationController{
 
 			if (application == null) {
 				if (!InputHelper.confirm("Application was not found. Retry?")) return;
-			} else if (!officer.getAssignedProject().equals(application.getProject())) {
+			} else if (officer.getAssignedProject() == null || !officer.getAssignedProject().equals(application.getProject())) {
 				if (!InputHelper.confirm("Officer is not responsible for the applicant's project. Retry?")) return;
 			} else if (!application.isBookingRequested()) {
 				if (!InputHelper.confirm("Booking request has not been submitted. Retry?")) return;
