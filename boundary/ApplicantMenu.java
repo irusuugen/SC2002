@@ -48,7 +48,7 @@ public class ApplicantMenu {
                 
             switch (choice) {
                 case 1:
-                    ApplicantController.changePassword(applicant);
+                    ChangeAccountPassword.changePassword(Role.APPLICANT, applicant);
                     break;
                 case 2:
                     List<Project> allProjects = ApplicantController.getOpenProjects(applicant);
