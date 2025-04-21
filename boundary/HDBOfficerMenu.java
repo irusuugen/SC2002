@@ -1,3 +1,16 @@
+/**
+ * This class provides the CLI menu interface for users logged in as officers.
+ * It allows managers to interact with the system by:
+ * <ul>
+ *   <li>Changing their password</li>
+ *   <li>Performing applicant operations</li>
+ *   <li>Viewing and filtering all BTO projects</li>
+ *   <li>Managing applicant bookings</li>
+ *   <li>Viewing and replying enquiries</li>
+ * </ul>
+ *
+ */
+
 package boundary;
 
 import control.*;
@@ -50,7 +63,7 @@ public class HDBOfficerMenu {
 
             switch (choice) {
                 case 1:
-                    ChangeAccountPassword.changePassword(Role.HDB_OFFICER, officer);
+                    ChangeAccountPassword.changePassword(officer);
                     break;
                 case 2:
                     List<Project> openProjects = ApplicantProjectController.getOpenProjects(officer);

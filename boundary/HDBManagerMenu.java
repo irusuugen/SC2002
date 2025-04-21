@@ -1,3 +1,16 @@
+/**
+ * This class provides the CLI menu interface for users logged in as managers.
+ * It allows managers to interact with the system by:
+ * <ul>
+ *   <li>Changing their password</li>
+ *   <li>Viewing and filtering all BTO projects</li>
+ *   <li>Managing officer registrations</li>
+ *   <li>Managing applicant applications and withdrawal requests</li>
+ *   <li>Viewing and replying enquiries</li>
+ * </ul>
+ *
+ */
+
 package boundary;
 
 import java.util.*;
@@ -7,6 +20,16 @@ import control.*;
 import utils.*;
 
 public class HDBManagerMenu {
+    /**
+     * Launches the manager menu interface in a loop until the user logs out.
+     *
+     * This method retrieves the currently logged-in applicant from the session
+     * and provides options via a text-based menu. Each menu option invokes
+     * relevant actions such as managing applications, managing enquiries,
+     * and managing registrations
+     *
+     * @param session The current user session containing the authenticated applicant.
+     */
     public static void managerMenu(UserSession session) {
         HDBManager manager = (HDBManager) session.getUser();
         Scanner sc = new Scanner(System.in);

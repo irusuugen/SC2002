@@ -21,8 +21,7 @@ public class HDBManagerApplicationController {
 
         System.out.println("Pending applications for your created projects:");
         for (int i = 0; i < applications.size(); i++) {
-            System.out.println("\nApplication No. " + (i + 1));
-            ApplicationViewer.printApplication(applications.get(i));
+            ApplicationViewer.printApplications(applications);
         }
 
         int selection = -1;

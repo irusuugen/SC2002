@@ -1,3 +1,9 @@
+/**
+ * This class handles the complete login workflow, from
+ * role selection to credential validation and session creation
+ * for the different user types
+ */
+
 package boundary;
 
 import entity.*;
@@ -8,10 +14,17 @@ import utils.*;
 public class Login {
     private final Scanner sc;
 
+    /**
+     * Initializes a new Login handler with a Scanner for user input.
+     */
     public Login() {
         this.sc = new Scanner(System.in);
     }
 
+    /**
+     * Executes the complete login workflow.
+     * @return UserSession if authentication succeeds, null if user aborts
+     */
     public UserSession login() {
         ClearPage.clearPage();
         Role userRole = roleSelection();
@@ -54,6 +67,10 @@ public class Login {
         return null; // Fallback (should never reach here)
     }
 
+    /**
+     * Routes to the appropriate menu based on user role.
+     * @param session The authenticated user session
+     */
     public void startUserSession(UserSession session) {
         ClearPage.clearPage();
         switch (session.getUser().getRole()) {
@@ -69,6 +86,10 @@ public class Login {
         }
     }
 
+    /**
+     * Handles user role selection via console interface.
+     * @return Selected Role enum value
+     */
     public Role roleSelection() {
         System.out.println("""
         ╔═══════════════════════════════════════╗
@@ -92,6 +113,14 @@ public class Login {
         }
     }
 
+    /**
+     * Validates user credentials against stored records.
+     * @param nric User's NRIC
+     * @param password User's password
+     * @param userRole Expected user role
+     * @return Authenticated User object
+     * @throws IllegalArgumentException if validation fails
+     */
     public User validate(String nric, String password, Role userRole) throws IllegalArgumentException {
         if (!nric.matches("^[ST]\\d{7}[A-Z]$")) {
             throw new IllegalArgumentException("Invalid NRIC.");

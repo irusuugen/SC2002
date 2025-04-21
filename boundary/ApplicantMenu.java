@@ -9,18 +9,7 @@
  *   <li>Submitting, viewing, editing, and deleting enquiries</li>
  * </ul>
  *
- * This class depends on {@link ApplicantApplicationController} to handle the business logic for,
- * {@link ApplicantEnquiryController} to handle the business logic for enquiries,
- * and {@link ProjectFilterMenu} to handle project filtering options.
- *
- * @author Michelle Aye
- * @version 1.0
- * @since 2025-04-21
- * @see ApplicantController
- * @see ApplicantEnquiryController
- * @see ProjectFilterMenu
  */
-
 
 package boundary;
 
@@ -84,7 +73,7 @@ public class ApplicantMenu {
                 
             switch (choice) {
                 case 1:
-                    ChangeAccountPassword.changePassword(Role.APPLICANT, applicant);
+                    ChangeAccountPassword.changePassword(applicant);
                     break;
                 case 2:
                     List<Project> allProjects = ApplicantProjectController.getOpenProjects(applicant);

@@ -4,9 +4,6 @@
  * using their respective repository implementations. Once initialization is complete,
  * it launches the Welcome interface, allowing users to log in and interact with the system.
  *
- * @author Michelle Aye
- * @version 1.0
- * @since 2025-04-21
  */
 
 import boundary.*;

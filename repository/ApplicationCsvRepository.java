@@ -1,4 +1,12 @@
-/* Class is for reading ApplicationList csv file */
+/**
+ * A CSV-based implementation of {@link IApplicationRepository}.
+ *
+ * Handles the reading and writing of application data to and from
+ * a CSV file, mapping it to {@link Application} instances and linking
+ * them to applicants and projects.
+ *
+ *
+ */
 
 package repository;
 
@@ -15,15 +23,34 @@ import java.util.List;
 
 public class ApplicationCsvRepository implements IApplicationRepository {
     private static final String FILE_PATH = "data/ApplicationList.csv";
-    
+
+    /**
+     * Loads all applications from the configured CSV file.
+     *
+     * @return A list of all loaded {@link Application} objects.
+     */
+
     public List<Application> loadAllApplications() {
         return readApplications(FILE_PATH);
     }
 
+    /**
+     * Writes all given applications to the configured CSV file.
+     *
+     * @param applications The list of applications to be saved.
+     */
     public void saveAllApplications(List<Application> applications) {
         writeToApplicationList(FILE_PATH, applications);
     }
 
+    /**
+     * Reads applications from the specified CSV file and maps each row
+     * to an {@link Application} instance. Links the application to the
+     * appropriate applicant and project using their NRIC and project name.
+     *
+     * @param filename The path of the file to read.
+     * @return A list of parsed {@link Application} instances.
+     */
     public List<Application> readApplications(String filename) {
         ArrayList<Application> applications = new ArrayList<>();
         try {
@@ -62,6 +89,12 @@ public class ApplicationCsvRepository implements IApplicationRepository {
         return applications;
     }
 
+    /**
+     * Writes the given list of applications to the specified CSV file.
+     *
+     * @param filename     The path of the file to write to.
+     * @param applications The list of applications to serialize.
+     */
     public static void writeToApplicationList(String filename, List<Application> applications){
         List<String> rows = new ArrayList<>();
         String header = "project,flatType,NRIC,date,status,bookingRequested,withdrawalRequested";

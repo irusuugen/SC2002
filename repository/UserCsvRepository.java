@@ -1,4 +1,14 @@
-/* Class to handle reading from CSV and returning the overall user list */
+/**
+ * This class is a CSV-based implementation of {@link IUserRepository}.
+ *
+ * This class handles reading from and writing to user CSV files
+ * for applicants, HDB officers, and HDB managers.
+ *
+ * It parses user data from specific CSV formats and maps them to User subclasses.
+ * Used as a low-level data provider in the system's user management module.
+ *
+ */
+
 package repository;
 
 import entity.*;
@@ -15,11 +25,19 @@ public class UserCsvRepository implements IUserRepository {
     private static final String MANAGER_FILE = "data/ManagerList.csv";
     private static final String OFFICER_FILE = "data/OfficerList.csv";
 
+    /**
+     * Loads all users from their respective CSV files.
+     * <p>
+     * Internally delegates to {@code readUsers()} with the appropriate
+     * {@link Role} to ensure correct mapping of user types.
+     *
+     * @return A combined list of all users in the system.
+     */
     public List<User> loadAllUsers() {
         List<User> allUsers = new ArrayList<>();
-        allUsers.addAll(readUsers(APPLICANT_FILE));
-        allUsers.addAll(readUsers(MANAGER_FILE));
-        allUsers.addAll(readUsers(OFFICER_FILE));
+        allUsers.addAll(readUsers(APPLICANT_FILE, Role.APPLICANT));
+        allUsers.addAll(readUsers(MANAGER_FILE, Role.HDB_MANAGER));
+        allUsers.addAll(readUsers(OFFICER_FILE, Role.HDB_OFFICER));
         return allUsers;
     }
 
@@ -35,7 +53,15 @@ public class UserCsvRepository implements IUserRepository {
         writeToUserList(MANAGER_FILE, users);
     }
 
-    public List<User> readUsers(String filename) {
+    /**
+     * Reads users from a specified CSV file and maps them to a User subclass instance based
+     * on the provided role.
+     *
+     * @param filename Path to the CSV file.
+     * @param role The role of the users in the CSV file.
+     * @return A list of users parsed from the file.
+     */
+    public List<User> readUsers(String filename, Role role) {
         ArrayList<User> users = new ArrayList<>();
         try {
             BufferedReader br = new BufferedReader(new FileReader(filename));
@@ -57,14 +83,10 @@ public class UserCsvRepository implements IUserRepository {
                 String password = userInfo[4];
 
                 // Checking for role of the user
-                if (filename.contains("Applicant")) {
-                    users.add(new Applicant(name, nric, password, age, isMarried));
-                }
-                else if (filename.contains("Manager")) {
-                    users.add(new HDBManager(name, nric, password, age, isMarried));
-                }
-                else if (filename.contains("Officer")) {
-                    users.add(new HDBOfficer(name, nric, password, age, isMarried));
+                switch (role) {
+                    case APPLICANT -> users.add(new Applicant(name, nric, password, age, isMarried));
+                    case HDB_MANAGER -> users.add(new HDBManager(name, nric, password, age, isMarried));
+                    case HDB_OFFICER -> users.add(new HDBOfficer(name, nric, password, age, isMarried));
                 }
             }
         } catch (Exception e) {
@@ -72,6 +94,13 @@ public class UserCsvRepository implements IUserRepository {
         }
         return users; 
     }
+
+    /**
+     * Writes a list of users to a specified CSV file.
+     *
+     * @param filename The CSV file path to write to.
+     * @param users    The list of users to be saved.
+     */
     public static void writeToUserList(String filename, List<User> users){
         List<String> rows = new ArrayList<>();
         String header = "Name,NRIC,Age,Marital Status,Password";

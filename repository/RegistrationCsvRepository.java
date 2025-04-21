@@ -1,3 +1,12 @@
+/**
+ * Handles reading and writing of information regarding registrations
+ * from and to a CSV file.
+ * This repository is responsible for parsing registration information from storage
+ * and converting it into Registration objects. It also serializes a list of
+ * registrations back into the appropriate CSV format.
+ *
+ */
+
 package repository;
 
 import entity.*;
@@ -12,14 +21,33 @@ import java.util.List;
 public class RegistrationCsvRepository implements IRegistrationRepository {
     private static final String FILE_PATH = "data/RegistrationList.csv";
 
+    /**
+     * Loads all registrations available in the system from the registration list file.
+     *
+     * @return A list of all Registration objects loaded from "data/RegistrationList.csv".
+     */
     public List<Registration> loadAllRegistrations() {
         return readRegistrations(FILE_PATH);
     }
 
+    /**
+     * Writes all given registrations to the configured CSV file.
+     *
+     * @param registrations The list of registrations to be saved.
+     */
     public void saveAllRegistrations(List<Registration> registrations) {
         writeToRegistrationList(FILE_PATH, registrations);
     }
 
+    /**
+     * Reads registration data from the specified CSV file and constructs a list of {@link Project} objects.
+     *
+     * This method parses registration details (project name, HDB officer's nric, etc.),
+     * and associates them with the correct officer based on NRIC.
+     *
+     * @param filename The path to the CSV file containing registration data.
+     * @return A list of Registration instances parsed from the file.
+     */
     public List<Registration> readRegistrations(String filename) {
         List<Registration> registrations = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
@@ -53,6 +81,15 @@ public class RegistrationCsvRepository implements IRegistrationRepository {
         return registrations;
     }
 
+    /**
+     * Writes the provided list of registrations to a CSV file.
+     *
+     * Each registration's key attributes, including project name and officer,
+     * are formatted and written in CSV structure suitable for reloading.
+     *
+     * @param filename The destination file path to write the registration list.
+     * @param registrations The list of Registration instances to be serialized.
+     */
     public static void writeToRegistrationList(String filename, List<Registration> registrations){
         List<String> rows = new ArrayList<>();
         String header = "NRIC,project,status";

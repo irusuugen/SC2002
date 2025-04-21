@@ -1,23 +1,30 @@
 /**
- * Handles reading and writing of information regarding the BTO projects
- * from and to a CSV file.
- * This repository is responsible for parsing project information from storage
- * and converting it into Project objects. It also serializes a list of
- * projects back into the appropriate CSV format.
+ * Defines the interface for project data persistence.
  *
+ * This abstraction allows for different storage implementations (e.g., CSV, database)
+ * without changing how projects are used throughout the system.
  *
- * @author Michelle Aye,
- * @author Trongmetheerat Theeraphat
- * @version 1.0
- * @since 2025-04-21
+ * Used by the {@link ProjectService} to load and save project data.
  */
 
 package repository;
 
+import entity.Enquiry;
 import entity.Project;
 import java.util.List;
 
 public interface IProjectRepository {
+    /**
+     * Loads all projects from the storage medium.
+     *
+     * @return A list of all {@link Project} instances.
+     */
     List<Project> loadAllProjects();
+
+    /**
+     * Saves the full list of projects to the storage medium.
+     *
+     * @param projects The list of projects to be saved.
+     */
     void saveAllProjects(List<Project> projects);
 }

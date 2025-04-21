@@ -1,3 +1,8 @@
+/**
+ * A boundary class that handles password change operations for user accounts.
+ * Provides password validation and ensures secure password requirements are met.
+ */
+
 package boundary;
 
 import entity.*;
@@ -9,7 +14,15 @@ import java.util.regex.Pattern;
 import utils.*;
 
 public class ChangeAccountPassword {
-    public static void changePassword(Role role, User user) {
+    /**
+     * Guides the user through the password change process with validation.
+     * Verifies current password, validates new password against security requirements,
+     * and updates the password if all conditions are met.
+     *
+     * @param user The user object whose password will be changed
+     */
+
+    public static void changePassword(User user) {
         String newPassword;
         String newPassword2;
         Scanner sc = new Scanner(System.in);
@@ -18,7 +31,10 @@ public class ChangeAccountPassword {
         ClearPage.clearPage();
         displayPasswordRequirements();
 
-        System.out.println("\n=== Change Password ===");
+        BoxPrinter.printTopBorder();
+        System.out.println(BoxPrinter.centerInBox("Change Password"));
+        BoxPrinter.printBottomBorder();
+
         System.out.print("Please enter your current password: ");
         String currentPassword = sc.nextLine();
         
@@ -54,6 +70,10 @@ public class ChangeAccountPassword {
         }
     }
 
+    /**
+     * Displays all criteria that must be met for a valid password
+     * to the user
+     */
     private static void displayPasswordRequirements() {
         System.out.println("Your new password must meet the following requirements:");
         System.out.println("• At least 12 characters long");
@@ -66,6 +86,13 @@ public class ChangeAccountPassword {
         System.out.println();
     }
 
+    /**
+     * Validates a password against security requirements.
+     * Checks length, character diversity, and other complexity rules.
+     *
+     * @param password The password string to validate
+     * @return true if the password meets all requirements, false otherwise
+     */
     private static boolean isValidPassword(String password) {
         if (password.length() < 12) {
             System.out.println("Password must be at least 12 characters long.");

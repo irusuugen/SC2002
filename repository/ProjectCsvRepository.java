@@ -1,3 +1,12 @@
+/**
+ * Handles reading and writing of information regarding the BTO projects
+ * from and to a CSV file.
+ * This repository is responsible for parsing project information from storage
+ * and converting it into Project objects. It also serializes a list of
+ * projects back into the appropriate CSV format.
+ *
+ */
+
 package repository;
 
 import entity.*;
@@ -25,6 +34,11 @@ public class ProjectCsvRepository implements IProjectRepository {
         return readProjects(FILE_PATH);
     }
 
+    /**
+     * Writes all given projects to the configured CSV file.
+     *
+     * @param projects The list of projects to be saved.
+     */
     public void saveAllProjects(List<Project> projects) {
         writeToProjectList(FILE_PATH, projects);
     }

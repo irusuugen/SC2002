@@ -1,3 +1,9 @@
+/**
+ * This class is responsible for displaying enquiry information in a formatted box layout.
+ * Formats and presents enquiries with project details, applicant information (with masked NRIC),
+ * and the enquiry/answer content.
+ */
+
 package boundary;
 
 import utils.BoxPrinter;
@@ -5,6 +11,18 @@ import java.util.List;
 import entity.*;
 
 public class EnquiriesViewer {
+    /**
+     * Prints a list of enquiries in a visually formatted box layout.
+     * Each enquiry is separated by dividers, with the following information displayed:
+     * - Enquiry number (1-based index)
+     * - Project name
+     * - Applicant name with masked NRIC (last 4 digits visible)
+     * - Enquiry message
+     * - Answer to the enquiry
+     *
+     * @param enquiries The list of Enquiry objects to display
+     * @throws NullPointerException if the enquiries list is null
+     */
     public static void printEnquiries(List<Enquiry> enquiries) {
         BoxPrinter.printTopBorder();
 
@@ -27,6 +45,4 @@ public class EnquiriesViewer {
         }
         
     }
-                
-        
 }
