@@ -1,7 +1,7 @@
 package boundary;
 
 import entity.*;
-import java.util.Scanner;
+import java.util.*;
 import repository.*;
 import utils.*;
 
@@ -40,13 +40,15 @@ public class Login {
             }
 
             try {
-                user = validate(nric, password);
+                user = validate(nric, password, userRole);
                 System.out.println("Login successful! Welcome, " + user.getName());
                 Thread.sleep(1000);
                 return new UserSession(user); // Return new UserSession with initialized filters
             } catch (Exception e) {
                 System.err.print(e.getMessage());
-                System.out.println(" Please try again.");
+                if(!InputHelper.confirm("Would you like to login again?")){
+                    return null; //Return to welcome page
+                }
             }
         }
         return null; // Fallback (should never reach here)
@@ -90,12 +92,26 @@ public class Login {
         }
     }
 
-    public User validate(String nric, String password) {
+    public User validate(String nric, String password, Role userRole) throws IllegalArgumentException {
         if (!nric.matches("^[ST]\\d{7}[A-Z]$")) {
             throw new IllegalArgumentException("Invalid NRIC.");
         }
 
-        User user = UserService.getAllUsers().stream()
+        List<User> userList = new ArrayList<>();
+        switch(userRole){
+            case APPLICANT:
+                userList.addAll(UserService.getApplicants());
+                break;
+            case HDB_OFFICER:
+                userList.addAll(UserService.getOfficers());
+                break;
+            case HDB_MANAGER:
+                userList.addAll(UserService.getManagers());
+                break;
+            default:
+                break;
+        }
+        User user = userList.stream()
             .filter(u -> u.getNric().equals(nric))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException("User not found."));
