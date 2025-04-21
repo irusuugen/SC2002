@@ -79,8 +79,8 @@ public class ApplicationCsvRepository implements ApplicationRepository {
             DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             row.add(a.getDate().format(dateFormatter));
             row.add(a.getStatusString());
-            row.add(a.isBookingRequested()? "0" : "1");
-            row.add(a.isWithdrawalRequested()? "0" : "1");
+            row.add(a.isBookingRequested()? "1" : "0");
+            row.add(a.isWithdrawalRequested()? "1" : "0");
             rows.add(String.join(",", row));
         }
 
