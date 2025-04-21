@@ -35,6 +35,6 @@ public class ApplicationService {
 	}
 
     public static void updateApplications(){
-        ApplicationRepository.writeToApplicationList("data/ApplicationList.csv", applicationList);
+        applicationRepository.saveAllApplications(applicationList);
     }
 }

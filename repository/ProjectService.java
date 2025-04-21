@@ -22,7 +22,8 @@ public class ProjectService {
     }
 
     public static void updateProjects(){
-        ProjectRepository.writeToProjectList("data/ProjectList.csv", projectList);
+        List<Project> projects = new ArrayList<>(projectList);
+        projectRepository.saveAllProjects(projects);
     }
     public static void addProject(Project p) {
        projectList.add(p);

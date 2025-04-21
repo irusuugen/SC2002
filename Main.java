@@ -9,11 +9,11 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        UserService.startUserStorage(new UserRepository());
-        ProjectService.startProjectStorage(new ProjectRepository());
-        ApplicationService.startApplicationStorage(new ApplicationRepository());
-        EnquiryService.startEnquiryStorage(new EnquiryRepository());
-        RegistrationService.startRegistrationStorage(new RegistrationRepository());
+        UserService.startUserStorage(new UserCsvRepository());
+        ProjectService.startProjectStorage(new ProjectCsvRepository());
+        ApplicationService.startApplicationStorage(new ApplicationCsvRepository());
+        EnquiryService.startEnquiryStorage(new EnquiryCsvRepository());
+        RegistrationService.startRegistrationStorage(new RegistrationCsvRepository());
 
         Welcome welcome = new Welcome();
 

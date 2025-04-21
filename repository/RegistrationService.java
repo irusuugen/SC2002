@@ -27,6 +27,6 @@ public class RegistrationService {
     }
 
     public static void updateRegistrations(){
-        RegistrationRepository.writeToRegistrationList("data/RegistrationList.csv", registrationList);
+        registrationRepository.saveAllRegistrations(registrationList);
     }
 }
