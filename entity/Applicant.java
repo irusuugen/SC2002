@@ -35,6 +35,17 @@ public class Applicant extends User {
         this.application = null;
     }
 
+    @Override
+    public boolean isEligibleForProject(Project project) {
+        if (getUserGroup() == UserGroup.MARRIED) {
+            return project.getNumFlatAvailable(FlatType.TWOROOMS) > 0 ||
+                    project.getNumFlatAvailable(FlatType.THREEROOMS) > 0;
+        } else if (getUserGroup() == UserGroup.SINGLE) {
+            return project.getNumFlatAvailable(FlatType.TWOROOMS) > 0;
+        }
+        return false;
+    }
+
     public Application getApplication() {
         return application;
     }

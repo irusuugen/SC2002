@@ -26,6 +26,9 @@ public abstract class User {
         }
     }
 
+    public boolean isEligibleForProject(Project project) {
+        return true;
+    }
     public Role getRole() {
         return this.role;
     }

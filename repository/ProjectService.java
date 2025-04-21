@@ -7,10 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProjectService {
-    private static ProjectRepository projectRepository;
+    private static IProjectRepository projectRepository;
     private static List<Project> projectList = new ArrayList<>();
 
-    public static boolean startProjectStorage(ProjectRepository repo) {
+    public static boolean startProjectStorage(IProjectRepository repo) {
         projectRepository = repo;
         projectList.clear();
         projectList = projectRepository.loadAllProjects();

@@ -13,7 +13,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ApplicationCsvRepository implements ApplicationRepository {
+public class ApplicationCsvRepository implements IApplicationRepository {
     private static final String FILE_PATH = "data/ApplicationList.csv";
     
     public List<Application> loadAllApplications() {

@@ -1,3 +1,13 @@
+/**
+ * Handles all application-related operations for applicants.
+ *
+ * This includes applying for a BTO project, viewing application status,making a booking request, and requesting application withdrawal.
+ *
+ * @author Michelle Aye
+ * @version 1.0
+ * @since 2025-04-21
+ */
+
 package control;
 
 import boundary.ApplicationViewer;
@@ -9,15 +19,25 @@ import utils.*;
 public class ApplicantApplicationController {
     private static Scanner sc = new Scanner(System.in);
 
-    // Creates an application
+    /**
+     * Allows the applicant to apply for a project they are eligible for.
+     *
+     * Prompts the user to select a project and flat type (if they are married), validates input,
+     * and creates the application.
+     *
+     * There are also checks for whether the applicant has a pending application,
+     * if they're reapplying for the same project they were unsuccessful for,
+     * and for flat availability before allowing the application.
+     *
+     * @param applicant The applicant who is applying for a project.
+     */
     public static void applyForProject(Applicant applicant) {
         Application previousApplication = applicant.getApplication();
 
         if (previousApplication != null) {
             Status status = previousApplication.getStatus();
-            Project prevProject = previousApplication.getProject();
 
-            // Block if the status is neither UNSUCCESSFUL nor WITHDRAWN
+            // Checks if user has a previous application, and if that application is still pending
             if (status != Status.UNSUCCESSFUL) {
                 System.out.println("You have already applied for a project.");
                 return;
@@ -76,7 +96,11 @@ public class ApplicantApplicationController {
         }
     }
 
-
+    /**
+     * Displays the details of the applicant's current application.
+     *
+     * @param applicant The applicant whose application is to be displayed.
+     */
     public static void viewApplication(Applicant applicant) {
         Application application = applicant.getApplication();
         if (application != null) {
@@ -86,6 +110,11 @@ public class ApplicantApplicationController {
         }
     }
 
+    /**
+     * Allows the applicant to request a flat booking if their application was successful.
+     *
+     * @param applicant The applicant requesting to book a flat.
+     */
     public static void requestBooking(Applicant applicant) {
         Application application = applicant.getApplication();
         if (application == null) {
@@ -95,10 +124,13 @@ public class ApplicantApplicationController {
 
         ApplicationViewer.printApplication(application);
         if (InputHelper.confirm("Are you sure you want to book a flat for this project?")) {
-            if (application.getStatus() == Status.SUCCESSFUL) {
+            if (application.getStatus() == Status.SUCCESSFUL && !application.isBookingRequested()) {
                 application.setBookingRequested(true);
                 System.out.println("Booking request has been sent to the HDB Officers.");
-            } else {
+            } else if (application.isBookingRequested()) {
+                System.out.println("You've already made a booking request for this project.");
+            }
+            else {
                 System.out.println("Booking not available right now. Please check your application status.");
             }
         } else {
@@ -106,6 +138,11 @@ public class ApplicantApplicationController {
         }
     }
 
+    /**
+     * Allows the applicant to request a withdrawal of their current application.
+     *
+     * @param applicant The applicant requesting withdrawal.
+     */
     public static void requestWithdrawal(Applicant applicant) {
         Application application = applicant.getApplication();
         if (application == null) {
@@ -126,6 +163,14 @@ public class ApplicantApplicationController {
         }
     }
 
+    /**
+     * Searches for an open project by name from the list of projects the
+     * applicant is eligible for.
+     *
+     * @param applicant The applicant requesting the project search.
+     * @param name      The name of the project to search for.
+     * @return The matching Project, or null if not found.
+     */
     public static Project findProjectByName(Applicant applicant, String name) {
         return ApplicantProjectController.getOpenProjects(applicant).stream()
                 .filter(p -> name.equalsIgnoreCase(p.getProjectName()))

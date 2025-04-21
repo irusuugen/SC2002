@@ -11,7 +11,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EnquiryCsvRepository implements EnquiryRepository {
+public class EnquiryCsvRepository implements IEnquiryRepository {
     private static final String FILE_PATH = "data/EnquiryList.csv";
 
     public List<Enquiry> loadAllEnquiries() {

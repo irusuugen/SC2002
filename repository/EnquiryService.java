@@ -7,10 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EnquiryService {
-    private static EnquiryRepository enquiryRepository;
+    private static IEnquiryRepository enquiryRepository;
     private static List<Enquiry> enquiryList = new ArrayList<>();
 
-    public static boolean startEnquiryStorage(EnquiryRepository repo) {
+    public static boolean startEnquiryStorage(IEnquiryRepository repo) {
         enquiryRepository = repo;
         enquiryList.clear();
         enquiryList = enquiryRepository.loadAllEnquiries();

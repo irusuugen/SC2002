@@ -17,7 +17,7 @@ package repository;
 import entity.Project;
 import java.util.List;
 
-public interface ProjectRepository {
+public interface IProjectRepository {
     List<Project> loadAllProjects();
     void saveAllProjects(List<Project> projects);
 }

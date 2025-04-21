@@ -10,7 +10,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserCsvRepository implements UserRepository {
+public class UserCsvRepository implements IUserRepository {
     private static final String APPLICANT_FILE = "data/ApplicantList.csv";
     private static final String MANAGER_FILE = "data/ManagerList.csv";
     private static final String OFFICER_FILE = "data/OfficerList.csv";

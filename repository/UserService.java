@@ -7,13 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserService {
-    private static UserRepository userRepository;
+    private static IUserRepository userRepository;
     private static List<Applicant> applicantList = new ArrayList<>();
     private static List<HDBManager> managerList = new ArrayList<>();
     private static List<HDBOfficer> officerList = new ArrayList<>();
     private static List<User> userList = new ArrayList<>();
 
-    public static boolean startUserStorage(UserRepository repo) {
+    public static boolean startUserStorage(IUserRepository repo) {
         userRepository = repo;
 
         applicantList.clear();

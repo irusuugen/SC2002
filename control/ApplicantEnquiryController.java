@@ -1,3 +1,14 @@
+/**
+ * Manages all enquiry-related actions by applicants.
+ *
+ * This includes submitting enquiries for projects, as well as editing,
+ * deleting, and viewing previously submitted enquiries.
+ *
+ * @author
+ * @version 1.0
+ * @since 2025-04-21
+ */
+
 package control;
 
 import boundary.EnquiriesViewer;
@@ -13,6 +24,11 @@ import java.util.Scanner;
 public class ApplicantEnquiryController {
     public static Scanner sc = new Scanner(System.in);
 
+    /**
+     * Allows the applicant to submit an enquiry about a project.
+     *
+     * @param applicant The applicant submitting the enquiry.
+     */
     public static void submitEnquiry(Applicant applicant) {
         ApplicantProjectController.viewOpenProjects(applicant);
         System.out.print("Enter the name of the project you'd like to submit an enquiry for: ");
@@ -40,6 +56,11 @@ public class ApplicantEnquiryController {
         }
     }
 
+    /**
+     * Allows the applicant to edit an enquiry that has not been answered.
+     *
+     * @param applicant The applicant editing their enquiry.
+     */
     public static void editEnquiry(Applicant applicant) {
         Enquiry enquiry = selectEnquiry(applicant);
 
@@ -62,6 +83,11 @@ public class ApplicantEnquiryController {
         }
     }
 
+    /**
+     * Allows the applicant to delete an enquiry that has not been answered.
+     *
+     * @param applicant The applicant deleting their enquiry.
+     */
     public static void deleteEnquiry(Applicant applicant) {
         List<Enquiry> enquiryList = applicant.getEnquiries();
         Enquiry enquiry = selectEnquiry(applicant);
@@ -83,7 +109,11 @@ public class ApplicantEnquiryController {
         }
     }
 
-
+    /**
+     * Displays all enquiries submitted by the applicant.
+     *
+     * @param applicant The applicant whose enquiries will be shown.
+     */
     public static void viewEnquiries(Applicant applicant) {
         List<Enquiry> enquiries = applicant.getEnquiries();
         if (enquiries.isEmpty()) {
@@ -94,6 +124,14 @@ public class ApplicantEnquiryController {
         }
     }
 
+    /**
+     * Helper method to allow the applicant to select an enquiry by index.
+     *
+     * @param applicant The applicant selecting an enquiry.
+     * @return The selected {@link Enquiry}, or {@code null} if the selection is invalid or
+     * no enquiries are available.
+     *
+     */
     public static Enquiry selectEnquiry(Applicant applicant) {
         List<Enquiry> enquiries = applicant.getEnquiries();
         if (enquiries.isEmpty()) {
@@ -108,7 +146,6 @@ public class ApplicantEnquiryController {
             return null;
         }
 
-        Enquiry enquiry = enquiries.get(number - 1);
-        return enquiry;
+        return enquiries.get(number - 1);
     }
 }

@@ -6,11 +6,10 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.rmi.registry.Registry;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RegistrationCsvRepository implements RegistrationRepository{
+public class RegistrationCsvRepository implements IRegistrationRepository {
     private static final String FILE_PATH = "data/RegistrationList.csv";
 
     public List<Registration> loadAllRegistrations() {

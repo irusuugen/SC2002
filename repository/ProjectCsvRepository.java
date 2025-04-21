@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ProjectCsvRepository implements ProjectRepository {
+public class ProjectCsvRepository implements IProjectRepository {
     private static final String FILE_PATH = "data/ProjectList.csv";
     
     /**

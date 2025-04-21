@@ -7,10 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ApplicationService {
-    private static ApplicationRepository applicationRepository;
+    private static IApplicationRepository applicationRepository;
     private static List<Application> applicationList = new ArrayList<>();
 
-    public static boolean startApplicationStorage(ApplicationRepository repo) {
+    public static boolean startApplicationStorage(IApplicationRepository repo) {
         applicationRepository = repo;
         applicationList.clear();
         applicationList = applicationRepository.loadAllApplications();

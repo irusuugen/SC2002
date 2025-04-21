@@ -1,3 +1,17 @@
+/**
+ * Provides methods for applicants to browse and view BTO projects they are eligible for.
+ *
+ * This controller handles project filtering based on the applicant's role, user group,
+ * flat availability, project visibility, and application period.
+ *
+ * It does not handle application or enquiry functionality.
+ *
+ * @author Michelle Aye
+ * @version 1.0
+ * @since 2025-04-21
+ *
+ */
+
 package control;
 
 import boundary.ProjectViewer;
@@ -11,16 +25,9 @@ public class ApplicantProjectController {
     public static List<Project> getOpenProjects(Applicant applicant) {
         List<Project> openProjects = new ArrayList<>();
         for (Project project : ProjectService.getAllProjects()) {
-            if (!project.isVisible() || !project.checkOpeningPeriod()) continue;
-            if (applicant instanceof HDBOfficer officer) {
-                if (project.getOfficerSlotList().contains(officer)) continue;
-            }
-            if (applicant.getUserGroup() == UserGroup.MARRIED &&
-                    (project.getNumFlatAvailable(FlatType.TWOROOMS) > 0 || project.getNumFlatAvailable(FlatType.THREEROOMS) > 0)) {
-                openProjects.add(project);
-            } else if (applicant.getUserGroup() == UserGroup.SINGLE &&
-                    project.getNumFlatAvailable(FlatType.TWOROOMS) > 0) {
-                openProjects.add(project);
+            if (!project.isVisible() || !project.checkOpeningPeriod()) continue; // Check if project has visibility toggled and is active
+            if (applicant.isEligibleForProject(project)) {
+                openProjects.add(project); // Check if the officer is handling or registered for the project already
             }
         }
         return openProjects;

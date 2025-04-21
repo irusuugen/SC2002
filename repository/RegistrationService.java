@@ -7,10 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RegistrationService {
-    private static RegistrationRepository registrationRepository;
+    private static IRegistrationRepository registrationRepository;
     private static List<Registration> registrationList = new ArrayList<>();
 
-    public static boolean startRegistrationStorage(RegistrationRepository repo) {
+    public static boolean startRegistrationStorage(IRegistrationRepository repo) {
         registrationRepository = repo;
         registrationList.clear();
         registrationList = registrationRepository.loadAllRegistrations();
