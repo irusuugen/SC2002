@@ -17,7 +17,7 @@ public class ApplicationService {
         //assign application to applicants and projects
         for (Application app: applicationList){
             app.getApplicant().setApplication(app);
-            app.getProject().getApplications().add(app);
+            app.getProject().addApplication(app);
         }
         return true;
     }

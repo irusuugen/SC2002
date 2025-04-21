@@ -14,9 +14,9 @@ public class RegistrationService {
         registrationRepository = repo;
         registrationList.clear();
         registrationList = registrationRepository.loadAllRegistrations();
-        //assign application to applicants and projects
+        //assign registration to officers and projects
         for(Registration reg: registrationList){
-            reg.getRegisteredOfficer().getRegistrationList().add(reg);
+            reg.getRegisteredOfficer().addRegistration(reg);
             reg.getProject().getRegistrations().add(reg);
         }
         return true;

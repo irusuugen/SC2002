@@ -68,7 +68,7 @@ public class Application {
     //change the status to withdraw if its only pending or successful only
     public void withdraw() 
     {
-        if (status == Status.PENDING || status == Status.SUCCESSFUL) {
+        if (status == Status.PENDING || status == Status.SUCCESSFUL || status == Status.BOOKED) {
             status = Status.UNSUCCESSFUL;
         }
     }

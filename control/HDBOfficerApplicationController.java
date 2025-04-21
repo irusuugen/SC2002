@@ -39,7 +39,7 @@ public class HDBOfficerApplicationController{
 					application.getProject().addOccupiedFlat(application.getFlatType());
 					application.markBooked();
 					ProjectService.updateProjects();
-					UserService.updateApplicants();
+					ApplicationService.updateApplications();
 					break;
 				} else {
 					if (!InputHelper.confirm("Application was not booked. Retry?")) return;

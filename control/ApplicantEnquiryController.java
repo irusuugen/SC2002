@@ -16,6 +16,7 @@ import boundary.ProjectViewer;
 import entity.Applicant;
 import entity.Enquiry;
 import entity.Project;
+import repository.EnquiryService;
 import utils.ClearPage;
 import utils.InputHelper;
 import java.util.List;
@@ -48,6 +49,8 @@ public class ApplicantEnquiryController {
 
         if (InputHelper.confirm("Confirm submission")) {
             Enquiry enquiry = new Enquiry(applicant, message, project);
+            EnquiryService.addEnquiry(enquiry);
+            EnquiryService.updateEnquiries();
             applicant.addEnquiry(enquiry);
             project.addEnquiry(enquiry);
             System.out.println("Enquiry submitted.");
@@ -77,6 +80,7 @@ public class ApplicantEnquiryController {
         String message = sc.nextLine();
         if (InputHelper.confirm("Confirm edit")) {
             enquiry.edit(message);
+            EnquiryService.updateEnquiries();
             System.out.println("Enquiry updated.");
         } else {
             System.out.println("Request cancelled.");
@@ -103,6 +107,8 @@ public class ApplicantEnquiryController {
         if (InputHelper.confirm("Confirm removal")) {
             enquiryList.remove(enquiry);
             enquiry.getProject().removeEnquiry(enquiry);
+            EnquiryService.removeEnquiry(enquiry);
+            EnquiryService.updateEnquiries();
             System.out.println("Enquiry deleted.");
         } else {
             System.out.println("Request cancelled.");

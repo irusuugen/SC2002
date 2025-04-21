@@ -16,8 +16,8 @@ public class EnquiryService {
         enquiryList = enquiryRepository.loadAllEnquiries();
         //assign enquiries to applicants and projects
         for(Enquiry en: enquiryList){
-            en.getApplicant().getEnquiries().add(en);
-            en.getProject().getEnquiries().add(en);
+            en.getApplicant().addEnquiry(en);
+            en.getProject().addEnquiry(en);
         }
         return true;
     }

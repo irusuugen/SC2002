@@ -13,6 +13,8 @@ package control;
 import boundary.ApplicationViewer;
 import boundary.ProjectViewer;
 import entity.*;
+import repository.ApplicationService;
+
 import java.util.Scanner;
 import utils.*;
 
@@ -89,6 +91,8 @@ public class ApplicantApplicationController {
         if (InputHelper.confirm("Are you sure you want to apply for this project?")) {
             Application application = new Application(project, flatType, applicant);
             applicant.setApplication(application);
+            ApplicationService.addApplication(application);
+            ApplicationService.updateApplications();
             project.addApplication(application);
             System.out.println("Application submitted.");
         } else {
@@ -126,6 +130,7 @@ public class ApplicantApplicationController {
         if (InputHelper.confirm("Are you sure you want to book a flat for this project?")) {
             if (application.getStatus() == Status.SUCCESSFUL && !application.isBookingRequested()) {
                 application.setBookingRequested(true);
+                ApplicationService.updateApplications();
                 System.out.println("Booking request has been sent to the HDB Officers.");
             } else if (application.isBookingRequested()) {
                 System.out.println("You've already made a booking request for this project.");
@@ -156,6 +161,7 @@ public class ApplicantApplicationController {
                 System.out.println("A withdrawal request has already been made.");
             } else {
                 application.setWithdrawalRequested(true);
+                ApplicationService.updateApplications();
                 System.out.println("Withdrawal request has been sent.");
             }
         } else {
