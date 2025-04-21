@@ -1,6 +1,32 @@
+/**
+ * This class provides the CLI menu interface for users logged in as applicants.
+ * It allows applicants to interact with the system by:
+ * <ul>
+ *   <li>Changing their password</li>
+ *   <li>Viewing and filtering open BTO projects</li>
+ *   <li>Applying for a project and managing their application</li>
+ *   <li>Booking a flat after successful applications</li>
+ *   <li>Submitting, viewing, editing, and deleting enquiries</li>
+ * </ul>
+ *
+ * This class depends on {@link ApplicantApplicationController} to handle the business logic for,
+ * {@link ApplicantEnquiryController} to handle the business logic for enquiries,
+ * and {@link ProjectFilterMenu} to handle project filtering options.
+ *
+ * @author Michelle Aye
+ * @version 1.0
+ * @since 2025-04-21
+ * @see ApplicantController
+ * @see ApplicantEnquiryController
+ * @see ProjectFilterMenu
+ */
+
+
 package boundary;
 
-import control.ApplicantController;
+import control.ApplicantApplicationController;
+import control.ApplicantEnquiryController;
+import control.ApplicantProjectController;
 import entity.*;
 import utils.ClearPage;
 import utils.InputHelper;
@@ -13,6 +39,16 @@ import entity.Project;
 public class ApplicantMenu {
     private static final Scanner sc = new Scanner(System.in);
 
+    /**
+     * Launches the applicant menu interface in a loop until the user logs out.
+     *
+     * This method retrieves the currently logged-in applicant from the session
+     * and provides options via a text-based menu. Each menu option invokes
+     * relevant actions such as applying for a project, submitting enquiries,
+     * or managing an application.
+     *
+     * @param session The current user session containing the authenticated applicant.
+     */
     public static void applicantMenu(UserSession session) {
         Applicant applicant = (Applicant) session.getUser();
         
@@ -51,35 +87,35 @@ public class ApplicantMenu {
                     ChangeAccountPassword.changePassword(Role.APPLICANT, applicant);
                     break;
                 case 2:
-                    List<Project> allProjects = ApplicantController.getOpenProjects(applicant);
+                    List<Project> allProjects = ApplicantProjectController.getOpenProjects(applicant);
                     ProjectFilterMenu.viewFilteredProjects(session, allProjects);
                     break;
                 case 3:
                     ProjectFilterMenu.showFilterMenu(session);
                     break;
                 case 4:
-                    ApplicantController.applyForProject(applicant);
+                    ApplicantApplicationController.applyForProject(applicant);
                     break;
                 case 5:
-                    ApplicantController.viewApplication(applicant);
+                    ApplicantApplicationController.viewApplication(applicant);
                     break;
                 case 6:
-                    ApplicantController.requestBooking(applicant);
+                    ApplicantApplicationController.requestBooking(applicant);
                     break;
                 case 7:
-                    ApplicantController.requestWithdrawal(applicant);
+                    ApplicantApplicationController.requestWithdrawal(applicant);
                     break;
                 case 8:
-                    ApplicantController.submitEnquiry(applicant);
+                    ApplicantEnquiryController.submitEnquiry(applicant);
                     break;
                 case 9:
-                    ApplicantController.viewEnquiries(applicant);
+                    ApplicantEnquiryController.viewEnquiries(applicant);
                     break;
                 case 10:
-                    ApplicantController.editEnquiry(applicant);
+                    ApplicantEnquiryController.editEnquiry(applicant);
                     break;
                 case 11:
-                    ApplicantController.deleteEnquiry(applicant);
+                    ApplicantEnquiryController.deleteEnquiry(applicant);
                     break;
                 case 12:
                     System.out.println("Logging out...");

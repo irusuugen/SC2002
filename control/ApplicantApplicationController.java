@@ -1,41 +1,13 @@
 package control;
 
 import boundary.ApplicationViewer;
-import boundary.EnquiriesViewer;
 import boundary.ProjectViewer;
 import entity.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
-import repository.*;
 import utils.*;
 
-public class ApplicantController {
+public class ApplicantApplicationController {
     private static Scanner sc = new Scanner(System.in);
-
-    // Return a list of projects based on applicant's user group, flat availability, project visibility
-    public static List<Project> getOpenProjects(Applicant applicant) {
-        List<Project> openProjects = new ArrayList<>();
-        for (Project project : ProjectService.getAllProjects()) {
-            if (!project.isVisible() || !project.checkOpeningPeriod()) continue;
-            if (applicant instanceof HDBOfficer officer) {
-                if (project.getOfficerSlotList().contains(officer)) continue;
-            }
-            if (applicant.getUserGroup() == UserGroup.MARRIED &&
-                    (project.getNumFlatAvailable(FlatType.TWOROOMS) > 0 || project.getNumFlatAvailable(FlatType.THREEROOMS) > 0)) {
-                openProjects.add(project);
-            } else if (applicant.getUserGroup() == UserGroup.SINGLE &&
-                    project.getNumFlatAvailable(FlatType.TWOROOMS) > 0) {
-                openProjects.add(project);
-            }
-        }
-        return openProjects;
-    }
-
-    public static void viewOpenProjects(Applicant applicant) {
-        List<Project> openProjects = getOpenProjects(applicant);
-        ProjectViewer.printProjects(openProjects, applicant);
-    }
 
     // Creates an application
     public static void applyForProject(Applicant applicant) {
@@ -52,7 +24,7 @@ public class ApplicantController {
             }
         }
 
-        viewOpenProjects(applicant);
+        ApplicantProjectController.viewOpenProjects(applicant);
 
         Project project;
         while (true) {
@@ -154,104 +126,8 @@ public class ApplicantController {
         }
     }
 
-    public static void submitEnquiry(Applicant applicant) {
-        viewOpenProjects(applicant);
-        System.out.print("Enter the name of the project you'd like to submit an enquiry for: ");
-        String inputTitle = sc.nextLine();
-        Project project = findProjectByName(applicant, inputTitle);
-        if (project == null) {
-            System.out.println("Project not found.");
-            return;
-        }
-
-        ClearPage.clearPage();
-        ProjectViewer.printOneProject(project, applicant);
-
-        System.out.println("Enter your enquiry:");
-        String message = sc.nextLine();
-        System.out.println("Your enquiry is: " + message);
-
-        if (InputHelper.confirm("Confirm submission")) {
-            Enquiry enquiry = new Enquiry(applicant, message, project);
-            applicant.addEnquiry(enquiry);
-            project.addEnquiry(enquiry);
-            System.out.println("Enquiry submitted.");
-        } else {
-            System.out.println("Request cancelled.");
-        }
-    }
-
-    public static void editEnquiry(Applicant applicant) {
-        List<Enquiry> enquiries = applicant.getEnquiries();
-        if (enquiries.isEmpty()) {
-            System.out.println("No enquiries available.");
-            return;
-        }
-
-        viewEnquiries(applicant);
-        int number = InputHelper.readInt("Select enquiry number: ");
-        if (number < 1 || number > enquiries.size()) {
-            System.out.println("Invalid selection.");
-            return;
-        }
-
-        Enquiry enquiry = enquiries.get(number - 1);
-        if (!enquiry.getAnswer().equals("(No reply yet)")) {
-            System.out.println("Enquiry already has a reply. Unable to edit.");
-            return;
-        }
-
-        System.out.println("Enter your new enquiry:");
-        String message = sc.nextLine();
-        if (InputHelper.confirm("Confirm edit")) {
-            enquiry.edit(message);
-            System.out.println("Enquiry updated.");
-        } else {
-            System.out.println("Request cancelled.");
-        }
-    }
-
-    public static void deleteEnquiry(Applicant applicant) {
-        List<Enquiry> enquiryList = applicant.getEnquiries();
-        if (enquiryList.isEmpty()) {
-            System.out.println("No enquiries available.");
-            return;
-        }
-
-        viewEnquiries(applicant);
-        int number = InputHelper.readInt("Select enquiry number: ");
-        if (number < 1 || number > enquiryList.size()) {
-            System.out.println("Invalid selection.");
-            return;
-        }
-
-        Enquiry enquiry = enquiryList.get(number - 1);
-        if (!enquiry.getAnswer().equals("(No reply yet)")) {
-            System.out.println("Enquiry already has a reply. Unable to delete.");
-            return;
-        }
-
-        if (InputHelper.confirm("Confirm removal")) {
-            enquiryList.remove(enquiry);
-            enquiry.getProject().removeEnquiry(enquiry);
-            System.out.println("Enquiry deleted.");
-        } else {
-            System.out.println("Request cancelled.");
-        }
-    }
-
-    public static void viewEnquiries(Applicant applicant) {
-        List<Enquiry> enquiries = applicant.getEnquiries();
-        if (enquiries.isEmpty()) {
-            System.out.println("No enquiries submitted.");
-        } else {
-            System.out.println("Here are your enquiries:");
-            EnquiriesViewer.printEnquiries(enquiries);
-        }
-    }
-
-    private static Project findProjectByName(Applicant applicant, String name) {
-        return getOpenProjects(applicant).stream()
+    public static Project findProjectByName(Applicant applicant, String name) {
+        return ApplicantProjectController.getOpenProjects(applicant).stream()
                 .filter(p -> name.equalsIgnoreCase(p.getProjectName()))
                 .findFirst()
                 .orElse(null);

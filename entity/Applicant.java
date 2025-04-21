@@ -1,3 +1,11 @@
+/**
+ * This class represents an applicant in the BTO Management System.
+ *
+ * @author Michelle Aye
+ * @version 1.0
+ * @since 2025-04-21
+ */
+
 package entity;
 
 import java.util.ArrayList;
@@ -10,6 +18,11 @@ public class Applicant extends User {
     private Application application;
     private List<Enquiry> enquiries;
 
+    /**
+     * Creates a new applicant with basic information
+     *
+     *
+     */
     public Applicant(String name, String nric, String password, int age, boolean isMarried) {
         super(name, nric, password, age, isMarried, Role.APPLICANT);
         this.enquiries = new ArrayList<>();
