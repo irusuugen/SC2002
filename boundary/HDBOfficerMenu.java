@@ -53,32 +53,32 @@ public class HDBOfficerMenu {
                     ChangeAccountPassword.changePassword(Role.HDB_OFFICER, officer);
                     break;
                 case 2:
-                    List<Project> openProjects = ApplicantController.getOpenProjects(officer);
+                    List<Project> openProjects = ApplicantProjectController.getOpenProjects(officer);
                     ProjectFilterMenu.viewFilteredProjects(session, openProjects);
                     break;
                 case 3:
-                    ApplicantController.applyForProject(officer);
+                    ApplicantApplicationController.applyForProject(officer);
                     break;
                 case 4:
-                    ApplicantController.viewApplication(officer);
+                    ApplicantApplicationController.viewApplication(officer);
                     break;
                 case 5:
-                    ApplicantController.requestBooking(officer);
+                    ApplicantApplicationController.requestBooking(officer);
                     break;
                 case 6:
-                    ApplicantController.requestWithdrawal(officer);
+                    ApplicantApplicationController.requestWithdrawal(officer);
                     break;
                 case 7:
-                    ApplicantController.submitEnquiry(officer);
+                    ApplicantEnquiryController.submitEnquiry(officer);
                     break;
                 case 8:
-                    ApplicantController.viewEnquiries(officer);
+                    ApplicantEnquiryController.viewEnquiries(officer);
                     break;
                 case 9:
-                    ApplicantController.editEnquiry(officer);
+                    ApplicantEnquiryController.editEnquiry(officer);
                     break;
                 case 10:
-                    ApplicantController.deleteEnquiry(officer);
+                    ApplicantEnquiryController.deleteEnquiry(officer);
                     break;
                 case 11:
                     // Register for a project
@@ -89,7 +89,7 @@ public class HDBOfficerMenu {
                     HDBOfficerRegistrationController.viewRegistrations(officer);
                     break;
                 case 13:
-                    // View assigned projects
+                    // View assigned project
                     ProjectViewer.printProjects(officer.getAssignedProjects(), officer);
                     break;
                 case 14:
