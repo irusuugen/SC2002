@@ -69,7 +69,7 @@ public class Application {
     public void withdraw() 
     {
         if (status == Status.PENDING || status == Status.SUCCESSFUL || status == Status.BOOKED) {
-            status = Status.WITHDRAWN;
+            status = Status.UNSUCCESSFUL;
         }
     }
 
