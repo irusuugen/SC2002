@@ -117,7 +117,7 @@ public class HDBOfficerMenu {
                     break;
                 case 14:
                     // View enquiries for assigned projects
-                    HDBOfficerEnquiryHandler.viewAssignedProjectsEnquiries(officer);
+                    HDBOfficerEnquiryHandler.viewEnquiries(officer);
                     break;
                 case 15:
                     // Reply to enquiries for assigned projects

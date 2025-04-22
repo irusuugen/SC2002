@@ -1,12 +1,14 @@
+/**
+ * This class that allows managers to create, edit, delete, toggle visibility,
+ * and view BTO projects.
+ */
+
 package control;
 
 import boundary.ProjectFilterMenu;
 import boundary.ProjectViewer;
 import entity.*;
-
-import java.time.format.DateTimeParseException;
 import java.util.*;
-
 import repository.ProjectService;
 import utils.*;
 import java.time.*;
@@ -16,7 +18,14 @@ public class HDBManagerProjectController {
     private static Scanner sc = new Scanner(System.in);
     private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-    public static void createProject(HDBManager manager, List<Project> allProjects) {
+    /**
+     * Allows a manager to create a new BTO project, ensuring no date overlaps with existing projects.
+     * Prompts for input details such as name, neighborhood, flat counts/prices, and application dates.
+     * Adds the project to the manager's list and saves it via ProjectService if confirmed.
+     *
+     * @param manager      The manager creating the project.
+     */
+    public static void createProject(HDBManager manager) {
         LocalDate openDate = InputHelper.readDate("Enter application opening date (DD/MM/YYYY): ", formatter);
         LocalDate closeDate = InputHelper.readDate("Enter application closing date (DD/MM/YYYY): ", formatter);
         if (closeDate.isBefore(openDate)) {
@@ -65,6 +74,13 @@ public class HDBManagerProjectController {
         }
     }
 
+    /**
+     * Enables a manager to edit a selected project they have created.
+     * Prompts for each editable field and confirms the update.
+     * Prevents edits that cause overlapping application dates with other projects.
+     *
+     * @param manager The manager editing their project.
+     */
     public static void editProject(HDBManager manager) {
         System.out.println("Here are the list of projects:");
         List<Project> createdProjects = manager.getCreatedProjects();
@@ -272,6 +288,14 @@ public class HDBManagerProjectController {
         }
     }
 
+    /**
+     * Displays a list of either the manager’s own projects or all available projects.
+     * Uses {@link ProjectFilterMenu} to allow viewing with filtering options.
+     *
+     * @param manager     The manager initiating the view.
+     * @param allProjects All available projects in the system.
+     * @param session     The current user session.
+     */
     public static void viewAllProjects(HDBManager manager, List<Project> allProjects, UserSession session) {
         // Filter for own projects
         System.out.println("Would you like to:");

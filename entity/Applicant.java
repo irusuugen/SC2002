@@ -9,9 +9,6 @@ package entity;
 import java.util.ArrayList;
 import java.util.List;
 
-import repository.ApplicationService;
-import utils.*;
-
 public class Applicant extends User {
     private Application application;
     private List<Enquiry> enquiries;
@@ -33,6 +30,14 @@ public class Applicant extends User {
         this.application = null;
     }
 
+    /**
+     * Checks whether the applicant is eligible for a project.
+     * Eligibility is based on the number of two-room flats available if the applicant is single,
+     * or the number of available two and three-room flats if the applicant is married.
+     *
+     * @param project The project that the applicant is being checked for their eligibltiy for
+     * @return true if applicant is eligible for the project
+     */
     @Override
     public boolean isEligibleForProject(Project project) {
         if (getUserGroup() == UserGroup.MARRIED) {
@@ -44,18 +49,38 @@ public class Applicant extends User {
         return false;
     }
 
+    /**
+     * Returns the application associated with the applicant.
+     *
+     * @return The applicant's application
+     */
     public Application getApplication() {
         return application;
     }
 
+    /**
+     * Returns the list of enquiries associated with the applicant
+     *
+     * @return The list of enquiries made
+     */
     public List<Enquiry> getEnquiries() {
         return enquiries;
     }
 
+    /**
+     * Associates the application made with the applicant
+     *
+     * @param application The application to associate the applicant with
+     */
     public void setApplication(Application application) {
         this.application = application;
     }
 
+    /**
+     * Adds the enquiry to the list of enquiries associated with the applicant
+     *
+     * @param enquiry The enquiry made by the applicant
+     */
     public void addEnquiry(Enquiry enquiry) {
         enquiries.add(enquiry);
     }

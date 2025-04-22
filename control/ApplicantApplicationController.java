@@ -171,7 +171,7 @@ public class ApplicantApplicationController {
      * applicant is eligible for.
      *
      * @param applicant The applicant requesting the project search.
-     * @param name      The name of the project to search for.
+     * @param name The name of the project to search for.
      * @return The matching Project, or null if not found.
      */
     public static Project findProjectByName(Applicant applicant, String name) {

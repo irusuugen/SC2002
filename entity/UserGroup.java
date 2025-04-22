@@ -1,7 +1,7 @@
 package entity;
 
 public enum UserGroup {
-    MARRIED, SINGLE, NEITHER;
+    MARRIED, SINGLE;
 
     @Override
     public String toString() {

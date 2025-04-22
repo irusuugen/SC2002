@@ -1,10 +1,14 @@
+/**
+ * Controller class that handles application-related actions performed by an HDB Officer.
+ * This includes updating an application to confirm a successful flat booking and printing a booking receipt.
+ */
+
 package control;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Stream;
-
 import entity.*;
 import repository.*;
 import utils.*;
@@ -13,6 +17,16 @@ public class HDBOfficerApplicationController{
 
 	private static Scanner sc = new Scanner(System.in);
 
+	/**
+	 * Allows the HDB Officer to update an application by marking it as successfully booked
+	 *
+	 * Prompts the officer to enter an applicant's NRIC, verifies that the applicant exists
+	 * and is assigned to the officer's project, and confirms that a booking has been requested.
+	 * If all validations pass and the officer confirms, the method updates the application and project data
+	 * accordingly and prints a booking receipt.
+	 *
+	 * @param officer The officer performing the booking
+	 */
 	public static void updateApplication(HDBOfficer officer) {
 		Application application;
 		while (true) {
@@ -47,11 +61,18 @@ public class HDBOfficerApplicationController{
 			}
 		}
 		ClearPage.clearPage();
-		printBookingReceipt(application, officer);
+		printBookingReceipt(application);
 	}
 
-
-	public static void printBookingReceipt(Application application, HDBOfficer officer) {
+	/**
+	 * Prints a formatted booking receipt for a successfully booked application.
+	 *
+	 * Displays receipt number, booking date, applicant details, and flat details
+	 * in a box format
+	 *
+	 * @param application Application that has been booked.
+	 */
+	public static void printBookingReceipt(Application application) {
 		BoxPrinter.printTopBorder();
 		System.out.println(BoxPrinter.centerInBox("HDB FLAT BOOKING RECEIPT"));
 

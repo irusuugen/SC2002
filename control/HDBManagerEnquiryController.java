@@ -1,3 +1,10 @@
+/**
+ * This class manages all enquiry-related actions by managers.
+ *
+ * This includes viewing all enquiries made, replying to unreplied enquiries.
+ *
+ */
+
 package control;
 
 import boundary.EnquiriesViewer;
@@ -8,6 +15,12 @@ import utils.*;
 
 public class HDBManagerEnquiryController {
 
+    /**
+     * Prints out all enquiries made for all projects
+     *
+     * @param allProjects The list of all projects
+     *
+     */
     public static void viewAllEnquiries(List<Project> allProjects) {
         List<Enquiry> allEnquiries = new ArrayList<>();
         for (Project project : allProjects) {
@@ -32,6 +45,12 @@ public class HDBManagerEnquiryController {
         return unrepliedEnquiries;
     }
 
+    /**
+     * Prints out all unreplied enquiries of the project that was selected by the manager
+     *
+     * @param project The project the manager chose to view the unreplied enquiries for
+     *
+     */
     public static void viewUnrepliedEnquiries(Project project) {
         List<Enquiry> unrepliedEnquiries = getUnrepliedEnquiries(project);
         if (unrepliedEnquiries.isEmpty()) {
@@ -42,6 +61,12 @@ public class HDBManagerEnquiryController {
         EnquiriesViewer.printEnquiries(unrepliedEnquiries);
     }
 
+    /**
+     * Allows manager to select an unreplied enquiry and give a reply to it
+     *
+     * @param manager The manager replying to the enquiry
+     *
+     */
     public static void replyEnquiry(HDBManager manager) {
         Project project = selectProject(manager.getCreatedProjects());
         if (project == null) return;
@@ -70,7 +95,13 @@ public class HDBManagerEnquiryController {
     }
 
 
-    // Allows manager to select a *created* project to look at enquiries for
+    /**
+     * Allows the manager to select a project they are handling to view enquiries for
+     *
+     * @param projects The list of created projects to iterate through
+     * @return The project chosen by the manager
+     *
+     */
     private static Project selectProject(List<Project> projects) {
         if (projects.isEmpty()) {
             System.out.println("You're not handling any projects currently.");

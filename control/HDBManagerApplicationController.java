@@ -1,3 +1,12 @@
+/**
+ * Handles all application-related operations for managers
+ *
+ * This includes processing applicants' applications,
+ * processing applicants' withdrawal requests,
+ * retrieving applications for the manager's created projects.
+ *
+ */
+
 package control;
 
 import entity.*;
@@ -9,6 +18,15 @@ import utils.*;
 import boundary.*;
 
 public class HDBManagerApplicationController {
+
+    /**
+     * Retrieves a list of applications for the projects the manager
+     * is handling that are still pending and not withdrawn,
+     * and allows the manager to select an application to approve or reject.
+     *
+     * @param manager The manager processing the applications
+     *
+     */
     public static void processApplication(HDBManager manager) {
         List<Application> applications = getAllApplications(manager).stream()
                 .filter(app -> app.getStatus() == Status.PENDING && !app.isWithdrawalRequested())
@@ -62,11 +80,17 @@ public class HDBManagerApplicationController {
         
     }
 
+    /**
+     * Changes the application status and updates the information in the application list
+     *
+     * @param selectedApp The application that the manager has chosen to process
+     * @param project The project for which the application was made
+     *
+     */
     private static void processApproval(Application selectedApp, Project project) {
         FlatType type = selectedApp.getFlatType();
         if (project.getNumFlatAvailable(type) > 0) {
             selectedApp.markSuccessful();
-            project.addOccupiedFlat(type);
             ApplicationService.updateApplications();
             ProjectService.updateProjects();
             System.out.println("Application approved.");
@@ -77,6 +101,13 @@ public class HDBManagerApplicationController {
         }
     }
 
+    /**
+     * Retrieves all applications for the projects the manager is handling
+     *
+     * @param manager The manager who is retrieving their applications
+     * @return List of {@link Application} objects associated with the projects that the manager is handling
+     *
+     */
     public static List<Application> getAllApplications(HDBManager manager) {
         List<Application> ret = new ArrayList<>();
         for (Project p : manager.getCreatedProjects()) {
@@ -85,6 +116,12 @@ public class HDBManagerApplicationController {
         return ret;
     }
 
+    /**
+     *
+     *
+     * @param manager The manager who is processing the withdrawals
+     *
+     */
     public static void processWithdrawal(HDBManager manager) {
         List<Application> withdrawalRequests = new ArrayList<>();
 
@@ -115,6 +152,12 @@ public class HDBManagerApplicationController {
         processWithdrawalDecision(selectedApp, project);
     }
 
+    /**
+     * Prints the list of withdrawal requests in the box format
+     *
+     * @param withdrawalRequests The list of withdrawal requests
+     *
+     */
     private static void displayWithdrawalRequests(List<Application> withdrawalRequests) {
         System.out.println("Withdrawal Requests:");
         for (int i = 0; i < withdrawalRequests.size(); i++) {
@@ -133,6 +176,15 @@ public class HDBManagerApplicationController {
         }
     }
 
+    /**
+     * Asks the manager whether they want to approve or reject the withdrawal request.
+     * Changes the application status and adds back the occupied flat to the number of available flats if
+     * the application status was BOOKED.
+     *
+     * @param selectedApp The application selected with a withdrawal request
+     * @param project The project for which the application was made for with a withdrawal request
+     *
+     */
     private static void processWithdrawalDecision(Application selectedApp, Project project) {
         int decision = InputHelper.readInt("1. Approve\n2. Reject\nEnter your decision: ");
         while (decision != 1 && decision != 2) {

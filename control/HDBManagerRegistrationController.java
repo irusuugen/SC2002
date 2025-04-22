@@ -1,3 +1,7 @@
+/**
+ * Handles all registration-related operations for HDB Managers, such as viewing and processing officer registrations.
+ */
+
 package control;
 
 import entity.*;
@@ -10,6 +14,12 @@ import java.util.*;
 
 public class HDBManagerRegistrationController {
 
+    /**
+     * Displays officer registrations filtered by status (Pending, Approved, Rejected, or All).
+     * Registrations associated with the projects the manager is handling are shown.
+     *
+     * @param manager The HDB Manager viewing the registrations.
+     */
     public static void viewRegistrations(HDBManager manager) {
         System.out.println("""
         View Officer Registrations:
@@ -46,6 +56,15 @@ public class HDBManagerRegistrationController {
         printRegistrations(filteredList);
     }
 
+    /**
+     * Filters and returns a list of registrations for the given manager and status.
+     * Registrations are only included if their associated project is within an appliation
+     * period, and the officer is not already assigned.
+     *
+     * @param manager       The HDB Manager whose projects to check.
+     * @param filterStatus  The registration status to filter by (can be null for no filtering).
+     * @return A list of filtered registrations.
+     */
     private static List<Registration> getFilteredRegistrations(HDBManager manager, Status filterStatus) {
         List<Registration> filteredList = new ArrayList<>();
         LocalDate today = LocalDate.now();
@@ -60,6 +79,11 @@ public class HDBManagerRegistrationController {
         return filteredList;
     }
 
+    /**
+     * Prints a formatted list of registrations with masked NRICs and project information.
+     *
+     * @param registrations The list of registrations to display.
+     */
     private static void printRegistrations(List<Registration> registrations) {
         for (int i = 0; i < registrations.size(); i++) {
             Registration reg = registrations.get(i);
@@ -77,6 +101,13 @@ public class HDBManagerRegistrationController {
         }
     }
 
+    /**
+     * Processes pending officer registrations for the manager's projects.
+     * The user can choose to approve or reject a selected pending registration.
+     * Upon approval, the officer is added to the project's officer list if a slot is available.
+     *
+     * @param manager The HDB Manager responsible for processing registrations.
+     */
     public static void processRegistrations(HDBManager manager) {
         List<Registration> pendingList = getFilteredRegistrations(manager, Status.PENDING);
 
@@ -99,6 +130,15 @@ public class HDBManagerRegistrationController {
         processRegistrationDecision(project, officer, selectedReg);
     }
 
+    /**
+     * Handles the decision process for a selected registration.
+     * The manager can approve or reject the registration. If approved and the project
+     * has capacity, the officer is added to the project.
+     *
+     * @param project       The project associated with the registration.
+     * @param officer       The officer being registered.
+     * @param selectedReg   The registration to process.
+     */
     private static void processRegistrationDecision(Project project, HDBOfficer officer, Registration selectedReg) {
         System.out.println("1. Approve");
         System.out.println("2. Reject");

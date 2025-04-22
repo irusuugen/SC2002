@@ -76,7 +76,7 @@ public class HDBManagerMenu {
                     break;
                 case 2:
                     // Create new project
-                    HDBManagerProjectController.createProject(manager, allProjects);
+                    HDBManagerProjectController.createProject(manager);
                     break;
                 case 3:
                     // Edit existing project
