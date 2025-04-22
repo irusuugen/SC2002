@@ -1,3 +1,8 @@
+/**
+ * Enum representing the user's group based on their marital status.
+ * This is used to categorize applicants as either married or single.
+ */
+
 package entity;
 
 public enum UserGroup {

@@ -1,3 +1,7 @@
+/**
+ * Represents a housing project in the BTO Management System
+ */
+
 package entity;
 
 import java.time.LocalDate;
@@ -28,6 +32,21 @@ public class Project {
     private List<Application> applicationList = new ArrayList<>();
     private List<Enquiry> enquiryList = new ArrayList<>();
 
+    /**
+     * Constructs a new project with the specified details.
+     *
+     * @param projectName         Nme of the project
+     * @param neighborhood        Neighborhood of the project
+     * @param num2Room            Number of 2-room flats in the project
+     * @param sellingPrice2Room   Selling price for 2-room flats
+     * @param num3Room            Number of 3-room flats in the project
+     * @param sellingPrice3Room   Selling price for 3-room flats
+     * @param applicationOpenDate Start date for applications
+     * @param applicationCloseDate End date for applications
+     * @param projectManager       Manager of the project
+     * @param officerSlot         Number of officer slots available for the project
+     * @param officerSlotList     List of officers assigned to the project
+     */
     public Project(String projectName, String neighborhood, int num2Room, float sellingPrice2Room,
                    int num3Room, float sellingPrice3Room, LocalDate applicationOpenDate,
                    LocalDate applicationCloseDate, HDBManager projectManager, int officerSlot,
@@ -188,6 +207,12 @@ public class Project {
     }
 
     // === Flat Management ===
+    /**
+     * Updates the number of available flats by marking a flat as occupied for a specific type.
+     * Minuses 1 from the number of available rooms for the flat type.
+     *
+     * @param type Type of flat (2-room or 3-room)
+     */
     public void addOccupiedFlat(FlatType type) {
         switch (type) {
             case TWOROOMS -> numAvailable2Room--;
@@ -195,6 +220,12 @@ public class Project {
         }
     }
 
+    /**
+     * Updates the number of available flats by marking a flat as unoccupied for a specific type.
+     * Adds 1 to the number of available rooms for the flat type.
+     *
+     * @param type Type of flat (2-room or 3-room)
+     */
     public void removeOccupiedFlat(FlatType type) {
         switch (type) {
             case TWOROOMS -> numAvailable2Room++;
@@ -212,6 +243,12 @@ public class Project {
     }
 
     // === Utility Methods ===
+
+    /**
+     * Checks whether the current date is within the application period of the project
+     *
+     * @return True if local date is within the application period
+     */
     public boolean checkOpeningPeriod() {
         LocalDate today = LocalDate.now();
         return (today.isEqual(applicationOpenDate) || today.isAfter(applicationOpenDate))

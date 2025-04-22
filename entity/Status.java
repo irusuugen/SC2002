@@ -1,3 +1,8 @@
+/**
+ * Enum representing the different statuses in the system.
+ * The statuses are used for both applications and registrations.
+ */
+
 package entity;
 
 public enum Status 
