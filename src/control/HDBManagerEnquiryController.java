@@ -27,7 +27,6 @@ public class HDBManagerEnquiryController implements IManagerEnquiryService {
         }
 
         if (allEnquiries.isEmpty()) {
-            System.out.println("No enquiries found.");
             return;
         }
         System.out.println("Here are your enquiries: ");
