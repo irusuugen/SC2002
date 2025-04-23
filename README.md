@@ -61,11 +61,19 @@ This project is a **Build-To-Order (BTO) Management System** developed as part o
 2. **Run the Application**:  
    - Clone the repository:  
      ```bash
-     git clone <GitHub-Repo-Link>
+     git clone https://github.com/irusuugen/SC2002.git
      ```
-   - Compile and execute `Main.java`:  
+   - Open the src folder:  
+      ```bash
+      cd SC2002/src
+      ```
+   - Compile `Main.java`:  
      ```bash
-     javac Main.java && java Main
+     javac Main.java
+     ```
+   - Compile `Main.java`:  
+     ```bash
+     java Main
      ```
 ---
 
