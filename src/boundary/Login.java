@@ -152,7 +152,7 @@ public class Login {
             .orElseThrow(() -> new IllegalArgumentException("User not found."));
 
         if (!user.getPassword().equals(password)) {
-            throw new IllegalArgumentException("Incorrect password.");
+            throw new IllegalArgumentException("Incorrect password.\n");
         }
 
         return user;

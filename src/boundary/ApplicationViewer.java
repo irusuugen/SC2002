@@ -38,7 +38,7 @@ public class ApplicationViewer {
         BoxPrinter.printTopBorder();
         for (int i = 0; i < applications.size(); i++) {
             Application application = applications.get(i);
-            BoxPrinter.printRow("Application No.", String.valueOf(i));
+            BoxPrinter.printRow("Application No.", String.valueOf(i+1));
             showApplicationDetails(application);
             if (i < applications.size() - 1) {
                 BoxPrinter.printDivider();

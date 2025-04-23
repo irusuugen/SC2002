@@ -81,7 +81,6 @@ public class ChangeAccountPassword {
         System.out.println("• At least one digit (0-9)");
         System.out.println("• At least one special character (e.g., !@#$%^&*)");
         System.out.println("• No spaces allowed");
-        System.out.println("• Cannot be a commonly used password");
         System.out.println();
     }
 
