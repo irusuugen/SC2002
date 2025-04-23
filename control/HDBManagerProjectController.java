@@ -26,8 +26,23 @@ public class HDBManagerProjectController implements IManagerProjectService {
      * @param manager The manager creating the project.
      */
     public void createProject(HDBManager manager) {
-        LocalDate openDate = InputHelper.readDate("Enter application opening date (DD/MM/YYYY): ", formatter);
-        LocalDate closeDate = InputHelper.readDate("Enter application closing date (DD/MM/YYYY): ", formatter);
+        LocalDate openDate = null;
+        while (openDate == null) {
+            openDate = InputHelper.readDate("Enter application opening date (DD/MM/YYYY): ", formatter);
+            if (openDate == null) {
+                System.out.println("Date cannot be blank. Please enter a valid date.");
+            }
+        }
+
+        LocalDate closeDate = null;
+        while (closeDate == null) {
+            closeDate = InputHelper.readDate("Enter application closing date (DD/MM/YYYY): ", formatter);
+            if (closeDate == null) {
+                System.out.println("Date cannot be blank. Please enter a valid date.");
+            }
+        }
+
+
         if (closeDate.isBefore(openDate)) {
             System.out.println("Application closing date cannot be earlier than opening date.");
             return;
