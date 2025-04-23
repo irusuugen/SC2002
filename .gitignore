@@ -1,0 +1,17 @@
+# IntelliJ project files
+.idea/
+*.iml
+
+# VS Code workspace files (optional, if you're switching editors)
+.vscode/
+
+# Compiled class files
+out/
+*.class
+
+# Logs
+*.log
+
+# OS junk files
+.DS_Store
+Thumbs.db
