@@ -1,14 +1,26 @@
+/**
+ * This class manages all enquiry-related actions by managers.
+ *
+ * This includes viewing all enquiries made, replying to unreplied enquiries.
+ *
+ */
+
 package control;
 
 import boundary.EnquiriesViewer;
 import entity.*;
 import java.util.*;
-import repository.ProjectService;
+import repository.*;
 import utils.*;
 
-public class HDBManagerEnquiryController {
-
-    public static void viewAllEnquiries(List<Project> allProjects) {
+public class HDBManagerEnquiryController implements IManagerEnquiryService {
+    /**
+     * Prints out all enquiries made for all projects
+     *
+     * @param allProjects The list of all projects
+     *
+     */
+    public void viewAllEnquiries(List<Project> allProjects) {
         List<Enquiry> allEnquiries = new ArrayList<>();
         for (Project project : allProjects) {
             allEnquiries.addAll(project.getEnquiries());
@@ -22,7 +34,14 @@ public class HDBManagerEnquiryController {
         EnquiriesViewer.printEnquiries(allEnquiries);
     }
 
-    public static List<Enquiry> getUnrepliedEnquiries(Project project) {
+    /**
+     * Retrieves the list of enquiries of a project that are not replied to
+     *
+     * @param project The project the manager is retrieving unreplied enquiries for
+     * @return List of unreplied enquiries for a selected project
+     *
+     */
+    public List<Enquiry> getUnrepliedEnquiries(Project project) {
         List<Enquiry> unrepliedEnquiries = new ArrayList<>();
         for (Enquiry enquiry : project.getEnquiries()) {
             if (enquiry.getAnswer().equals("(No reply yet)")) {
@@ -32,7 +51,13 @@ public class HDBManagerEnquiryController {
         return unrepliedEnquiries;
     }
 
-    public static void viewUnrepliedEnquiries(Project project) {
+    /**
+     * Prints out all unreplied enquiries of the project that was selected by the manager
+     *
+     * @param project The project the manager chose to view the unreplied enquiries for
+     *
+     */
+    public void viewUnrepliedEnquiries(Project project) {
         List<Enquiry> unrepliedEnquiries = getUnrepliedEnquiries(project);
         if (unrepliedEnquiries.isEmpty()) {
             System.out.println("No unreplied enquiries found.");
@@ -42,46 +67,54 @@ public class HDBManagerEnquiryController {
         EnquiriesViewer.printEnquiries(unrepliedEnquiries);
     }
 
-    public static void replyEnquiry(HDBManager manager) {
-        Project project = selectProject(manager.getCreatedProjects());
-        if (project == null) return;
-
-        List<Enquiry> unreplied = getUnrepliedEnquiries(project);
-        viewUnrepliedEnquiries(project);
-        if (unreplied.isEmpty()) return;
-
-        int choice = InputHelper.readInt(
-                "Enter enquiry number (1-" + unreplied.size() + "): ");
-        Enquiry enquiry = unreplied.get(choice - 1);
-
+    /**
+     * Allows manager to select an unreplied enquiry and give a reply to it
+     *
+     * @param enquiry The enquiry selected by the manager to reply to
+     *
+     */
+    public void replyEnquiry(Enquiry enquiry) {
+        if (enquiry==null){
+            return;
+        }
         System.out.println("Enter your response:");
         String response = new Scanner(System.in).nextLine();
-
         if (InputHelper.confirm("Confirm reply")) {
             enquiry.reply(response);
+            EnquiryService.updateEnquiries();
             System.out.println("Reply successful.");
         }
     }
 
-    // Allows manager to select a *created* project to look at enquiries for
-    private static Project selectProject(List<Project> projects) {
-        if (projects.isEmpty()) {
-            System.out.println("You're not handling any projects currently.");
+    /**
+     * Prompts the manager to select a project to view unreplied enquiries for, and then
+     * allows for selection of unreplied enquiry.
+     *
+     * @param manager The manager selecting the enquiry
+     * @param projectService The project service used to retrieve the manager's projects
+     * @return Unreplied enquiry selected by the manager
+     */
+    public Enquiry selectEnquiry(HDBManager manager, IManagerProjectService projectService) {
+        Project project = projectService.selectProject(manager.getCreatedProjects());
+        if (project == null) {
+            System.out.println("No project found.");
             return null;
         }
 
-        System.out.println("Select a project:");
-        for (int i = 0; i < projects.size(); i++) {
-            System.out.printf("(%d) %s\n", i + 1, projects.get(i).getProjectName());
+        List<Enquiry> unreplied = getUnrepliedEnquiries(project);
+        viewUnrepliedEnquiries(project);
+        if (unreplied.isEmpty()) {
+            System.out.println("No enquiries found.");
+            return null;
         }
 
+        int choice;
         while (true) {
-            int choice = InputHelper.readInt("Enter choice (0 to cancel): ");
-            if (choice == 0) return null;
-            if (choice >= 1 && choice <= projects.size()) {
-                return projects.get(choice - 1);
-            }
-            System.out.println("Invalid choice. Please select a number from 1 to " + projects.size() + ", or 0 to cancel.");
+            choice = InputHelper.readInt("Enter enquiry number (1-" + unreplied.size() + "): ");
+            if (choice >= 1 && choice <= unreplied.size()) break;
+            System.out.println("Invalid input. Please choose a number from 1 to " + unreplied.size() + ".");
         }
+        Enquiry enquiry = unreplied.get(choice - 1);
+        return enquiry;
     }
 }

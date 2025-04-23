@@ -1,4 +1,8 @@
-/* This class provides the UI for the Welcome Page */
+/**
+ * This class provides the user interface for the application's welcome page and main menu.
+ * This directs users to the login page, or the exit page to quit the application.
+ */
+
 package boundary;
 
 import java.util.Scanner;
@@ -7,6 +11,12 @@ import entity.UserSession;
 import utils.ClearPage;
 
 public class Welcome {
+    /**
+     * Displays the welcome screen and main menu, then handles user selection.
+     * Based on user selection, it either initiates the login process via {@link Login} class
+     * or triggers application exit via {@link Exit} class
+     * The method will continue prompting until a valid choice is made.
+     */
     public void welcome() {
         ClearPage.clearPage();
         Scanner sc = new Scanner(System.in);

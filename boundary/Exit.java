@@ -1,3 +1,7 @@
+/**
+ * This class is responsible for printing the goodbye message and exiting out of the program.
+ */
+
 package boundary;
 
 import utils.*;

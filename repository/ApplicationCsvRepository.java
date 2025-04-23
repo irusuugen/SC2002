@@ -1,4 +1,12 @@
-/* Class is for reading ApplicationList csv file */
+/**
+ * A CSV-based implementation of {@link IApplicationRepository}.
+ *
+ * Handles the reading and writing of application data to and from
+ * a CSV file, mapping it to {@link Application} instances and linking
+ * them to applicants and projects.
+ *
+ *
+ */
 
 package repository;
 
@@ -13,13 +21,36 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ApplicationRepository {
+public class ApplicationCsvRepository implements IApplicationRepository {
+    private static final String FILE_PATH = "data/ApplicationList.csv";
+
+    /**
+     * Loads all applications from the configured CSV file.
+     *
+     * @return A list of all loaded {@link Application} objects.
+     */
+
     public List<Application> loadAllApplications() {
-        List<Application> allApplications = new ArrayList<>();
-        allApplications.addAll(readApplications("data/ApplicationList.csv"));
-        return allApplications;
+        return readApplications(FILE_PATH);
     }
 
+    /**
+     * Writes all given applications to the configured CSV file.
+     *
+     * @param applications The list of applications to be saved.
+     */
+    public void saveAllApplications(List<Application> applications) {
+        writeToApplicationList(FILE_PATH, applications);
+    }
+
+    /**
+     * Reads applications from the specified CSV file and maps each row
+     * to an {@link Application} instance. Links the application to the
+     * appropriate applicant and project using their NRIC and project name.
+     *
+     * @param filename The path of the file to read.
+     * @return A list of parsed {@link Application} instances.
+     */
     public List<Application> readApplications(String filename) {
         ArrayList<Application> applications = new ArrayList<>();
         try {
@@ -44,7 +75,7 @@ public class ApplicationRepository {
                 combinedList.addAll(UserService.getOfficers());
                 Applicant applicant  = combinedList.stream().filter(a -> a.getNric().equals(NRIC)).findFirst().get();
                 Status status = Status.valueOf(applicationInfo[3]);
-                DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("d/M/yy");
+                DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                 LocalDate applicationDate = LocalDate.parse(applicationInfo[4], dateFormatter);
                 boolean bookingRequested = Boolean.parseBoolean(applicationInfo[5]);
                 boolean withdrawalRequested = Boolean.parseBoolean(applicationInfo[6]);
@@ -58,6 +89,12 @@ public class ApplicationRepository {
         return applications;
     }
 
+    /**
+     * Writes the given list of applications to the specified CSV file.
+     *
+     * @param filename     The path of the file to write to.
+     * @param applications The list of applications to serialize.
+     */
     public static void writeToApplicationList(String filename, List<Application> applications){
         List<String> rows = new ArrayList<>();
         String header = "project,flatType,NRIC,date,status,bookingRequested,withdrawalRequested";
@@ -72,18 +109,16 @@ public class ApplicationRepository {
                 row.add("3-Room");
             }
             row.add(a.getApplicant().getNric());
-            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("d/M/yy");
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             row.add(a.getDate().format(dateFormatter));
             row.add(a.getStatusString());
-            row.add(a.isBookingRequested()? "0" : "1");
-            row.add(a.isWithdrawalRequested()? "0" : "1");
+            row.add(a.isBookingRequested()? "1" : "0");
+            row.add(a.isWithdrawalRequested()? "1" : "0");
             rows.add(String.join(",", row));
         }
 
         try (PrintWriter writer = new PrintWriter(new FileWriter(filename))) {
-            for (String row : rows) {
-                writer.println(row);
-            }
+            writer.print(String.join("\n",rows));
         } catch (IOException e) {
             System.out.println("Error writing file: " + e.getMessage());
         }

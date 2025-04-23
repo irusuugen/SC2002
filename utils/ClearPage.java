@@ -1,7 +1,13 @@
-/* Class for clearing the terminal (for page changes) */
+/**
+ * This is a utility class that allows for the clearing of the terminal
+ */
 package utils;
 
 public class ClearPage {
+    /**
+     * Clears the terminal in a different way based on the external user's
+     * operating system.
+     */
     public static void clearPage() {
         String os = System.getProperty("os.name"); // Detects OS being used
         try {

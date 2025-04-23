@@ -1,17 +1,38 @@
+/**
+ * This class provides the CLI menu interface for users logged in as applicants.
+ * It allows applicants to interact with the system by:
+ * <ul>
+ *   <li>Changing their password</li>
+ *   <li>Viewing and filtering open BTO projects</li>
+ *   <li>Applying for a project and managing their application</li>
+ *   <li>Booking a flat after successful applications</li>
+ *   <li>Submitting, viewing, editing, and deleting enquiries</li>
+ * </ul>
+ *
+ */
+
 package boundary;
 
-import control.ApplicantController;
+import control.*;
 import entity.*;
-import repository.ProjectService;
 import utils.ClearPage;
 import utils.InputHelper;
 import java.util.Scanner;
 import java.util.List;
-import java.util.stream.Collectors;
+import entity.UserSession;
+import entity.Project;
+
 
 public class ApplicantMenu {
     private static final Scanner sc = new Scanner(System.in);
-
+    private static final IApplicantEnquiryService enquiryService = new ApplicantEnquiryController();
+    public static final IApplicantApplicationService applicationService = new ApplicantApplicationController();
+    public static final IApplicantProjectService projectService = new ApplicantProjectController();
+    /**
+     * Launches the applicant menu interface in a loop until the user logs out.
+     *
+     * @param session The current user session containing the authenticated applicant.
+     */
     public static void applicantMenu(UserSession session) {
         Applicant applicant = (Applicant) session.getUser();
         
@@ -22,8 +43,8 @@ public class ApplicantMenu {
             ║              Applicant Menu                ║
             ╠════════════════════════════════════════════╣
             ║  1. Change password                        ║
-            ║  2. View all open projects (Filtered)      ║
-            ║  3. Set Project Filters                    ║
+            ║  2. View all open projects (filtered)      ║
+            ║  3. Set project filters                    ║
             ║  4. Apply for a project                    ║
             ║  5. View application                       ║
             ║  6. Book flat                              ║
@@ -40,44 +61,45 @@ public class ApplicantMenu {
             int choice;
             while (true) {
                 choice = InputHelper.readInt("➤ Enter your choice: ");
-                if (choice >= 1 && choice <= 11) break;
-                System.out.println("Please enter a number between 1 and 11.");
+                if (choice >= 1 && choice <= 12) break;
+                System.out.println("Please enter a number between 1 and 12.");
             }
             ClearPage.clearPage(); // Clears terminal for the page for the corresponding options
                 
             switch (choice) {
                 case 1:
-                    ApplicantController.changePassword(applicant);
+                    ChangeAccountPassword.changePassword(applicant);
                     break;
                 case 2:
-                    viewOpenProjectsWithFilters(session);
+                    List<Project> allProjects = projectService.getOpenProjects(applicant);
+                    ProjectFilterMenu.viewFilteredProjects(session, allProjects);
                     break;
                 case 3:
-                    showFilterMenu(session);
+                    ProjectFilterMenu.showFilterMenu(session);
                     break;
                 case 4:
-                    ApplicantController.applyForProject(applicant);
+                    applicationService.applyForProject(applicant, projectService);
                     break;
                 case 5:
-                    ApplicantController.viewApplication(applicant);
+                    applicationService.viewApplication(applicant);
                     break;
                 case 6:
-                    ApplicantController.requestBooking(applicant);
+                    applicationService.requestBooking(applicant);
                     break;
                 case 7:
-                    ApplicantController.requestWithdrawal(applicant);
+                    applicationService.requestWithdrawal(applicant);
                     break;
                 case 8:
-                    ApplicantController.submitEnquiry(applicant);
+                    enquiryService.submitEnquiry(applicant, projectService);
                     break;
                 case 9:
-                    ApplicantController.viewEnquiries(applicant);
+                    enquiryService.viewEnquiries(applicant);
                     break;
                 case 10:
-                    ApplicantController.editEnquiry(applicant);
+                    enquiryService.editEnquiry(applicant);
                     break;
                 case 11:
-                    ApplicantController.deleteEnquiry(applicant);
+                    enquiryService.deleteEnquiry(applicant);
                     break;
                 case 12:
                     System.out.println("Logging out...");
@@ -87,102 +109,5 @@ public class ApplicantMenu {
             System.out.println("➤ Press Enter to continue...");
             sc.nextLine(); 
         }
-    }
-
-    private static void viewOpenProjectsWithFilters(UserSession session) {
-        Applicant applicant = (Applicant) session.getUser();
-        
-        // Get base projects using existing controller logic
-        List<Project> projects = ProjectService.getAllProjects().stream()
-            .filter(p -> p.isVisible())
-            .filter(p -> applicant.getUserGroup() == UserGroup.SINGLE ? 
-                p.getNumFlatAvailable(FlatType.TWOROOMS) > 0 : true)
-            .collect(Collectors.toList());
-        
-        // Apply user's filters
-        projects = session.getProjectFilter().applyFilters(projects);
-        
-        // Display with current filter info
-        System.out.println("\n════════════════════════════════════════");
-        System.out.println("   AVAILABLE PROJECTS (FILTERED)");
-        System.out.println("════════════════════════════════════════");
-        printCurrentFilters(session.getProjectFilter());
-        System.out.println("════════════════════════════════════════\n");
-        
-        if (projects.isEmpty()) {
-            System.out.println("No projects match your current filters.");
-            return;
-        }
-        
-        System.out.printf("%-25s %-15s %-10s %-10s %-15s %-15s\n",
-            "PROJECT", "LOCATION", "2-ROOM", "3-ROOM", "OPEN DATE", "CLOSE DATE");
-        
-        projects.forEach(p -> System.out.printf("%-25s %-15s %-10d %-10d %-15s %-15s\n",
-            p.getProjectName(),
-            p.getNeighborhood(),
-            p.getNumFlatAvailable(FlatType.TWOROOMS),
-            p.getNumFlatAvailable(FlatType.THREEROOMS),
-            p.getOpenDate(),
-            p.getCloseDate()
-        ));
-    }
-
-    private static void showFilterMenu(UserSession session) {
-        ProjectFilter filter = session.getProjectFilter();
-        
-        while (true) {
-            ClearPage.clearPage();
-            System.out.println("""
-            ╔════════════════════════════════════════════╗
-            ║            PROJECT FILTERS                 ║
-            ╠════════════════════════════════════════════╣
-            ║  1. Filter by Location                     ║
-            ║  2. Filter by Flat Type                    ║
-            ║  3. Toggle Sort Order                      ║
-            ║  4. Clear All Filters                      ║
-            ║  5. Back to Main Menu                      ║
-            ╚════════════════════════════════════════════╝
-            """);
-            
-            printCurrentFilters(filter);
-            
-            int choice = InputHelper.readInt("➤ Enter choice (1-5): ");
-            
-            switch (choice) {
-                case 1:
-                    System.out.print("Enter location (e.g., 'Yishun' or leave blank): ");
-                    String loc = sc.nextLine().trim();
-                    filter.setLocationFilter(loc.isEmpty() ? null : loc);
-                    break;
-                case 2:
-                    System.out.print("Enter flat type (2-Room/3-Room or leave blank): ");
-                    String type = sc.nextLine().trim();
-                    filter.setFlatTypeFilter(type.isEmpty() ? null : type);
-                    break;
-                case 3:
-                    boolean newSort = !filter.isSortByAlphabetical();
-                    filter.setSortByAlphabetical(newSort);
-                    System.out.println("Sort order set to: " + (newSort ? "A-Z" : "Z-A"));
-                    break;
-                case 4:
-                    filter.clearFilters();
-                    System.out.println("All filters cleared");
-                    break;
-                case 5:
-                    return;
-            }
-        }
-    }
-
-    private static void printCurrentFilters(ProjectFilter filter) {
-        System.out.println("\nCurrent Filters:");
-        System.out.println("📍 Location: " + 
-            (filter.getLocationFilter() != null ? filter.getLocationFilter() : "None"));
-        System.out.println("🏠 Flat Type: " + 
-            (filter.getFlatTypeFilter() != null ? 
-                (filter.getFlatTypeFilter().equals(FlatType.TWOROOMS) ? "2-Room" : "3-Room") 
-                : "None"));
-        System.out.println("🔃 Sort Order: " + 
-            (filter.isSortByAlphabetical() ? "A → Z" : "Z → A"));
     }
 }

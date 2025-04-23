@@ -1,57 +1,79 @@
+/**
+ * Controller class that handles application-related actions performed by an HDB Officer.
+ * This includes updating an application to confirm a successful flat booking and printing a booking receipt.
+ */
+
 package control;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Stream;
 import entity.*;
 import repository.*;
 import utils.*;
 
-public class HDBOfficerApplicationController{
+public class HDBOfficerApplicationController implements IOfficerApplicationService {
 
 	private static Scanner sc = new Scanner(System.in);
-	
-	public static void updateApplication(HDBOfficer officer)
-	{
+
+	/**
+	 * Allows the HDB Officer to update an application by marking it as successfully booked
+	 *
+	 * Prompts the officer to enter an applicant's NRIC, verifies that the applicant exists
+	 * and is assigned to the officer's project, and confirms that a booking has been requested.
+	 * If all validations pass and the officer confirms booking, the applicant's application is printed,
+	 * and the officer updates the application status to BOOKED and project data accordingly.
+	 * A booking receipt is also printed.
+	 *
+	 * @param officer The officer processing the booking request
+	 */
+	public void updateApplication(HDBOfficer officer) {
 		Application application;
-		while(true){
-			System.out.print("Please enter applicant's NRIC: ");
+		while (true) {
+			System.out.print("Please enter an applicant's NRIC: ");
 			String nric = sc.nextLine();
-			application = ApplicationService.fetchApplicationFromNRIC(nric);
-			if(application == null){
-				System.out.print("Application was not found. Retry? (Y/N): ");
-                String retry = sc.nextLine();
-                if (retry.equalsIgnoreCase("N")) return;
-			}
-			else if (!officer.getAssignedProjects().contains(application.getProject())){
-				System.out.print("Officer is not responsible for the applicant's project. Retry? (Y/N): ");
-            	String retry = sc.nextLine();
-                if (retry.equalsIgnoreCase("N")) return;
-			}
-			else if(!application.isBookingRequested()){
-				System.out.print("Booking request has not been submitted. Retry? (Y/N): ");
-            	String retry = sc.nextLine();
-                if (retry.equalsIgnoreCase("N")) return;
-			}
-			else {
-				System.out.println("Application found. Confirm successful booking? (Y/N): ");
-				String confirm = sc.nextLine();
-				if (confirm.equalsIgnoreCase("Y")) {
+
+			application = Stream.concat(
+							UserService.getOfficers().stream(),
+							UserService.getApplicants().stream()
+					)
+					.filter(user -> user.getNric().equals(nric))
+					.map(Applicant::getApplication)
+					.findFirst()
+					.orElse(null);
+
+			if (application == null) {
+				if (!InputHelper.confirm("Application was not found. Retry?")) return;
+			} else if (officer.getAssignedProject() == null || !officer.getAssignedProject().equals(application.getProject())) {
+				if (!InputHelper.confirm("Officer is not responsible for the applicant's project. Retry?")) return;
+			} else if (!application.isBookingRequested()) {
+				if (!InputHelper.confirm("Booking request has not been submitted. Retry?")) return;
+			} else {
+				if (InputHelper.confirm("Application found. Confirm successful booking?")) {
 					application.getProject().addOccupiedFlat(application.getFlatType());
 					application.markBooked();
+					ProjectService.updateProjects();
+					ApplicationService.updateApplications();
 					break;
 				} else {
-					System.out.println("Application was not booked. Retry? (Y/N): ");
-					String retry = sc.nextLine();
-					if (retry.equalsIgnoreCase("N")) return;
+					if (!InputHelper.confirm("Application was not booked. Retry?")) return;
 				}
 			}
 		}
 		ClearPage.clearPage();
-		printBookingReceipt(application, officer);
+		printBookingReceipt(application);
 	}
 
-	public static void printBookingReceipt(Application application, HDBOfficer officer) {
+	/**
+	 * Prints a formatted booking receipt for a successfully booked application.
+	 *
+	 * Displays receipt number, booking date, applicant details, and flat details
+	 * in a box format
+	 *
+	 * @param application Application that has been booked.
+	 */
+	private void printBookingReceipt(Application application) {
 		BoxPrinter.printTopBorder();
 		System.out.println(BoxPrinter.centerInBox("HDB FLAT BOOKING RECEIPT"));
 

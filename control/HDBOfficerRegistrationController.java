@@ -1,5 +1,11 @@
+/**
+ * Handles the registration workflow for HDB Officers.
+ * Provides functionality to view, register, and display officer-related projects.
+ */
+
 package control;
 
+import java.time.LocalDate;
 import java.util.*;
 import boundary.ProjectViewer;
 import entity.*;
@@ -7,24 +13,39 @@ import repository.*;
 import utils.*;
 
 
-public class HDBOfficerRegistrationController{
+public class HDBOfficerRegistrationController implements IOfficerRegistrationService{
 
 	private static Scanner sc = new Scanner(System.in);
 
+	/**
+	 * Retrieves a list of projects that the given officer is eligible to register for.
+	 *
+	 * A project is considered registrable if:
+	 * - The officer is not already assigned to it.
+	 * - The officer has not already registered for it.
+	 * - The project does not overlap in application period with an assigned project.
+	 * - The project has not closed.
+	 *
+	 * @param officer The HDBOfficer attempting to register.
+	 * @return A list of registrable {@link Project} objects.
+	 */
 	public static List<Project> getRegistrableProjects(HDBOfficer officer) {
 		List<Project> registrableProjects = new ArrayList<>();
 
 		for (Project project : ProjectService.getAllProjects()) {
-			boolean isAlreadyAssigned = officer.getAssignedProjects().contains(project);
+			boolean isAlreadyAssigned = officer.getAssignedProject() != null && officer.getAssignedProject().equals(project);
 
 			// Check if the officer has already registered for this project
 			boolean hasAlreadyRegistered = officer.getRegistrationList().stream()
 					.anyMatch(reg -> reg.getProject().equals(project));
 
-			boolean hasDateClash = officer.getAssignedProjects().stream()
-					.anyMatch(assigned -> DateOverlap.applicationPeriodsOverlap(assigned, project));
+			boolean hasDateClash = officer.getAssignedProject() != null && DateOverlap.applicationPeriodsOverlap(officer.getAssignedProject(), project);
 
-			if (!isAlreadyAssigned && !hasAlreadyRegistered && !hasDateClash) {
+			LocalDate today = LocalDate.now();
+			
+			boolean isClosed = project.getCloseDate().isBefore(today);
+
+			if (!isAlreadyAssigned && !hasAlreadyRegistered && !hasDateClash && !isClosed) {
 				registrableProjects.add(project);
 			}
 		}
@@ -32,14 +53,32 @@ public class HDBOfficerRegistrationController{
 		return registrableProjects;
 	}
 
-
+	/**
+	 * Displays the list of registrable projects for the given officer.
+	 *
+	 * @param officer The HDBOfficer attempting to view available projects.
+	 */
 	public static void viewRegistrableProjects(HDBOfficer officer)
 	{
 		List<Project> registrableProjects = getRegistrableProjects(officer);
 		ProjectViewer.printProjects(registrableProjects, officer);
 	}
 
-	public static void registerForProject(HDBOfficer officer) {
+	/**
+	 * Allows an HDB officer to register for a project.
+	 *
+	 * The registration will only be allowed if:
+	 * - The officer does not have an active project.
+	 * - The selected project is in the registrable list.
+	 *
+	 * Prompts the user for input until valid project and confirmation are received.
+	 *
+	 * @param officer The HDBOfficer attempting to register.
+	 */
+	public void registerForProject(HDBOfficer officer) {
+		if (officer.getAssignedProject() != null && officer.getAssignedProject().checkOpeningPeriod()){
+			System.out.println("You are currently an officer of an active project");
+		}
 		viewRegistrableProjects(officer);
 		Project project;
 		// Loop until a valid project is selected
@@ -62,13 +101,13 @@ public class HDBOfficerRegistrationController{
 				break; // Exit the inner loop once a valid project is found
 			}
 		}
-
-		// Create a new Registration and register the officer
 		while (true) {
 			System.out.print("Are you sure you want to apply for this project? (Y/N): ");
 			String choice = sc.nextLine();
 			if (choice.equalsIgnoreCase("Y")) {
 				Registration registration = new Registration(officer, project);
+				RegistrationService.addRegistration(registration);
+				RegistrationService.updateRegistrations();
 				project.registerOfficer(registration);
 				officer.addRegistration(registration);
 				System.out.println("Registered successfully!");
@@ -83,8 +122,13 @@ public class HDBOfficerRegistrationController{
 		}
 	}
 
-
-	public static void viewRegistrations(HDBOfficer officer)
+	/**
+	 * Displays a list of all projects the given officer has registered for,
+	 * including their registration status.
+	 *
+	 * @param officer The HDBOfficer whose registrations are being displayed.
+	 */
+	public void viewRegistrations(HDBOfficer officer)
 	{
 		List<Registration> registrationList = officer.getRegistrationList();
 
@@ -105,5 +149,18 @@ public class HDBOfficerRegistrationController{
 				BoxPrinter.printBottomBorder();
 			}
 		}
+	}
+
+	/**
+	 * Prints the project to which the officer is currently assigned, if any.
+	 *
+	 * @param officer The HDBOfficer whose assigned project is to be printed.
+	 */
+	public void printAssignedProject(HDBOfficer officer){
+		if(officer.getAssignedProject() == null){
+			System.out.println("You are not assigned to any projects.");
+			return;
+		}
+		ProjectViewer.printOneProject(officer.getAssignedProject(), Role.HDB_OFFICER, officer);
 	}
 }

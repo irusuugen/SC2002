@@ -1,11 +1,22 @@
+/**
+ * Represents an enquiry submitted by an applicant for a specific project.
+ */
+
 package entity;
 
 public class Enquiry {
     private Applicant applicant;
     private String message;  //enquiry message from the applicant
     private Project project; //project the enquiry is related to
-    private String answer;   //reply to the enquiry (can be null if no reply yet)
+    private String answer;
 
+    /**
+     * Constructs an Enquiry with applicant, message and project specified.
+     *
+     * @param applicant           The applicant.
+     * @param message             The message.
+     * @param project             The BTO project.
+     */
     public Enquiry(Applicant applicant, String message, Project project) 
     {
         this.applicant = applicant;
@@ -14,70 +25,56 @@ public class Enquiry {
         this.answer = "(No reply yet)"; 
     }
 
+    /**
+     * Constructs an Enquiry with all attributes specified (used when loading from storage).
+     *
+     * @param applicant           The applicant.
+     * @param message             The message.
+     * @param project             The BTO project.
+     * @param answer              The answer.
+     */
     public Enquiry(Applicant applicant, String message, Project project, String answer) 
     {
         this.applicant = applicant;
         this.message = message;
         this.project = project;
-        if(answer.equals("")) this.answer = "(No reply yet)";
+        if (answer.equals("")) this.answer = "(No reply yet)";
         else this.answer = answer;
     }
 
+    /** @return The applicant who asked the enquiry. */
     public Applicant getApplicant(){
         return applicant;
     }
 
+    /** @return Message of the enquiry */
     public String getMessage() 
     {
         return message;
     }
 
+    /** @return The project the enquiry belongs to */
     public Project getProject() 
     {
         return project;
     }
 
+    /** @return The answer to the enquiry */
     public String getAnswer() 
     {
         return answer;
     }
 
-    // //view the details of the enquiry, including the message and any reply
-    // public void view() 
-    // {
-    //     System.out.println("Enquiry about Project: " + project.getProjectName());
-    //     System.out.println("Message: " + message);
-    //     if (answer!=null) 
-    //     {
-    //         System.out.println("Reply: " + answer);
-    //     } else 
-    //     {
-    //         System.out.println("Reply: (No reply yet)");
-    //     }
-    // }
-
+    /** @param newMessage Sets the new message in enquiry */
     public void edit(String newMessage) 
     {
         this.message = newMessage;
     }
 
+    /** @param answer Sets the answer to the enquiry */
     public void reply(String answer) 
     {
         this.answer = answer;
     }
-   
-    // @Override
-    // public String toString() {
-    //     return "Project: " + project.getProjectName() +
-    //            "\nMessage: " + message +
-    //            "\nAnswer: " + (answer != null ? answer : "(No reply yet)");
-    // }
+
 }
-
-/*
-Using view()
-enquiry.view();  // Will print: "Enquiry about Project: Yishun BTO Project", "Message: What is the application deadline?", etc.
-
-Using toString() implicitly with System.out.println
-System.out.println(enquiry);  // Will print: "Project: Yishun BTO Project\nMessage: What is the application deadline?\nAnswer: (No reply yet)"
-*/ 

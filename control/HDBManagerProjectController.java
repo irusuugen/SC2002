@@ -1,23 +1,48 @@
+/**
+ * This class allows managers to create, edit, delete, toggle visibility,
+ * and view BTO projects.
+ */
+
 package control;
 
+import boundary.ProjectFilterMenu;
 import boundary.ProjectViewer;
 import entity.*;
-
-import java.time.format.DateTimeParseException;
 import java.util.*;
-
 import repository.ProjectService;
 import utils.*;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 
-public class HDBManagerProjectController {
+public class HDBManagerProjectController implements IManagerProjectService {
     private static Scanner sc = new Scanner(System.in);
     private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-    public static void createProject(HDBManager manager, List<Project> allProjects) {
-        LocalDate openDate = InputHelper.readDate("Enter application opening date (DD/MM/YYYY): ", formatter);
-        LocalDate closeDate = InputHelper.readDate("Enter application closing date (DD/MM/YYYY): ", formatter);
+    /**
+     * Allows a manager to create a new BTO project, ensuring no date overlaps with existing projects.
+     * Prompts for input details such as name, neighborhood, flat counts/prices, and application dates.
+     * Adds the project to the manager's list and saves it via ProjectService if confirmed.
+     *
+     * @param manager The manager creating the project.
+     */
+    public void createProject(HDBManager manager) {
+        LocalDate openDate = null;
+        while (openDate == null) {
+            openDate = InputHelper.readDate("Enter application opening date (DD/MM/YYYY): ", formatter);
+            if (openDate == null) {
+                System.out.println("Date cannot be blank. Please enter a valid date.");
+            }
+        }
+
+        LocalDate closeDate = null;
+        while (closeDate == null) {
+            closeDate = InputHelper.readDate("Enter application closing date (DD/MM/YYYY): ", formatter);
+            if (closeDate == null) {
+                System.out.println("Date cannot be blank. Please enter a valid date.");
+            }
+        }
+
+
         if (closeDate.isBefore(openDate)) {
             System.out.println("Application closing date cannot be earlier than opening date.");
             return;
@@ -41,10 +66,8 @@ public class HDBManagerProjectController {
         String neighborhood = sc.nextLine();
         int twoRooms = InputHelper.readInt("Enter the number of 2-room units: ");
         int threeRooms = InputHelper.readInt("Enter the number of 3-room units: ");
-        System.out.print("Enter 2-room price: $");
-        float twoRoomsPrice = sc.nextFloat();
-        System.out.print("Enter 3-room price: $");
-        float threeRoomsPrice = sc.nextFloat();
+        float twoRoomsPrice = InputHelper.readFloat("Enter 2-room price: $");
+        float threeRoomsPrice = InputHelper.readFloat("Enter 3-room price: $");
         int officerSlots;
         while (true) {
             officerSlots = InputHelper.readInt("Enter the number of officer slots (max 10): ");
@@ -55,10 +78,10 @@ public class HDBManagerProjectController {
         Project p = new Project(name, neighborhood, twoRooms, twoRoomsPrice, threeRooms, threeRoomsPrice, openDate, closeDate, manager, officerSlots, new ArrayList<>());
 
         ClearPage.clearPage();
-        ProjectViewer.printOneProject(p, manager);
-        sc.nextLine(); // Consume newline;
+        ProjectViewer.printOneProject(p, Role.HDB_MANAGER, manager);
         if (InputHelper.confirm("Confirm project creation?")) {
             ProjectService.addProject(p);
+            ProjectService.updateProjects();
             manager.addCreatedProject(p);
             System.out.println("Project created.");
         } else {
@@ -66,7 +89,14 @@ public class HDBManagerProjectController {
         }
     }
 
-    public static void editProject(HDBManager manager) {
+    /**
+     * Enables a manager to edit a selected project they have created.
+     * Prompts for each editable field and confirms the update.
+     * Prevents edits that cause overlapping application dates with other projects.
+     *
+     * @param manager The manager editing their project.
+     */
+    public void editProject(HDBManager manager) {
         System.out.println("Here are the list of projects:");
         List<Project> createdProjects = manager.getCreatedProjects();
         ProjectViewer.printProjects(createdProjects, manager);
@@ -86,9 +116,9 @@ public class HDBManagerProjectController {
         // Copy original values into temporary variables
         String neighborhood = original.getNeighborhood();
         int twoRooms = original.getNumRoom(FlatType.TWOROOMS);
-        int threeRooms = original.getNumRoom(FlatType.TWOROOMS);
+        int threeRooms = original.getNumRoom(FlatType.THREEROOMS);
         float price2 = original.getSellingPrice(FlatType.TWOROOMS);
-        float price3 = original.getSellingPrice(FlatType.TWOROOMS);
+        float price3 = original.getSellingPrice(FlatType.THREEROOMS);
         int officerSlots = original.getOfficerSlot();
         LocalDate openDate = original.getOpenDate();
         LocalDate closeDate = original.getCloseDate();
@@ -96,7 +126,7 @@ public class HDBManagerProjectController {
 
         // Start editing into temp variables
         ClearPage.clearPage();
-        ProjectViewer.printOneProject(original, manager);
+        ProjectViewer.printOneProject(original, Role.HDB_MANAGER, manager);
         System.out.println("\nEnter new values (press Enter to keep current value):");
 
         System.out.print("New neighborhood: ");
@@ -105,19 +135,43 @@ public class HDBManagerProjectController {
 
         System.out.print("New 2-room unit count: ");
         input = sc.nextLine();
-        if (!input.isEmpty()) twoRooms = Integer.parseInt(input);
+        if (!input.isEmpty()) {
+            try {
+                twoRooms = Integer.parseInt(input);
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Keeping original value.");
+            }
+        }
 
         System.out.print("New 3-room unit count: ");
         input = sc.nextLine();
-        if (!input.isEmpty()) threeRooms = Integer.parseInt(input);
+        if (!input.isEmpty()) {
+            try {
+                threeRooms = Integer.parseInt(input);
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Keeping original value.");
+            }
+        }
 
         System.out.print("New 2-room price: $");
         input = sc.nextLine();
-        if (!input.isEmpty()) price2 = Float.parseFloat(input);
+        if (!input.isEmpty()) {
+            try {
+                price2 = Float.parseFloat(input);
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Keeping original value.");
+            }
+        }
 
         System.out.print("New 3-room price: $");
         input = sc.nextLine();
-        if (!input.isEmpty()) price3 = Float.parseFloat(input);
+        if (!input.isEmpty()) {
+            try {
+                price3 = Float.parseFloat(input);
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Keeping original value.");
+            }
+        }
 
         while (true) {
             System.out.print("New officer slots: ");
@@ -159,6 +213,7 @@ public class HDBManagerProjectController {
                 return;
             }
         }
+
         // Check overlap against manager’s other projects
         for (Project other : createdProjects) {
             if (!other.equals(original)) {
@@ -175,7 +230,7 @@ public class HDBManagerProjectController {
 
         ClearPage.clearPage();
         System.out.println("Updated project preview:");
-        ProjectViewer.printOneProject(preview, manager);
+        ProjectViewer.printOneProject(preview, Role.HDB_MANAGER, manager);
 
         if (InputHelper.confirm("Confirm changes to this project")) {
             // Apply final changes to original project
@@ -187,14 +242,20 @@ public class HDBManagerProjectController {
             original.setOfficerSlots(officerSlots);
             original.setOpenDate(openDate);
             original.setCloseDate(closeDate);
-
+            ProjectService.updateProjects();
             System.out.println("Project updated successfully.");
         } else {
             System.out.println("Changes discarded.");
         }
     }
 
-    public static void deleteProject(HDBManager manager, List<Project> allProjects) {
+    /**
+     * Allows manager to delete a project they were handling, and also removes the project from the system
+     *
+     * @param manager Manager choosing a project to delete
+     * @param allProjects List of all projects the manager is handling
+     */
+    public void deleteProject(HDBManager manager, List<Project> allProjects) {
         List<Project> createdProjects = manager.getCreatedProjects();
         ProjectViewer.printProjects(createdProjects, manager);
         System.out.print("Enter the name of the project you'd like to delete: ");
@@ -209,17 +270,24 @@ public class HDBManagerProjectController {
         }
 
         ClearPage.clearPage();
-        ProjectViewer.printOneProject(project, manager);
+        ProjectViewer.printOneProject(project, Role.HDB_MANAGER, manager);
         if (InputHelper.confirm("Confirm deletion of project")) {
             createdProjects.remove(project);
             ProjectService.removeProject(project);
+            ProjectService.updateProjects();
             System.out.println("Project deleted successfully.");
         } else {
             System.out.println("Request cancelled.");
         }
     }
 
-    public static void toggleProjectVisibility(HDBManager manager) {
+    /**
+     * Allows the manager to toggle project visibility to off or on.
+     *
+     * @param manager The manager toggling project visibility
+     *
+     */
+    public void toggleProjectVisibility(HDBManager manager) {
         List<Project> createdProjects = manager.getCreatedProjects();
         System.out.println("Here are the list of projects:");
         ProjectViewer.printProjects(createdProjects, manager);
@@ -235,10 +303,11 @@ public class HDBManagerProjectController {
         }
 
         ClearPage.clearPage();
-        ProjectViewer.printOneProject(project, manager);
+        ProjectViewer.printOneProject(project, Role.HDB_MANAGER, manager);
         System.out.println("Current visibility: " + (project.isVisible() ? "Visible" : "Hidden"));
         if (InputHelper.confirm("Would you like to toggle this project's visibility")) {
             project.setVisibility(!project.isVisible());
+            ProjectService.updateProjects();
             System.out.println("Project visibility toggled.");
             System.out.println("New visibility: " + (project.isVisible() ? "Visible" : "Hidden"));
         } else {
@@ -246,7 +315,15 @@ public class HDBManagerProjectController {
         }
     }
 
-    public static void viewAllProjects(HDBManager manager, List<Project> allProjects) {
+    /**
+     * Displays a list of either the manager’s own projects or all available projects.
+     * Uses {@link ProjectFilterMenu} to allow viewing with filtering options.
+     *
+     * @param manager     The manager initiating the view.
+     * @param allProjects All available projects in the system.
+     * @param session     The current user session.
+     */
+    public void viewAllProjects(HDBManager manager, List<Project> allProjects, UserSession session) {
         // Filter for own projects
         System.out.println("Would you like to:");
         System.out.println("1. View only your own created projects");
@@ -269,6 +346,34 @@ public class HDBManagerProjectController {
 
         ClearPage.clearPage();
         System.out.println("Here are the list of projects:");
-        ProjectViewer.printProjects(projectsToShow, manager);
+        ProjectFilterMenu.viewFilteredProjects(session, projectsToShow);
+    }
+
+    /**
+     * Allows the manager to select a project they are handling
+     *
+     * @param projects The list of created projects to iterate through
+     * @return The project chosen by the manager
+     *
+     */
+    public Project selectProject(List<Project> projects) {
+        if (projects.isEmpty()) {
+            System.out.println("You're not handling any projects currently.");
+            return null;
+        }
+
+        System.out.println("Select a project:");
+        for (int i = 0; i < projects.size(); i++) {
+            System.out.printf("(%d) %s\n", i + 1, projects.get(i).getProjectName());
+        }
+
+        while (true) {
+            int choice = InputHelper.readInt("Enter choice (0 to cancel): ");
+            if (choice == 0) return null;
+            if (choice >= 1 && choice <= projects.size()) {
+                return projects.get(choice - 1);
+            }
+            System.out.println("Invalid choice. Please select a number from 1 to " + projects.size() + ", or 0 to cancel.");
+        }
     }
 }
