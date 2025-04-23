@@ -65,9 +65,14 @@ public class ProjectFilterMenu {
                     filter.setLocationFilter(loc.isEmpty() ? null : loc);
                 }
                 case 2 -> {
-                    System.out.print("Enter flat type (2-Room/3-Room or leave blank): ");
-                    String type = sc.nextLine().trim();
-                    filter.setFlatTypeFilter(type.isEmpty() ? null : type);
+                    while (true) {
+                        System.out.print("Enter flat type (2-Room/3-Room or leave blank): ");
+                        String type = sc.nextLine().trim();
+                        filter.setFlatTypeFilter(type.isEmpty() ? null : type);
+                        if ((filter.getFlatTypeFilter() == FlatType.THREEROOMS) && (session.getUser().getRole() == Role.APPLICANT)) {
+                            System.out.println("Based on your status, you cannot view 3-Room flats. Please enter a different filter.");
+                        } else break;
+                    }
                 }
                 case 3 -> {
                     Boolean current = filter.getSortByAlphabetical();
