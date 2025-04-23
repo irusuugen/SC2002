@@ -74,9 +74,9 @@ public class ApplicationCsvRepository implements IApplicationRepository {
                 List<Applicant> combinedList = new ArrayList<>(UserService.getApplicants());
                 combinedList.addAll(UserService.getOfficers());
                 Applicant applicant  = combinedList.stream().filter(a -> a.getNric().equals(NRIC)).findFirst().get();
-                Status status = Status.valueOf(applicationInfo[3]);
                 DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                LocalDate applicationDate = LocalDate.parse(applicationInfo[4], dateFormatter);
+                LocalDate applicationDate = LocalDate.parse(applicationInfo[3], dateFormatter);
+                Status status = Status.valueOf(applicationInfo[4]);
                 boolean bookingRequested = Boolean.parseBoolean(applicationInfo[5]);
                 boolean withdrawalRequested = Boolean.parseBoolean(applicationInfo[6]);
                 // Creates a project and adds to projectList
