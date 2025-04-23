@@ -1,3 +1,8 @@
+/**
+ * This class provides the menu for a list of filters that the user can choose from for filtering of projects.
+ * The class also handles printing of the filtered projects, using ProjectViewer methods
+ */
+
 package boundary;
 
 import entity.*;
@@ -8,6 +13,11 @@ import java.util.Scanner;
 
 public class ProjectFilterMenu {
 
+    /**
+     * Prints the list of projects given filtered by the current filter settings
+     * @param session The session of the authenticated user
+     * @param allProjects The list of projects to be filtered
+     */
     public static void viewFilteredProjects(UserSession session, List<Project> allProjects) {
         List<Project> filteredProjects = session.getProjectFilter().applyFilters(allProjects);
 
@@ -23,6 +33,10 @@ public class ProjectFilterMenu {
         ProjectViewer.printProjects(filteredProjects, session.getUser());
     }
 
+    /**
+     * Prints the menu for the different filter settings
+     * @param session Current session of the authenticated user
+     */
     public static void showFilterMenu(UserSession session) {
         ProjectFilter filter = session.getProjectFilter();
         Scanner sc = new Scanner(System.in);
@@ -36,7 +50,7 @@ public class ProjectFilterMenu {
             ╠════════════════════════════════════════════════════════════════════════╣
             ║  1. Filter by Location                                                 ║
             ║  2. Filter by Flat Type                                                ║
-            ║  3. Cycle Sort Order (A→Z / Z→A / None)                                ║
+            ║  3. Cycle Sort Order (A→Z / Z→A / None) (Repeat to cycle)              ║
             ║  4. Clear All Filters                                                  ║
             ║  5. Back to Main Menu                                                  ║
             ╚════════════════════════════════════════════════════════════════════════╝
@@ -83,6 +97,10 @@ public class ProjectFilterMenu {
         }
     }
 
+    /**
+     * Prints out the current filter settings of the user
+     * @param filter The current filter settings of the user
+     */
     public static void printCurrentFilters(ProjectFilter filter) {
         System.out.println("Location: " +
                 (filter.getLocationFilter() != null ? filter.getLocationFilter() : "None"));

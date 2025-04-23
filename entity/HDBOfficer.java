@@ -49,17 +49,28 @@ public class HDBOfficer extends Applicant {
 		return true;
 	}
 
+	/**
+	 * Sets an assigned project to the officer
+	 * @param project Project to assign
+	 */
 	public void setAssignedProject(Project project) {
 		assignedProject = project;
 	}
 
+	/**
+	 * Adds a registration for a project to the officer's associated registration list
+	 * @param registration Registration to add to registration list
+	 */
 	public void addRegistration(Registration registration) {
 		registrationList.add(registration);
 	}
 
+	/**@return Project that the officer is assigned to */
 	public Project getAssignedProject()	{
 		return this.assignedProject;
 	}
+
+	/** @return List of registrations made by officer */
 	public List<Registration> getRegistrationList() {
 		return this.registrationList;
 	}

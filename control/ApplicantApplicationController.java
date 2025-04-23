@@ -28,6 +28,7 @@ public class ApplicantApplicationController implements IApplicantApplicationServ
      * and for flat availability before allowing the application.
      *
      * @param applicant The applicant who is applying for a project.
+     * @param projectService The project service used to retrieve list of projects to apply for
      */
     public void applyForProject(Applicant applicant, IApplicantProjectService projectService) {
         Application previousApplication = applicant.getApplication();

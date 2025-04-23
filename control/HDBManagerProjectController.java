@@ -1,5 +1,5 @@
 /**
- * This class that allows managers to create, edit, delete, toggle visibility,
+ * This class allows managers to create, edit, delete, toggle visibility,
  * and view BTO projects.
  */
 
@@ -23,7 +23,7 @@ public class HDBManagerProjectController implements IManagerProjectService {
      * Prompts for input details such as name, neighborhood, flat counts/prices, and application dates.
      * Adds the project to the manager's list and saves it via ProjectService if confirmed.
      *
-     * @param manager      The manager creating the project.
+     * @param manager The manager creating the project.
      */
     public void createProject(HDBManager manager) {
         LocalDate openDate = InputHelper.readDate("Enter application opening date (DD/MM/YYYY): ", formatter);
@@ -234,6 +234,12 @@ public class HDBManagerProjectController implements IManagerProjectService {
         }
     }
 
+    /**
+     * Allows manager to delete a project they were handling, and also removes the project from the system
+     *
+     * @param manager Manager choosing a project to delete
+     * @param allProjects List of all projects the manager is handling
+     */
     public void deleteProject(HDBManager manager, List<Project> allProjects) {
         List<Project> createdProjects = manager.getCreatedProjects();
         ProjectViewer.printProjects(createdProjects, manager);
@@ -260,6 +266,12 @@ public class HDBManagerProjectController implements IManagerProjectService {
         }
     }
 
+    /**
+     * Allows the manager to toggle project visibility to off or on.
+     *
+     * @param manager The manager toggling project visibility
+     *
+     */
     public void toggleProjectVisibility(HDBManager manager) {
         List<Project> createdProjects = manager.getCreatedProjects();
         System.out.println("Here are the list of projects:");

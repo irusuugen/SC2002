@@ -34,6 +34,13 @@ public class HDBManagerEnquiryController implements IManagerEnquiryService {
         EnquiriesViewer.printEnquiries(allEnquiries);
     }
 
+    /**
+     * Retrieves the list of enquiries of a project that are not replied to
+     *
+     * @param project The project the manager is retrieving unreplied enquiries for
+     * @return List of unreplied enquiries for a selected project
+     *
+     */
     public List<Enquiry> getUnrepliedEnquiries(Project project) {
         List<Enquiry> unrepliedEnquiries = new ArrayList<>();
         for (Enquiry enquiry : project.getEnquiries()) {
@@ -84,7 +91,7 @@ public class HDBManagerEnquiryController implements IManagerEnquiryService {
      * allows for selection of unreplied enquiry.
      *
      * @param manager The manager selecting the enquiry
-     * @param projectService The project service interface used to retrieve the manager's projects
+     * @param projectService The project service used to retrieve the manager's projects
      * @return Unreplied enquiry selected by the manager
      */
     public Enquiry selectEnquiry(HDBManager manager, IManagerProjectService projectService) {

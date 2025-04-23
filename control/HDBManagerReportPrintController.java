@@ -1,5 +1,5 @@
 /**
- * Allows the maanger to print a report of applications made. The manager is able to filter
+ * Allows the manager to print a report of applications made. The manager is able to filter
  * and choose between the user groups, as well as the type of room.
  */
 

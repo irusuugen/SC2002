@@ -35,18 +35,39 @@ public class Registration {
 		this.registeredProject=project;
 		this.registrationStatus=status;
 	}
+
+	/**
+	 * Sets registration status
+	 * @param status Status to change to
+	 */
 	public void setStatus(Status status)
 	{
 		this.registrationStatus=status;
 	}
+
+	/**
+	 *
+	 * @return Status of registration
+	 */
 	public Status getStatus()
 	{
 		return this.registrationStatus;
 	}
+
+	/**
+	 *
+	 * @return Project that the registration is associated with
+	 */
 	public Project getProject()
 	{
 		return this.registeredProject;
 	}
+
+	/**
+	 *
+	 * @return Officer who made the registration
+	 */
+
 	public HDBOfficer getRegisteredOfficer(){
 		return this.registeredOfficer;
 	}

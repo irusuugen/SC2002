@@ -50,34 +50,67 @@ public abstract class User {
     public boolean isEligibleForProject(Project project) {
         return true;
     }
+
+    /**
+     *
+     * @return Role enum of the user (APPLICANT, HDB_OFFICER, or HDB_MANAGER)
+     */
     public Role getRole() {
         return this.role;
     }
 
+    /**
+     *  Sets a new password for the user
+     * @param password New password to change to
+     */
     public void changePassword(String password) {
         this.password = password;
     }
 
+    /**
+     *
+     * @return NRIC of user
+     */
     public String getNric() {
         return this.nric;
     }
 
+    /**
+     *
+     * @return Password of the user
+     */
     public String getPassword() {
         return this.password;
     }
 
+    /**
+     *
+     * @return User name
+     */
     public String getName() {
         return this.name;
     }
-    
+
+    /**
+     *
+     * @return true if user is married, false if not
+     */
     public boolean isMarried() {
         return this.isMarried;
     }
 
+    /**
+     *
+     * @return Age of user
+     */
     public int getAge() {
         return this.age;
     }
 
+    /**
+     *
+     * @return Whether user is married or single (user group enum)
+     */
     public UserGroup getUserGroup() {
         return this.userGroup;
     }

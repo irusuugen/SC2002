@@ -24,10 +24,17 @@ public class HDBManager extends User {
         this.createdProjects = new ArrayList<>();
     }
 
+    /**
+     * @return List of projects that manager has created
+     */
     public List<Project> getCreatedProjects() {
         return createdProjects;
     }
 
+    /**
+     * Adds a project to the list of the manager's created projects
+     * @param p Project to be added
+     */
     public void addCreatedProject(Project p) {
         this.createdProjects.add(p);
     }

@@ -27,6 +27,7 @@ public class ApplicantEnquiryController implements IApplicantEnquiryService {
      * Allows the applicant to submit an enquiry about a project.
      *
      * @param applicant The applicant submitting the enquiry.
+     * @param projectService Project service used to retrieve list of projects available to the applicant
      */
     public void submitEnquiry(Applicant applicant, IApplicantProjectService projectService) {
         projectService.viewOpenProjects(applicant);

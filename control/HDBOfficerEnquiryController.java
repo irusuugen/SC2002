@@ -92,6 +92,12 @@ public class HDBOfficerEnquiryController implements IOfficerEnquiryService {
 		}
 	}
 
+	/**
+	 * Allows the officer to select an unreplied enquiry from the list of enquiries for their assigned proejct
+	 *
+	 * @param officer Officer selecting an unreplied enquiry
+	 * @return The selected unreplied enquiry
+	 */
 	public Enquiry selectAssignedProjectEnquiry(HDBOfficer officer) {
 		Project project = officer.getAssignedProject();
 		if (project == null)  {
