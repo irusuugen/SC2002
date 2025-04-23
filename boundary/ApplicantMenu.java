@@ -13,9 +13,7 @@
 
 package boundary;
 
-import control.ApplicantApplicationController;
-import control.ApplicantEnquiryController;
-import control.ApplicantProjectController;
+import control.*;
 import entity.*;
 import utils.ClearPage;
 import utils.InputHelper;
@@ -27,14 +25,11 @@ import entity.Project;
 
 public class ApplicantMenu {
     private static final Scanner sc = new Scanner(System.in);
-
+    private static final IApplicantEnquiryService enquiryService = new ApplicantEnquiryController();
+    public static final IApplicantApplicationService applicationService = new ApplicantApplicationController();
+    public static final IApplicantProjectService projectService = new ApplicantProjectController();
     /**
      * Launches the applicant menu interface in a loop until the user logs out.
-     *
-     * This method retrieves the currently logged-in applicant from the session
-     * and provides options via a text-based menu. Each menu option invokes
-     * relevant actions such as applying for a project, submitting enquiries,
-     * or managing an application.
      *
      * @param session The current user session containing the authenticated applicant.
      */
@@ -76,35 +71,35 @@ public class ApplicantMenu {
                     ChangeAccountPassword.changePassword(applicant);
                     break;
                 case 2:
-                    List<Project> allProjects = ApplicantProjectController.getOpenProjects(applicant);
+                    List<Project> allProjects = projectService.getOpenProjects(applicant);
                     ProjectFilterMenu.viewFilteredProjects(session, allProjects);
                     break;
                 case 3:
                     ProjectFilterMenu.showFilterMenu(session);
                     break;
                 case 4:
-                    ApplicantApplicationController.applyForProject(applicant);
+                    applicationService.applyForProject(applicant, projectService);
                     break;
                 case 5:
-                    ApplicantApplicationController.viewApplication(applicant);
+                    applicationService.viewApplication(applicant);
                     break;
                 case 6:
-                    ApplicantApplicationController.requestBooking(applicant);
+                    applicationService.requestBooking(applicant);
                     break;
                 case 7:
-                    ApplicantApplicationController.requestWithdrawal(applicant);
+                    applicationService.requestWithdrawal(applicant);
                     break;
                 case 8:
-                    ApplicantEnquiryController.submitEnquiry(applicant);
+                    enquiryService.submitEnquiry(applicant, projectService);
                     break;
                 case 9:
-                    ApplicantEnquiryController.viewEnquiries(applicant);
+                    enquiryService.viewEnquiries(applicant);
                     break;
                 case 10:
-                    ApplicantEnquiryController.editEnquiry(applicant);
+                    enquiryService.editEnquiry(applicant);
                     break;
                 case 11:
-                    ApplicantEnquiryController.deleteEnquiry(applicant);
+                    enquiryService.deleteEnquiry(applicant);
                     break;
                 case 12:
                     System.out.println("Logging out...");

@@ -21,13 +21,15 @@ import java.util.Scanner;
 import java.util.List;
 
 public class HDBOfficerMenu {
+    private static final IApplicantEnquiryService applicantEnquiryService = new ApplicantEnquiryController();
+    private static final IApplicantApplicationService applicantApplicationService = new ApplicantApplicationController();
+    private static final IApplicantProjectService projectService = new ApplicantProjectController();
+    private static final IOfficerEnquiryService officerEnquiryService = new HDBOfficerEnquiryController();
+    private static final IOfficerApplicationService officerApplicationService = new HDBOfficerApplicationController();
+    private static final IOfficerRegistrationService officerRegistrationService = new HDBOfficerRegistrationController();
+
     /**
      * Launches the manager menu interface in a loop until the user logs out.
-     *
-     * This method retrieves the currently logged-in applicant from the session
-     * and provides options via a text-based menu. Each menu option invokes
-     * relevant actions such as managing bookings, managing enquiries,
-     * and submitting registrations
      *
      * @param session The current user session containing the authenticated officer
      */
@@ -76,56 +78,57 @@ public class HDBOfficerMenu {
                     ChangeAccountPassword.changePassword(officer);
                     break;
                 case 2:
-                    List<Project> openProjects = ApplicantProjectController.getOpenProjects(officer);
+                    List<Project> openProjects = projectService.getOpenProjects(officer);
                     ProjectFilterMenu.viewFilteredProjects(session, openProjects);
                     break;
                 case 3:
-                    ApplicantApplicationController.applyForProject(officer);
+                    applicantApplicationService.applyForProject(officer, projectService);
                     break;
                 case 4:
-                    ApplicantApplicationController.viewApplication(officer);
+                    applicantApplicationService.viewApplication(officer);
                     break;
                 case 5:
-                    ApplicantApplicationController.requestBooking(officer);
+                    applicantApplicationService.requestBooking(officer);
                     break;
                 case 6:
-                    ApplicantApplicationController.requestWithdrawal(officer);
+                    applicantApplicationService.requestWithdrawal(officer);
                     break;
                 case 7:
-                    ApplicantEnquiryController.submitEnquiry(officer);
+                    applicantEnquiryService.submitEnquiry(officer, projectService);
                     break;
                 case 8:
-                    ApplicantEnquiryController.viewEnquiries(officer);
+                    applicantEnquiryService.viewEnquiries(officer);
                     break;
                 case 9:
-                    ApplicantEnquiryController.editEnquiry(officer);
+                    applicantEnquiryService.editEnquiry(officer);
                     break;
                 case 10:
-                    ApplicantEnquiryController.deleteEnquiry(officer);
+                    applicantEnquiryService.deleteEnquiry(officer);
                     break;
                 case 11:
                     // Register for a project
-                    HDBOfficerRegistrationController.registerForProject(officer);
+                    officerRegistrationService.registerForProject(officer);
                     break;
                 case 12:
                     // View registered projects
-                    HDBOfficerRegistrationController.viewRegistrations(officer);
+                    officerRegistrationService.viewRegistrations(officer);
                     break;
                 case 13:
                     // View assigned project
-                    HDBOfficerRegistrationController.printAssignedProject(officer);
+                    officerRegistrationService.printAssignedProject(officer);
                     break;
                 case 14:
                     // View enquiries for assigned projects
-                    HDBOfficerEnquiryHandler.viewEnquiries(officer);
+                    officerEnquiryService.viewEnquiries(officer);
                     break;
                 case 15:
                     // Reply to enquiries for assigned projects
-                    HDBOfficerEnquiryHandler.replyEnquiry(officer);
+                    Enquiry enquiry = officerEnquiryService.selectAssignedProjectEnquiry(officer);
+                    officerEnquiryService.replyEnquiry(enquiry);
                     break;
                 case 16:
                     // Update successful applications
-                    HDBOfficerApplicationController.updateApplication(officer);
+                    officerApplicationService.updateApplication(officer);
                     break;
                 case 17:
                     System.out.println("Logging out...");

@@ -37,7 +37,7 @@ public class InputHelper {
 
     /**
      * Prompts the user for a yes/no confirmation.
-     * Continues prompting until either 'Y' or 'N' is entered (case insensitive).
+     * Continues prompting until either 'Y' or 'N' is entered (case-insensitive).
      *
      * @param message The confirmation message to display
      * @return true if user enters 'Y', false if user enters 'N'

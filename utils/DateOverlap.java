@@ -14,7 +14,7 @@ public class DateOverlap {
      *
      * @param p1 The first project used for comparison
      * @param p2 The second project used for comparison
-     * @return {@code true} if the application periods of the projects clash
+     * @return True if the application periods of the projects clash
      */
     public static boolean applicationPeriodsOverlap(Project p1, Project p2) {
         LocalDate start1 = p1.getOpenDate();

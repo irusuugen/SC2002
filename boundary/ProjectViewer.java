@@ -1,4 +1,8 @@
-/* Class for printing of project(s) */
+/**
+ * This class is responsible for printing project information in a formatted box layout.
+ * Either the full list of projects or a singular project can be printed, and project details are filtered out
+ * based on what information each user role needs.
+ */
 
 package boundary;
 
@@ -8,22 +12,33 @@ import utils.*;
 
 public class ProjectViewer {
 
-    public static void printOneProject(Project project, User user) {
+    /**
+     *
+     * @param project Project whose information is being printed
+     * @param role The role of the user who is viewing the project details
+     * @param user The user who is viewing the project details
+     */
+    public static void printOneProject(Project project, Role role, User user) {
         System.out.println("Here is the project information:");
         BoxPrinter.printTopBorder();
 
-        if (user instanceof HDBOfficer) {
+        if (role == Role.HDB_OFFICER) {
             showFullProjectDetails(project);
         }
-        else if (user instanceof Applicant applicant) {
-            filterProjectDetailsForApplicants(project, applicant);
-        } else if (user instanceof HDBManager) {
+        else if (role == Role.APPLICANT) {
+            filterProjectDetailsForApplicants(project, (Applicant) user);
+        } else if (role == Role.HDB_MANAGER) {
             showFullProjectDetails(project);
         }
 
         BoxPrinter.printBottomBorder();
     }
 
+    /**
+     * Prints the list of projects
+     * @param projects The list of projects to be printed
+     * @param user The user viewing the list of projects
+     */
     public static void printProjects(List<Project> projects, User user) {
         if (projects.isEmpty()) {
             System.out.println("No projects available to display.");
@@ -53,6 +68,12 @@ public class ProjectViewer {
         }
     }
 
+    /**
+     * Prints the details of the project based on whether the applicant is single or married in the box format
+     *
+     * @param project The project whose details are being printed
+     * @param applicant The applicant viewing the project details
+     */
     public static void filterProjectDetailsForApplicants(Project project, Applicant applicant) {
         BoxPrinter.printRow("Project Name", project.getProjectName());
         BoxPrinter.printRow("Neighborhood", project.getNeighborhood());
@@ -67,6 +88,10 @@ public class ProjectViewer {
         BoxPrinter.printRow("Application Period", project.getOpenDate() + " to " + project.getCloseDate());
     }
 
+    /**
+     * Prints the full project details
+     * @param project The project whose details are being printed
+     */
     public static void showFullProjectDetails(Project project) {
         BoxPrinter.printRow("Project Name", project.getProjectName());
         BoxPrinter.printRow("Neighborhood", project.getNeighborhood());

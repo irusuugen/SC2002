@@ -88,7 +88,7 @@ public class Login {
 
     /**
      * Handles user role selection via console interface.
-     * @return Selected Role enum value
+     * @return Selected user Role enum
      */
     public Role roleSelection() {
         System.out.println("""

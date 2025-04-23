@@ -1,5 +1,5 @@
 /**
- * This class Provides the user interface for the application's welcome page and main menu.
+ * This class provides the user interface for the application's welcome page and main menu.
  * This directs users to the login page, or the exit page to quit the application.
  */
 

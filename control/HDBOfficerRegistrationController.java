@@ -13,7 +13,7 @@ import repository.*;
 import utils.*;
 
 
-public class HDBOfficerRegistrationController{
+public class HDBOfficerRegistrationController implements IOfficerRegistrationService{
 
 	private static Scanner sc = new Scanner(System.in);
 
@@ -75,7 +75,7 @@ public class HDBOfficerRegistrationController{
 	 *
 	 * @param officer The HDBOfficer attempting to register.
 	 */
-	public static void registerForProject(HDBOfficer officer) {
+	public void registerForProject(HDBOfficer officer) {
 		if (officer.getAssignedProject() != null && officer.getAssignedProject().checkOpeningPeriod()){
 			System.out.println("You are currently an officer of an active project");
 		}
@@ -128,7 +128,7 @@ public class HDBOfficerRegistrationController{
 	 *
 	 * @param officer The HDBOfficer whose registrations are being displayed.
 	 */
-	public static void viewRegistrations(HDBOfficer officer)
+	public void viewRegistrations(HDBOfficer officer)
 	{
 		List<Registration> registrationList = officer.getRegistrationList();
 
@@ -156,11 +156,11 @@ public class HDBOfficerRegistrationController{
 	 *
 	 * @param officer The HDBOfficer whose assigned project is to be printed.
 	 */
-	public static void printAssignedProject(HDBOfficer officer){
+	public void printAssignedProject(HDBOfficer officer){
 		if(officer.getAssignedProject() == null){
 			System.out.println("You are not assigned to any projects.");
 			return;
 		}
-		ProjectViewer.printOneProject(officer.getAssignedProject(), officer);
+		ProjectViewer.printOneProject(officer.getAssignedProject(), Role.HDB_OFFICER, officer);
 	}
 }

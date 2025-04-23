@@ -16,8 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ApplicantProjectController {
-
+public class ApplicantProjectController implements IApplicantProjectService {
     /**
      * Iterates through the list of all projects and
      * filters the projects that the applicant is eligible for based on their role, their marriage status,
@@ -28,7 +27,7 @@ public class ApplicantProjectController {
      * or an empty list if no matching projects are found
      *
      */
-    public static List<Project> getOpenProjects(Applicant applicant) {
+    public List<Project> getOpenProjects(Applicant applicant) {
         List<Project> openProjects = new ArrayList<>();
         for (Project project : ProjectService.getAllProjects()) {
             if (!project.isVisible() || !project.checkOpeningPeriod()) continue; // Check if project has visibility toggled and is active
@@ -44,8 +43,23 @@ public class ApplicantProjectController {
      *
      * @param applicant The applicant who is viewing their open projects
      */
-    public static void viewOpenProjects(Applicant applicant) {
+    public void viewOpenProjects(Applicant applicant) {
         List<Project> openProjects = getOpenProjects(applicant);
         ProjectViewer.printProjects(openProjects, applicant);
+    }
+
+    /**
+     * Searches for an open project by name from the list of projects the
+     * applicant is eligible for.
+     *
+     * @param applicant The applicant requesting the project search.
+     * @param name The name of the project to search for.
+     * @return The matching Project, or null if not found.
+     */
+    public Project findProjectByName(Applicant applicant, String name) {
+        return getOpenProjects(applicant).stream()
+                .filter(p -> name.equalsIgnoreCase(p.getProjectName()))
+                .findFirst()
+                .orElse(null);
     }
 }

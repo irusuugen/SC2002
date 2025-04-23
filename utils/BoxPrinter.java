@@ -1,7 +1,6 @@
 /**
  * A utility class for printing formatted text in bordered boxes.
  * Provides methods to create consistent, visually appealing box layouts in console output.
- * The box width is fixed at {@value #BOX_WIDTH} characters.
  */
 
 package utils;
@@ -11,7 +10,6 @@ public class BoxPrinter {
 
     /**
      * Prints the top border of a box using box-drawing characters.
-     * The border consists of '╔', '═', and '╗' characters.
      */
     public static void printTopBorder() {
         System.out.println("╔" + "═".repeat(BOX_WIDTH - 2) + "╗");
@@ -19,7 +17,6 @@ public class BoxPrinter {
 
     /**
      * Prints the bottom border of a box using box-drawing characters.
-     * The border consists of '╚', '═', and '╝' characters.
      */
     public static void printBottomBorder() {
         System.out.println("╚" + "═".repeat(BOX_WIDTH - 2) + "╝");
@@ -27,8 +24,6 @@ public class BoxPrinter {
 
     /**
      * Prints a horizontal divider for use inside a box.
-     * The divider consists of '╠', '═', and '╣' characters.
-     * Useful for separating sections within the same box.
      */
     public static void printDivider() {
         System.out.println("╠" + "═".repeat(BOX_WIDTH - 2) + "╣");

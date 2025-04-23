@@ -20,13 +20,13 @@ import control.*;
 import utils.*;
 
 public class HDBManagerMenu {
+    private static final IManagerEnquiryService enquiryService = new HDBManagerEnquiryController();
+    private static final IManagerProjectService projectService = new HDBManagerProjectController();
+    private static final IManagerRegistrationService registrationService = new HDBManagerRegistrationController();
+    private static final IManagerApplicationService applicationService = new HDBManagerApplicationController();
+
     /**
      * Launches the manager menu interface in a loop until the user logs out.
-     *
-     * This method retrieves the currently logged-in applicant from the session
-     * and provides options via a text-based menu. Each menu option invokes
-     * relevant actions such as managing applications, managing enquiries,
-     * and managing registrations
      *
      * @param session The current user session containing the authenticated applicant.
      */
@@ -76,42 +76,43 @@ public class HDBManagerMenu {
                     break;
                 case 2:
                     // Create new project
-                    HDBManagerProjectController.createProject(manager);
+                    projectService.createProject(manager);
                     break;
                 case 3:
                     // Edit existing project
-                    HDBManagerProjectController.editProject(manager);
+                    projectService.editProject(manager);
                     break;
                 case 4:
                     // Delete existing project
-                    HDBManagerProjectController.deleteProject(manager, allProjects);
+                    projectService.deleteProject(manager, allProjects);
                     break;
                 case 5:
                     // Toggle project visibility
-                    HDBManagerProjectController.toggleProjectVisibility(manager);
+                    projectService.toggleProjectVisibility(manager);
                     break;
                 case 6:
                     // View all projects
-                    HDBManagerProjectController.viewAllProjects(manager, allProjects, session);
+                    projectService.viewAllProjects(manager, allProjects, session);
                     break;
                 case 7:
                     // View all enquiries
-                    HDBManagerEnquiryController.viewAllEnquiries(allProjects);
+                    enquiryService.viewAllEnquiries(allProjects);
                     break;
                 case 8:
-                    HDBManagerEnquiryController.replyEnquiry(manager);
+                    Enquiry enquiry = enquiryService.selectEnquiry(manager, projectService);
+                    enquiryService.replyEnquiry(enquiry);
                     break;
                 case 9:
-                    HDBManagerRegistrationController.viewRegistrations(manager);
+                    registrationService.viewRegistrations(manager);
                     break;
                 case 10:
-                    HDBManagerRegistrationController.processRegistrations(manager);
+                    registrationService.processRegistrations(manager);
                     break;
                 case 11:
-                    HDBManagerApplicationController.processApplication(manager);
+                    applicationService.processApplication(manager);
                     break;
                 case 12:
-                    HDBManagerApplicationController.processWithdrawal(manager);
+                    applicationService.processWithdrawal(manager);
                     break;
                 case 13:
                     HDBManagerReportPrintController.generateAndPrintReport(allApplications);

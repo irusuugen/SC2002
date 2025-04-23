@@ -1,6 +1,5 @@
 /**
- * A boundary class that handles password change operations for user accounts.
- * Provides password validation and ensures secure password requirements are met.
+ * This class handles password change operations for all user accounts.
  */
 
 package boundary;
@@ -87,8 +86,7 @@ public class ChangeAccountPassword {
     }
 
     /**
-     * Validates a password against security requirements.
-     * Checks length, character diversity, and other complexity rules.
+     * Validates a password against security requirements (length, character diversity, etc.)
      *
      * @param password The password string to validate
      * @return true if the password meets all requirements, false otherwise

@@ -13,15 +13,14 @@ import java.util.*;
 import repository.*;
 import utils.*;
 
-public class HDBManagerEnquiryController {
-
+public class HDBManagerEnquiryController implements IManagerEnquiryService {
     /**
      * Prints out all enquiries made for all projects
      *
      * @param allProjects The list of all projects
      *
      */
-    public static void viewAllEnquiries(List<Project> allProjects) {
+    public void viewAllEnquiries(List<Project> allProjects) {
         List<Enquiry> allEnquiries = new ArrayList<>();
         for (Project project : allProjects) {
             allEnquiries.addAll(project.getEnquiries());
@@ -35,7 +34,7 @@ public class HDBManagerEnquiryController {
         EnquiriesViewer.printEnquiries(allEnquiries);
     }
 
-    public static List<Enquiry> getUnrepliedEnquiries(Project project) {
+    public List<Enquiry> getUnrepliedEnquiries(Project project) {
         List<Enquiry> unrepliedEnquiries = new ArrayList<>();
         for (Enquiry enquiry : project.getEnquiries()) {
             if (enquiry.getAnswer().equals("(No reply yet)")) {
@@ -51,7 +50,7 @@ public class HDBManagerEnquiryController {
      * @param project The project the manager chose to view the unreplied enquiries for
      *
      */
-    public static void viewUnrepliedEnquiries(Project project) {
+    public void viewUnrepliedEnquiries(Project project) {
         List<Enquiry> unrepliedEnquiries = getUnrepliedEnquiries(project);
         if (unrepliedEnquiries.isEmpty()) {
             System.out.println("No unreplied enquiries found.");
@@ -64,29 +63,15 @@ public class HDBManagerEnquiryController {
     /**
      * Allows manager to select an unreplied enquiry and give a reply to it
      *
-     * @param manager The manager replying to the enquiry
+     * @param enquiry The enquiry selected by the manager to reply to
      *
      */
-    public static void replyEnquiry(HDBManager manager) {
-        Project project = selectProject(manager.getCreatedProjects());
-        if (project == null) return;
-
-        List<Enquiry> unreplied = getUnrepliedEnquiries(project);
-        viewUnrepliedEnquiries(project);
-        if (unreplied.isEmpty()) return;
-
-        int choice;
-        while (true) {
-            choice = InputHelper.readInt("Enter enquiry number (1-" + unreplied.size() + "): ");
-            if (choice >= 1 && choice <= unreplied.size()) break;
-            System.out.println("Invalid input. Please choose a number from 1 to " + unreplied.size() + ".");
+    public void replyEnquiry(Enquiry enquiry) {
+        if (enquiry==null){
+            return;
         }
-
-        Enquiry enquiry = unreplied.get(choice - 1);
-
         System.out.println("Enter your response:");
         String response = new Scanner(System.in).nextLine();
-
         if (InputHelper.confirm("Confirm reply")) {
             enquiry.reply(response);
             EnquiryService.updateEnquiries();
@@ -94,32 +79,35 @@ public class HDBManagerEnquiryController {
         }
     }
 
-
     /**
-     * Allows the manager to select a project they are handling to view enquiries for
+     * Prompts the manager to select a project to view unreplied enquiries for, and then
+     * allows for selection of unreplied enquiry.
      *
-     * @param projects The list of created projects to iterate through
-     * @return The project chosen by the manager
-     *
+     * @param manager The manager selecting the enquiry
+     * @param projectService The project service interface used to retrieve the manager's projects
+     * @return Unreplied enquiry selected by the manager
      */
-    private static Project selectProject(List<Project> projects) {
-        if (projects.isEmpty()) {
-            System.out.println("You're not handling any projects currently.");
+    public Enquiry selectEnquiry(HDBManager manager, IManagerProjectService projectService) {
+        Project project = projectService.selectProject(manager.getCreatedProjects());
+        if (project == null) {
+            System.out.println("No project found.");
             return null;
         }
 
-        System.out.println("Select a project:");
-        for (int i = 0; i < projects.size(); i++) {
-            System.out.printf("(%d) %s\n", i + 1, projects.get(i).getProjectName());
+        List<Enquiry> unreplied = getUnrepliedEnquiries(project);
+        viewUnrepliedEnquiries(project);
+        if (unreplied.isEmpty()) {
+            System.out.println("No enquiries found.");
+            return null;
         }
 
+        int choice;
         while (true) {
-            int choice = InputHelper.readInt("Enter choice (0 to cancel): ");
-            if (choice == 0) return null;
-            if (choice >= 1 && choice <= projects.size()) {
-                return projects.get(choice - 1);
-            }
-            System.out.println("Invalid choice. Please select a number from 1 to " + projects.size() + ", or 0 to cancel.");
+            choice = InputHelper.readInt("Enter enquiry number (1-" + unreplied.size() + "): ");
+            if (choice >= 1 && choice <= unreplied.size()) break;
+            System.out.println("Invalid input. Please choose a number from 1 to " + unreplied.size() + ".");
         }
+        Enquiry enquiry = unreplied.get(choice - 1);
+        return enquiry;
     }
 }

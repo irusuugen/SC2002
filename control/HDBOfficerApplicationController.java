@@ -13,7 +13,7 @@ import entity.*;
 import repository.*;
 import utils.*;
 
-public class HDBOfficerApplicationController{
+public class HDBOfficerApplicationController implements IOfficerApplicationService {
 
 	private static Scanner sc = new Scanner(System.in);
 
@@ -22,15 +22,16 @@ public class HDBOfficerApplicationController{
 	 *
 	 * Prompts the officer to enter an applicant's NRIC, verifies that the applicant exists
 	 * and is assigned to the officer's project, and confirms that a booking has been requested.
-	 * If all validations pass and the officer confirms, the method updates the application and project data
-	 * accordingly and prints a booking receipt.
+	 * If all validations pass and the officer confirms booking, the applicant's application is printed,
+	 * and the officer updates the application status to BOOKED and project data accordingly.
+	 * A booking receipt is also printed.
 	 *
-	 * @param officer The officer performing the booking
+	 * @param officer The officer processing the booking request
 	 */
-	public static void updateApplication(HDBOfficer officer) {
+	public void updateApplication(HDBOfficer officer) {
 		Application application;
 		while (true) {
-			System.out.print("Please enter applicant's NRIC: ");
+			System.out.print("Please enter an applicant's NRIC: ");
 			String nric = sc.nextLine();
 
 			application = Stream.concat(
@@ -72,7 +73,7 @@ public class HDBOfficerApplicationController{
 	 *
 	 * @param application Application that has been booked.
 	 */
-	public static void printBookingReceipt(Application application) {
+	private void printBookingReceipt(Application application) {
 		BoxPrinter.printTopBorder();
 		System.out.println(BoxPrinter.centerInBox("HDB FLAT BOOKING RECEIPT"));
 

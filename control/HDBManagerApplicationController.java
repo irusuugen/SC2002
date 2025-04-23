@@ -17,7 +17,7 @@ import java.util.*;
 import utils.*;
 import boundary.*;
 
-public class HDBManagerApplicationController {
+public class HDBManagerApplicationController implements IManagerApplicationService{
 
     /**
      * Retrieves a list of applications for the projects the manager
@@ -27,7 +27,7 @@ public class HDBManagerApplicationController {
      * @param manager The manager processing the applications
      *
      */
-    public static void processApplication(HDBManager manager) {
+    public void processApplication(HDBManager manager) {
         List<Application> applications = getAllApplications(manager).stream()
                 .filter(app -> app.getStatus() == Status.PENDING && !app.isWithdrawalRequested())
                 .toList();
@@ -122,7 +122,7 @@ public class HDBManagerApplicationController {
      * @param manager The manager who is processing the withdrawals
      *
      */
-    public static void processWithdrawal(HDBManager manager) {
+    public void processWithdrawal(HDBManager manager) {
         List<Application> withdrawalRequests = new ArrayList<>();
 
         // Collect all withdrawal requests

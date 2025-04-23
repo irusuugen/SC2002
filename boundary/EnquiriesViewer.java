@@ -1,5 +1,5 @@
 /**
- * This class is responsible for displaying enquiry information in a formatted box layout.
+ * This class is responsible for displaying enquiry information in a formatted box.
  * Formats and presents enquiries with project details, applicant information (with masked NRIC),
  * and the enquiry/answer content.
  */
@@ -12,13 +12,15 @@ import entity.*;
 
 public class EnquiriesViewer {
     /**
-     * Prints a list of enquiries in a visually formatted box layout.
-     * Each enquiry is separated by dividers, with the following information displayed:
-     * - Enquiry number (1-based index)
-     * - Project name
-     * - Applicant name with masked NRIC (last 4 digits visible)
-     * - Enquiry message
-     * - Answer to the enquiry
+     * Prints a list of enquiries in a formatted box layout.
+     * The following information is displayed:
+     * <ul>
+     *     <li>Enquiry number (1-based index)</li>
+     *     <li>Project name</li>
+     *     <li>Applicant name and masked NRIC</li>
+     *     <li>Enquiry</li>
+     *     <li>Enquiry reply</li>
+     * </ul>
      *
      * @param enquiries The list of Enquiry objects to display
      * @throws NullPointerException if the enquiries list is null

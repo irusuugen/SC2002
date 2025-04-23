@@ -11,11 +11,10 @@ import boundary.ApplicationViewer;
 import boundary.ProjectViewer;
 import entity.*;
 import repository.ApplicationService;
-
 import java.util.Scanner;
 import utils.*;
 
-public class ApplicantApplicationController {
+public class ApplicantApplicationController implements IApplicantApplicationService{
     private static Scanner sc = new Scanner(System.in);
 
     /**
@@ -30,7 +29,7 @@ public class ApplicantApplicationController {
      *
      * @param applicant The applicant who is applying for a project.
      */
-    public static void applyForProject(Applicant applicant) {
+    public void applyForProject(Applicant applicant, IApplicantProjectService projectService) {
         Application previousApplication = applicant.getApplication();
 
         if (previousApplication != null) {
@@ -43,13 +42,13 @@ public class ApplicantApplicationController {
             }
         }
 
-        ApplicantProjectController.viewOpenProjects(applicant);
+        projectService.viewOpenProjects(applicant);
 
         Project project;
         while (true) {
             System.out.print("Please enter the name of the project you'd like to apply for: ");
             String inputTitle = sc.nextLine();
-            project = findProjectByName(applicant, inputTitle);
+            project = projectService.findProjectByName(applicant, inputTitle);
 
             if (project == null) {
                 if (!InputHelper.confirm("Project not found. Retry?")) return;
@@ -64,7 +63,7 @@ public class ApplicantApplicationController {
         }
 
         ClearPage.clearPage();
-        ProjectViewer.printOneProject(project, applicant);
+        ProjectViewer.printOneProject(project, Role.APPLICANT, applicant);
 
         FlatType flatType = FlatType.TWOROOMS;
         if (applicant.getUserGroup() == UserGroup.MARRIED) {
@@ -102,7 +101,7 @@ public class ApplicantApplicationController {
      *
      * @param applicant The applicant whose application is to be displayed.
      */
-    public static void viewApplication(Applicant applicant) {
+    public void viewApplication(Applicant applicant) {
         Application application = applicant.getApplication();
         if (application != null) {
             ApplicationViewer.printApplication(application);
@@ -116,7 +115,7 @@ public class ApplicantApplicationController {
      *
      * @param applicant The applicant requesting to book a flat.
      */
-    public static void requestBooking(Applicant applicant) {
+    public void requestBooking(Applicant applicant) {
         Application application = applicant.getApplication();
         if (application == null) {
             System.out.println("No existing application.");
@@ -145,7 +144,7 @@ public class ApplicantApplicationController {
      *
      * @param applicant The applicant requesting withdrawal.
      */
-    public static void requestWithdrawal(Applicant applicant) {
+    public void requestWithdrawal(Applicant applicant) {
         Application application = applicant.getApplication();
         if (application == null) {
             System.out.println("No existing application.");
@@ -164,20 +163,5 @@ public class ApplicantApplicationController {
         } else {
             System.out.println("Request cancelled.");
         }
-    }
-
-    /**
-     * Searches for an open project by name from the list of projects the
-     * applicant is eligible for.
-     *
-     * @param applicant The applicant requesting the project search.
-     * @param name The name of the project to search for.
-     * @return The matching Project, or null if not found.
-     */
-    public static Project findProjectByName(Applicant applicant, String name) {
-        return ApplicantProjectController.getOpenProjects(applicant).stream()
-                .filter(p -> name.equalsIgnoreCase(p.getProjectName()))
-                .findFirst()
-                .orElse(null);
     }
 }

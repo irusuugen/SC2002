@@ -1,6 +1,5 @@
 /**
- * This class is responsible for displaying application information in a formatted manner.
- * Uses {@link utils.BoxPrinter} to present application data in visually appealing box layouts.
+ * This class is responsible for displaying application information in a formatted box.
  */
 
 package boundary;
@@ -26,7 +25,6 @@ public class ApplicationViewer {
 
     /**
      * Prints a list of applications with separators between each application.
-     * Displays a message if the list is empty.
      *
      * @param applications The list of applications to display
      */
@@ -52,8 +50,7 @@ public class ApplicationViewer {
 
     /**
      * Displays detailed information about an application that is within the box layout.
-     * Includes masked NRIC for privacy, applicant details, and application status.
-     * Automatically shows withdrawal status if applicable.
+     * Includes masked NRIC, applicant details, and application status and withdrawal status if applicable.
      *
      * @param application The application object whose details to display
      */

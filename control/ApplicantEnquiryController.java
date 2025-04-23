@@ -13,13 +13,14 @@ import boundary.ProjectViewer;
 import entity.Applicant;
 import entity.Enquiry;
 import entity.Project;
+import entity.Role;
 import repository.EnquiryService;
 import utils.ClearPage;
 import utils.InputHelper;
 import java.util.List;
 import java.util.Scanner;
 
-public class ApplicantEnquiryController {
+public class ApplicantEnquiryController implements IApplicantEnquiryService {
     public static Scanner sc = new Scanner(System.in);
 
     /**
@@ -27,18 +28,18 @@ public class ApplicantEnquiryController {
      *
      * @param applicant The applicant submitting the enquiry.
      */
-    public static void submitEnquiry(Applicant applicant) {
-        ApplicantProjectController.viewOpenProjects(applicant);
+    public void submitEnquiry(Applicant applicant, IApplicantProjectService projectService) {
+        projectService.viewOpenProjects(applicant);
         System.out.print("Enter the name of the project you'd like to submit an enquiry for: ");
         String inputTitle = sc.nextLine();
-        Project project = ApplicantApplicationController.findProjectByName(applicant, inputTitle);
+        Project project = projectService.findProjectByName(applicant, inputTitle);
         if (project == null) {
             System.out.println("Project not found.");
             return;
         }
 
         ClearPage.clearPage();
-        ProjectViewer.printOneProject(project, applicant);
+        ProjectViewer.printOneProject(project, Role.APPLICANT, applicant);
 
         System.out.println("Enter your enquiry:");
         String message = sc.nextLine();
@@ -61,7 +62,7 @@ public class ApplicantEnquiryController {
      *
      * @param applicant The applicant editing their enquiry.
      */
-    public static void editEnquiry(Applicant applicant) {
+    public void editEnquiry(Applicant applicant) {
         Enquiry enquiry = selectEnquiry(applicant);
 
         if (enquiry == null) {
@@ -89,7 +90,7 @@ public class ApplicantEnquiryController {
      *
      * @param applicant The applicant deleting their enquiry.
      */
-    public static void deleteEnquiry(Applicant applicant) {
+    public void deleteEnquiry(Applicant applicant) {
         List<Enquiry> enquiryList = applicant.getEnquiries();
         Enquiry enquiry = selectEnquiry(applicant);
 
@@ -117,7 +118,7 @@ public class ApplicantEnquiryController {
      *
      * @param applicant The applicant whose enquiries will be shown.
      */
-    public static void viewEnquiries(Applicant applicant) {
+    public void viewEnquiries(Applicant applicant) {
         List<Enquiry> enquiries = applicant.getEnquiries();
         if (enquiries.isEmpty()) {
             System.out.println("No enquiries submitted.");
@@ -135,7 +136,7 @@ public class ApplicantEnquiryController {
      * no enquiries are available.
      *
      */
-    public static Enquiry selectEnquiry(Applicant applicant) {
+    public Enquiry selectEnquiry(Applicant applicant) {
         List<Enquiry> enquiries = applicant.getEnquiries();
         if (enquiries.isEmpty()) {
             System.out.println("No enquiries available.");

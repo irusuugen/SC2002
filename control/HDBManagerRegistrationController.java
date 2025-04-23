@@ -12,7 +12,7 @@ import utils.*;
 import java.time.LocalDate;
 import java.util.*;
 
-public class HDBManagerRegistrationController {
+public class HDBManagerRegistrationController implements IManagerRegistrationService {
 
     /**
      * Displays officer registrations filtered by status (Pending, Approved, Rejected, or All).
@@ -20,7 +20,7 @@ public class HDBManagerRegistrationController {
      *
      * @param manager The HDB Manager viewing the registrations.
      */
-    public static void viewRegistrations(HDBManager manager) {
+    public void viewRegistrations(HDBManager manager) {
         System.out.println("""
         View Officer Registrations:
         1. Pending
@@ -65,7 +65,7 @@ public class HDBManagerRegistrationController {
      * @param filterStatus  The registration status to filter by (can be null for no filtering).
      * @return A list of filtered registrations.
      */
-    private static List<Registration> getFilteredRegistrations(HDBManager manager, Status filterStatus) {
+     private List<Registration> getFilteredRegistrations(HDBManager manager, Status filterStatus) {
         List<Registration> filteredList = new ArrayList<>();
         LocalDate today = LocalDate.now();
         for (Project project : manager.getCreatedProjects()) {
@@ -108,7 +108,7 @@ public class HDBManagerRegistrationController {
      *
      * @param manager The HDB Manager responsible for processing registrations.
      */
-    public static void processRegistrations(HDBManager manager) {
+    public void processRegistrations(HDBManager manager) {
         List<Registration> pendingList = getFilteredRegistrations(manager, Status.PENDING);
 
         if (pendingList.isEmpty()) {

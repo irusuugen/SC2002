@@ -14,7 +14,7 @@ import utils.*;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 
-public class HDBManagerProjectController {
+public class HDBManagerProjectController implements IManagerProjectService {
     private static Scanner sc = new Scanner(System.in);
     private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
@@ -25,7 +25,7 @@ public class HDBManagerProjectController {
      *
      * @param manager      The manager creating the project.
      */
-    public static void createProject(HDBManager manager) {
+    public void createProject(HDBManager manager) {
         LocalDate openDate = InputHelper.readDate("Enter application opening date (DD/MM/YYYY): ", formatter);
         LocalDate closeDate = InputHelper.readDate("Enter application closing date (DD/MM/YYYY): ", formatter);
         if (closeDate.isBefore(openDate)) {
@@ -63,7 +63,7 @@ public class HDBManagerProjectController {
         Project p = new Project(name, neighborhood, twoRooms, twoRoomsPrice, threeRooms, threeRoomsPrice, openDate, closeDate, manager, officerSlots, new ArrayList<>());
 
         ClearPage.clearPage();
-        ProjectViewer.printOneProject(p, manager);
+        ProjectViewer.printOneProject(p, Role.HDB_MANAGER, manager);
         if (InputHelper.confirm("Confirm project creation?")) {
             ProjectService.addProject(p);
             ProjectService.updateProjects();
@@ -81,7 +81,7 @@ public class HDBManagerProjectController {
      *
      * @param manager The manager editing their project.
      */
-    public static void editProject(HDBManager manager) {
+    public void editProject(HDBManager manager) {
         System.out.println("Here are the list of projects:");
         List<Project> createdProjects = manager.getCreatedProjects();
         ProjectViewer.printProjects(createdProjects, manager);
@@ -111,7 +111,7 @@ public class HDBManagerProjectController {
 
         // Start editing into temp variables
         ClearPage.clearPage();
-        ProjectViewer.printOneProject(original, manager);
+        ProjectViewer.printOneProject(original, Role.HDB_MANAGER, manager);
         System.out.println("\nEnter new values (press Enter to keep current value):");
 
         System.out.print("New neighborhood: ");
@@ -215,7 +215,7 @@ public class HDBManagerProjectController {
 
         ClearPage.clearPage();
         System.out.println("Updated project preview:");
-        ProjectViewer.printOneProject(preview, manager);
+        ProjectViewer.printOneProject(preview, Role.HDB_MANAGER, manager);
 
         if (InputHelper.confirm("Confirm changes to this project")) {
             // Apply final changes to original project
@@ -234,7 +234,7 @@ public class HDBManagerProjectController {
         }
     }
 
-    public static void deleteProject(HDBManager manager, List<Project> allProjects) {
+    public void deleteProject(HDBManager manager, List<Project> allProjects) {
         List<Project> createdProjects = manager.getCreatedProjects();
         ProjectViewer.printProjects(createdProjects, manager);
         System.out.print("Enter the name of the project you'd like to delete: ");
@@ -249,7 +249,7 @@ public class HDBManagerProjectController {
         }
 
         ClearPage.clearPage();
-        ProjectViewer.printOneProject(project, manager);
+        ProjectViewer.printOneProject(project, Role.HDB_MANAGER, manager);
         if (InputHelper.confirm("Confirm deletion of project")) {
             createdProjects.remove(project);
             ProjectService.removeProject(project);
@@ -260,7 +260,7 @@ public class HDBManagerProjectController {
         }
     }
 
-    public static void toggleProjectVisibility(HDBManager manager) {
+    public void toggleProjectVisibility(HDBManager manager) {
         List<Project> createdProjects = manager.getCreatedProjects();
         System.out.println("Here are the list of projects:");
         ProjectViewer.printProjects(createdProjects, manager);
@@ -276,7 +276,7 @@ public class HDBManagerProjectController {
         }
 
         ClearPage.clearPage();
-        ProjectViewer.printOneProject(project, manager);
+        ProjectViewer.printOneProject(project, Role.HDB_MANAGER, manager);
         System.out.println("Current visibility: " + (project.isVisible() ? "Visible" : "Hidden"));
         if (InputHelper.confirm("Would you like to toggle this project's visibility")) {
             project.setVisibility(!project.isVisible());
@@ -296,7 +296,7 @@ public class HDBManagerProjectController {
      * @param allProjects All available projects in the system.
      * @param session     The current user session.
      */
-    public static void viewAllProjects(HDBManager manager, List<Project> allProjects, UserSession session) {
+    public void viewAllProjects(HDBManager manager, List<Project> allProjects, UserSession session) {
         // Filter for own projects
         System.out.println("Would you like to:");
         System.out.println("1. View only your own created projects");
@@ -320,5 +320,33 @@ public class HDBManagerProjectController {
         ClearPage.clearPage();
         System.out.println("Here are the list of projects:");
         ProjectFilterMenu.viewFilteredProjects(session, projectsToShow);
+    }
+
+    /**
+     * Allows the manager to select a project they are handling
+     *
+     * @param projects The list of created projects to iterate through
+     * @return The project chosen by the manager
+     *
+     */
+    public Project selectProject(List<Project> projects) {
+        if (projects.isEmpty()) {
+            System.out.println("You're not handling any projects currently.");
+            return null;
+        }
+
+        System.out.println("Select a project:");
+        for (int i = 0; i < projects.size(); i++) {
+            System.out.printf("(%d) %s\n", i + 1, projects.get(i).getProjectName());
+        }
+
+        while (true) {
+            int choice = InputHelper.readInt("Enter choice (0 to cancel): ");
+            if (choice == 0) return null;
+            if (choice >= 1 && choice <= projects.size()) {
+                return projects.get(choice - 1);
+            }
+            System.out.println("Invalid choice. Please select a number from 1 to " + projects.size() + ", or 0 to cancel.");
+        }
     }
 }
