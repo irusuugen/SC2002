@@ -47,8 +47,7 @@ This project is a **Build-To-Order (BTO) Management System** developed as part o
 
 ## UML Diagrams
 1. **Class Diagram**:  
-   - Shows entity classes (`User`, `Project`, `Enquiry`), control/boundary classes, and relationships.  
-   - Annotations highlight OOP principles (e.g., polymorphism in user roles).  
+   - Shows entity classes (`User`, `Project`, `Enquiry`), control/boundary classes, and relationships.    
 2. **Sequence Diagram**:  
    - Illustrates HDB Officer’s workflow (applying for BTO + registering for a project).  
 
@@ -75,15 +74,6 @@ This project is a **Build-To-Order (BTO) Management System** developed as part o
      ```bash
      java Main
      ```
----
-
-## Testing
-Refer to **Appendix A** in the assignment PDF for sample test cases. Key scenarios include:  
-- User login (valid/invalid credentials).  
-- Project visibility toggle.  
-- Flat booking restrictions (e.g., single booking per applicant).  
-- Report generation with filters.  
-
 ---
 
 ## Additional Features
