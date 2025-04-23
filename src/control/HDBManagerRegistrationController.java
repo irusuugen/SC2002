@@ -1,5 +1,5 @@
 /**
- * Handles all registration-related operations for HDB Managers, such as viewing and processing officer registrations.
+ * This class allows managers to process registrations for projects made by officers.
  */
 
 package control;
@@ -7,7 +7,8 @@ package control;
 import entity.*;
 import repository.ProjectService;
 import repository.RegistrationService;
-import utils.*;
+import utils.InputHelper;
+import utils.BoxPrinter;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -57,21 +58,17 @@ public class HDBManagerRegistrationController implements IManagerRegistrationSer
     }
 
     /**
-     * Filters and returns a list of registrations for the given manager and status.
-     * Registrations are only included if their associated project is within an appliation
-     * period, and the officer is not already assigned.
+     * Returns all registrations from the manager's created projects filtered by status.
      *
-     * @param manager       The HDB Manager whose projects to check.
-     * @param filterStatus  The registration status to filter by (can be null for no filtering).
-     * @return A list of filtered registrations.
+     * @param manager The manager whose project registrations are to be retrieved.
+     * @param filterStatus The status to filter by (null for all).
+     * @return List of registrations matching the filter.
      */
-     private List<Registration> getFilteredRegistrations(HDBManager manager, Status filterStatus) {
+    private List<Registration> getFilteredRegistrations(HDBManager manager, Status filterStatus) {
         List<Registration> filteredList = new ArrayList<>();
-        LocalDate today = LocalDate.now();
         for (Project project : manager.getCreatedProjects()) {
             for (Registration reg : project.getRegistrations()) {
-                HDBOfficer officer = reg.getRegisteredOfficer();
-                if ((officer.getAssignedProject() == null || officer.getAssignedProject().getCloseDate().isBefore(today)) && (filterStatus == null || reg.getStatus() == filterStatus)) {
+                if (filterStatus == null || reg.getStatus() == filterStatus) {
                     filteredList.add(reg);
                 }
             }
@@ -80,7 +77,31 @@ public class HDBManagerRegistrationController implements IManagerRegistrationSer
     }
 
     /**
-     * Prints a formatted list of registrations with masked NRICs and project information.
+     * Filters pending registrations where the officer is unassigned or their assigned project is expired.
+     *
+     * @param manager The manager whose project registrations are being processed.
+     * @return List of eligible pending registrations.
+     */
+    private List<Registration> getPendingRegistrationsForProcessing(HDBManager manager) {
+        List<Registration> filteredList = new ArrayList<>();
+        LocalDate today = LocalDate.now();
+        for (Project project : manager.getCreatedProjects()) {
+            for (Registration reg : project.getRegistrations()) {
+                HDBOfficer officer = reg.getRegisteredOfficer();
+                boolean isUnassignedOrExpired =
+                        officer.getAssignedProject() == null ||
+                                officer.getAssignedProject().getCloseDate().isBefore(today);
+
+                if (isUnassignedOrExpired && reg.getStatus() == Status.PENDING) {
+                    filteredList.add(reg);
+                }
+            }
+        }
+        return filteredList;
+    }
+
+    /**
+     * Prints a formatted list of registrations with masked NRICs and project info.
      *
      * @param registrations The list of registrations to display.
      */
@@ -88,8 +109,7 @@ public class HDBManagerRegistrationController implements IManagerRegistrationSer
         for (int i = 0; i < registrations.size(); i++) {
             Registration reg = registrations.get(i);
             HDBOfficer officer = reg.getRegisteredOfficer();
-            String nric = officer.getNric();
-            String maskedNric = "****" + nric.substring(nric.length() - 4);
+            String maskedNric = "****" + officer.getNric().substring(officer.getNric().length() - 4);
             String nameWithMaskedNric = officer.getName() + " (" + maskedNric + ")";
 
             BoxPrinter.printTopBorder();
@@ -102,14 +122,12 @@ public class HDBManagerRegistrationController implements IManagerRegistrationSer
     }
 
     /**
-     * Processes pending officer registrations for the manager's projects.
-     * The user can choose to approve or reject a selected pending registration.
-     * Upon approval, the officer is added to the project's officer list if a slot is available.
+     * Allows the manager to approve or reject pending officer registrations.
      *
-     * @param manager The HDB Manager responsible for processing registrations.
+     * @param manager The manager processing the registrations.
      */
     public void processRegistrations(HDBManager manager) {
-        List<Registration> pendingList = getFilteredRegistrations(manager, Status.PENDING);
+        List<Registration> pendingList = getPendingRegistrationsForProcessing(manager);
 
         if (pendingList.isEmpty()) {
             System.out.println("There are no pending officer registrations to process.");
@@ -131,13 +149,11 @@ public class HDBManagerRegistrationController implements IManagerRegistrationSer
     }
 
     /**
-     * Handles the decision process for a selected registration.
-     * The manager can approve or reject the registration. If approved and the project
-     * has capacity, the officer is added to the project.
+     * Processes the selected registration (approve or reject) and updates the system.
      *
-     * @param project       The project associated with the registration.
-     * @param officer       The officer being registered.
-     * @param selectedReg   The registration to process.
+     * @param project The project the officer is registering for.
+     * @param officer The officer applying for registration.
+     * @param selectedReg The registration object.
      */
     private static void processRegistrationDecision(Project project, HDBOfficer officer, Registration selectedReg) {
         System.out.println("1. Approve");
@@ -175,5 +191,4 @@ public class HDBManagerRegistrationController implements IManagerRegistrationSer
 
         System.out.println("Registration processed.");
     }
-
 }
