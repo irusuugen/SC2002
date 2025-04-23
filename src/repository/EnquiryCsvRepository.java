@@ -86,9 +86,9 @@ public class EnquiryCsvRepository implements IEnquiryRepository {
         for(Enquiry e: enquiries){
             List<String> row = new ArrayList<>();
             row.add(e.getApplicant().getNric());
-            row.add(e.getMessage());
+            row.add("\""+e.getMessage()+"\"");
             row.add(e.getProject().getProjectName());
-            row.add(e.getAnswer().equals("(No reply yet)")? "":e.getAnswer());
+            row.add("\""+ (e.getAnswer().equals("(No reply yet)")? "":e.getAnswer())+"\"");
             rows.add(String.join(",", row));
         }
 
